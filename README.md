@@ -9,7 +9,7 @@ csharp-slides
 - [ ] Lecture 3 - Custom types
 - [x] [Lecture 4 - Flow control, Exceptions](https://drive.google.com/open?id=113dEHoylhsbnGlqcXI14O2B6EnFNCWV1UKFBfLilmCo&authuser=0)
 - [x] [Lecture 5 - OOP](https://drive.google.com/open?id=17vL1XaJjSr77T18SdaAXP1mquSqVtaI8EHrKwagwuBU&authuser=0)
-- [ ] [Lecture 5.1 - OOP. Continued](https://drive.google.com/open?id=17ax8dZVzRrsEh53SlzBm2RsalZFvGpRrRJ_YI-QU3EI&authuser=0)
+- [x] [Lecture 5.1 - OOP. Continued](https://drive.google.com/open?id=17ax8dZVzRrsEh53SlzBm2RsalZFvGpRrRJ_YI-QU3EI&authuser=0)
 - [ ] Lecture 6 - Working with strings and text
 - [ ] Lecture 7 - Delegates, Events and Lambdas
 - [ ] Lecture 8 - Collections and generics
