@@ -11,7 +11,7 @@ csharp-slides
 - [x] [Lecture 5 - OOP](https://drive.google.com/open?id=17vL1XaJjSr77T18SdaAXP1mquSqVtaI8EHrKwagwuBU&authuser=0)
 - [x] [Lecture 5.1 - OOP. Continued](https://drive.google.com/open?id=17ax8dZVzRrsEh53SlzBm2RsalZFvGpRrRJ_YI-QU3EI&authuser=0)
 - [ ] Lecture 6 - Working with strings and text
-- [ ] Lecture 7 - Delegates, Events and Lambdas
+- [x] [Lecture 7 - Delegates, Events and Lambdas](https://docs.google.com/presentation/d/18aWj-E13-jcpo7Za-RlsZhyRGr2sPPNm9MGKhWinS20/edit?usp=sharing)
 - [ ] Lecture 8 - Collections and generics
 - [ ] Lecture 9 - LINQ Pt.1
 - [ ] Lecture 10 - LINQ Pt.2
