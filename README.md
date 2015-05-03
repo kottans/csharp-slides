@@ -15,7 +15,7 @@ csharp-slides
 - [ ] [Lecture 8 - Collections and generics](https://drive.google.com/open?id=1x_GryQXEDeWE6vE6X7St8epIFr7cnfgl3eofp9ITqhw&authuser=0)
 - [ ] Lecture 9 - LINQ Pt.1
 - [ ] Lecture 10 - LINQ Pt.2
-- [x] Lecture 11 - Garbage collection](https://docs.google.com/presentation/d/1n_K-LopzpyI5hMPMftK5WQdULmTUsZxBQ5TtER118FM/edit?usp=sharing)
+- [x] [Lecture 11 - Garbage collection](https://docs.google.com/presentation/d/1n_K-LopzpyI5hMPMftK5WQdULmTUsZxBQ5TtER118FM/edit?usp=sharing)
 - [ ] Lecture 12 - Reflection
 - [ ] Lecture 13 - Multithreading Pt.1
 - [ ] Lecture 14 - Multithreading Pt.2
