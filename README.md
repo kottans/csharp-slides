@@ -1,7 +1,8 @@
 csharp-slides
 =============
-## Currently CSharp slies are in development and accesible via links:
+## Currently CSharp slides are in development and accesible via links:
 
+[Wiki](https://github.com/Kottans/csharp-slides/wiki)    
 [Course program](https://docs.google.com/document/d/19Gfj71qbpKlHXIiye7m_PZDk4jA7M1G21bxRzauVP8w/edit#)
 
 - [x] [Lecture 1 - .NET, infra, tools, basics](https://drive.google.com/open?id=1HMd2B0FErbFMT2v7Z4SDXhUHX_x6fkXMf2QS9yV4X3A&authuser=0)
@@ -12,7 +13,7 @@ csharp-slides
 - [x] [Lecture 5.1 - OOP. Continued](https://drive.google.com/open?id=17ax8dZVzRrsEh53SlzBm2RsalZFvGpRrRJ_YI-QU3EI&authuser=0)
 - [ ] Lecture 6 - Working with strings and text
 - [x] [Lecture 7 - Delegates, Events and Lambdas](https://drive.google.com/open?id=18aWj-E13-jcpo7Za-RlsZhyRGr2sPPNm9MGKhWinS20&authuser=0)
-- [ ] [Lecture 8 - Collections and generics](https://drive.google.com/open?id=1x_GryQXEDeWE6vE6X7St8epIFr7cnfgl3eofp9ITqhw&authuser=0)
+- [x] [Lecture 8 - Collections and generics](https://drive.google.com/open?id=1x_GryQXEDeWE6vE6X7St8epIFr7cnfgl3eofp9ITqhw&authuser=0)
 - [ ] Lecture 9 - LINQ Pt.1
 - [ ] Lecture 10 - LINQ Pt.2
 - [x] [Lecture 11 - Garbage collection](https://docs.google.com/presentation/d/1n_K-LopzpyI5hMPMftK5WQdULmTUsZxBQ5TtER118FM/edit?usp=sharing)
