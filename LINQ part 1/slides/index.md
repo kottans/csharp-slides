@@ -346,3 +346,105 @@ But bear in mind that you cannot write everything in query expressions
 .Skip(50)       // So it has to be mixed with query methods.
 .Take(10);
 ```
+
+---
+###Query expression == fluent sytax
+From compiler perspective query expressions are just syntactic sugar and it always translates them into method calls
+
+For example following code
+
+```cs
+from person in people
+where person.Age >= 18
+select person;
+```
+
+<div class="fragment">
+will be translated to 
+
+```cs
+
+var adults = people.Where(person => person.Age >= 18);
+
+```
+</div>
+
+<div class="fragment">
+It is the same as preprocessing (if it's familiar to you)
+</div>
+
+***
+
+###IEnumerable helps to LINQ to rock and roll
+
+LINQ query can produce one of two results:
+
+enumeration
+
+```cs
+IEnumerable<int> res = from s in sequance
+                       where s > 3
+                       select s;
+```
+
+scalar (statistic)
+
+```cs
+int res = (from s in sequance
+          where s > 3
+          select s).Count();
+```
+
+***
+###Why to use VAR in LINQ context
+Always use VAR storing result of query because...
+
+<div class="fragment">
+Type of result can be a little bit clumsy:
+
+```cs
+IEnumerable<IGrouping<string, Person>> result = people.GroupBy(n => n.Name);
+```
+
+vs
+
+```cs
+var result = people.GroupBy(n => n.Name);
+```
+</div>
+
+---
+###Why to use VAR in LINQ context
+It can be an enumeration of anonymous types:
+
+<div class="fragment">
+
+```cs
+var result = from person in people
+             select new {person.Name, person.Surname};
+```
+</div>
+
+---
+
+###Why to use VAR in LINQ context
+You never know how you will change your LINQ query therefore VAR will help you to not change resulting type with a small change:
+
+<div class="fragment">
+for example query was
+
+```cs
+var result = from person in people
+             select new Person { Name = person.Name, Surname = person.Surname };
+```
+</div>
+
+<div class="fragment">
+But someone decided to group it
+
+```cs
+var result = from person in people
+             group person by person.Name;
+```
+
+</div>
