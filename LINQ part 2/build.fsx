@@ -9,10 +9,10 @@
 
 // Git configuration (used for publishing documentation in gh-pages branch)
 // The profile where the project is posted
-let gitOwner = "myGitUser"
+let gitOwner = "Kottans"
 let gitHome = "https://github.com/" + gitOwner
 // The name of the project on GitHub
-let gitProjectName = "MyProject"
+let gitProjectName = "csharp-slides"
 
 open FsReveal
 open Fake
