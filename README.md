@@ -21,3 +21,11 @@ csharp-slides
 - [ ] Lecture 13 - Multithreading Pt.1
 - [ ] Lecture 14 - Multithreading Pt.2
 - [ ] Lecture 15 - Dynamic programming
+----
+##How to prepare FsReveal presentation
+1. Copy existing presentation folder and rename it accordingly
+2. Edit content of file <presentation_folder>\slides\index.md and add used images to folder <presentation_folder>\slides\images
+3. run build.cmd to build presentation and raise up local http server and continouos build of markup file to html presentation
+4. When ready, run script <presentation_folder>\GenerateReleaseSlides.cmd which will produce Release folder
+5. Copy contents of Release folder to the branch gh-pages into related folder
+That's it
