@@ -19,8 +19,9 @@ csharp-slides
 - [x] [Lecture 11 - Garbage collection](https://docs.google.com/presentation/d/1n_K-LopzpyI5hMPMftK5WQdULmTUsZxBQ5TtER118FM/edit?usp=sharing)
 - [ ] Lecture 12 - Reflection
 - [ ] Lecture 13 - Multithreading Pt.1
-- [ ] Lecture 14 - Multithreading Pt.2
-- [ ] Lecture 15 - Dynamic programming
+- [ ] Lecture 14 - Multithreading Pt.2   
+- [ ] Lecture 15 - Dynamic programming   
+
 ----
 ##How to prepare FsReveal presentation
 1. Copy existing presentation folder and rename it accordingly
