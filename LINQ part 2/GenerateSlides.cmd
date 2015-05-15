@@ -2,6 +2,7 @@ rem set release template
 copy templates\template_release.hmtl packages\FsReveal\fsreveal\template.html /Y
 exit 
 pause
+
 call build GenerateSlides
 
 rem return back original template
