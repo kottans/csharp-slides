@@ -59,11 +59,17 @@ a.btn {
   box-shadow: 3px 3px 3px rgba(0, 0, 0, 0.3);
   border-radius: 3px 3px 3px 3px;
 }
+
+
 a.btn + a.btn {
   margin-top: 5px;
 }
 a.btn.secondary {
   background-color: #444;
+}
+
+a.btn.inactive {
+  background-color: #aaa;
 }
 a.uc {
   font-style:italic;
