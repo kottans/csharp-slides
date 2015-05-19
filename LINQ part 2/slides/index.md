@@ -135,9 +135,19 @@ which in future may be translated in other language
 
 ### Deferred execution
 
+Execute not when constructed, but when enumerated (when MoveNext is called)
+
+<div class="fragment">
+	Deferred execution is important because it decouples query construction from query execution.	
+</div>
+
+---
+
+### Deferred execution
+
 All standard query operators provide deferred execution, with the following exceptions:
-- Opereators that return a single element or scalar value, such as `First` or `Count`
-- Conversion operators like `ToArray`, `ToList`, `ToDictionary`, `ToLookup`
+- Operators that return a single element or scalar value, such as `First` or `Count`
+- The following conversion operators: `ToArray`, `ToList`, `ToDictionary`, `ToLookup`
 
 ***
 
