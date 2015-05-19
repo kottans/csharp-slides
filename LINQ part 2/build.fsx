@@ -22,6 +22,7 @@ open System.Diagnostics
 open Suave
 open Suave.Web
 open Suave.Http
+open Suave.Types
 open Suave.Http.Files
 
 let outDir = __SOURCE_DIRECTORY__ @@ "output"
@@ -79,6 +80,7 @@ let handleWatcherEvents (events:FileChange seq) =
 let startWebServer () =
     let serverConfig = 
         { defaultConfig with
+           bindings = [ HttpBinding.mk' HTTP "127.0.0.1" 8084 ]
            homeFolder = Some (FullName outDir)
         }
     let app =
@@ -87,7 +89,7 @@ let startWebServer () =
         >>= Writers.setHeader "Expires" "0"
         >>= browseHome
     startWebServerAsync serverConfig app |> snd |> Async.Start
-    Process.Start "http://localhost:8083/index.html" |> ignore
+    Process.Start "http://localhost:8084/index.html" |> ignore
 
 Target "GenerateSlides" (fun _ ->
     !! (slidesDir @@ "*.md")
