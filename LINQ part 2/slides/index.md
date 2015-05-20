@@ -13,18 +13,13 @@
 ***
 
 ## Agenda
-- anonymous types
 - IEnumerable vs IQueryable
-- EntityFramework 
+- Entity Framework 
 - deferred execution
 - sortings
 - groupings 
 - joins
 - aggregation
- 
-***
-
-### Anonymous types
 
 ***
 
@@ -129,13 +124,112 @@ which in future may be translated in other language
 
 ***
 
-### EntityFramework 
+### Entity Framework 
+
+Object-Relational Mapping (ORM) which allows you:
+
+- Work with data-store in object-oriented way
+- Query any supported data source
+- Potantially change data source
+- Has own change tracking system which can be extended
+- Business specifications can be reused throughout your project
+- Currently prefered data access in wich Microsoft invests the most
+
+---
+
+### Entity Framework main concepts:
+#### DbContext
+
+It is a bridge between your domain or entity classes and the database.
+
+![DbContext](http://yuml.me/0199201a)
+
+---
+
+#### DbContext diagram explanation
+
+<div data-markdown class="fragment">
+
+  DbSets 
+
+  DbContext contains entity set (`DbSet<TEntity>`) for all the entities which is mapped to DB tables
+
+</div>
+
+<div data-markdown class="fragment">
+
+  Change Tracking 
+
+  It keeps track of changes occurred in the entities after it has been querying from the database
+
+</div>
+
+<div data-markdown class="fragment">
+
+  Caching
+
+  DbContext does first level caching by default. It stores the entities which has been retrieved during the life time of a context class.
+
+</div>
+
+<div data-markdown class="fragment">
+
+  Querying
+
+  DbContext converts LINQ-to-Entities queries to SQL query and send it to the database.
+
+</div>
+
+<div data-markdown class="fragment">
+
+  Persistance
+
+  It also performs the Insert, update and delete operations to the database, based on the entity states.
+
+</div>
+
+---
+
+#### DbContext
+Example:
+
+```cs
+  ctx.Students.Where(stud => stud.City == "Kiev")
+                .Select(stud => new { stud.FirstName, stud.LastName });
+```
+
+<div data-markdown class="fragment">
+
+  You already saw this query. But in this case `ctx` is instance of DbContext.
+  
+</div>
+
+---
+
+#### Ways to generate DbContext
+
+- Code-First
+- Db-First
+
+---
+
+### Entity Framework 7
+- Supports new types of storages (SQLite, NoSQL)
+- Thanks to CLR Core can be run on any platform (Linux, Mac)
+- Lightweight and modular
+
+---
+
+### Entity Framework resources
+
+[Entity Framework tutorial](http://www.entityframeworktutorial.net/)
 
 ***
 
 ### Deferred execution
 
-Execute not when constructed, but when enumerated (when MoveNext is called)
+Execute not when constructed, but when enumerated 
+(when MoveNext is called)
 
 <div class="fragment">
 	Deferred execution is important because it decouples query construction from query execution.	
@@ -146,8 +240,87 @@ Execute not when constructed, but when enumerated (when MoveNext is called)
 ### Deferred execution
 
 All standard query operators provide deferred execution, with the following exceptions:
-- Operators that return a single element or scalar value, such as `First` or `Count`
-- The following conversion operators: `ToArray`, `ToList`, `ToDictionary`, `ToLookup`
+
+  - Operators that return a single element or scalar value, such as:
+    - `First` 
+    - `Count`
+  - The following conversion operators: 
+    - `ToArray` 
+    - `ToList` 
+    - `ToDictionary` 
+    - `ToLookup`
+
+---
+
+### Multiple enumeration
+
+IEnumerable is cool when it is used for right job.
+In some cases it can introduce performance overhead:
+
+<div class="fragment">
+
+Please do not write such "magnificent code":
+
+```cs
+
+public static IEnumerable<PersonWithDish> GiveDishesBadWay(IEnumerable<Person> people, IEnumerable<Dish> dishes)
+{
+  for(int i = 0; i < people.Count(); i++)
+  {
+    yield return new PersonWithDish()
+    {
+      PersonName = people.ElementAt(i).Name, 
+      DishName = dishes.ElementAt(i).Name
+    };
+  }
+}
+
+```
+
+</div>
+
+---
+
+### Multiple enumeration
+
+Other way to avoid it could be just cache result of execution with `ToList` or `ToArray` and get needed element by indexer;
+
+Or choose right parameter type for your method:
+
+```cs
+
+public static IEnumerable<PersonWithDish> GiveDishesBetterWay(IReadOnlyList<Person> people, IReadOnlyList<Dish> dishes)
+{
+    for (int i = 0; i < people.Count; i++)
+    {
+        yield return new PersonWithDish()
+        {
+            PersonName = people[i].Name,
+            DishName = dishes[i].Name
+        };
+    }
+}
+
+```
+
+---
+
+### Multiple enumeration
+
+In this case to avoid multiple enumeration just use built-in method `Zip` :
+
+```cs
+public static IEnumerable<PersonWithDish> GiveDishesBestWay(IEnumerable<Person> people, IEnumerable<Dish> dishes)
+{
+    return people.Zip(dishes, (p, d) => new PersonWithDish
+                                        {
+                                            PersonName = p.Name, 
+                                            DishName = d.Name
+                                        }))
+}
+```
+
+[a link to the code](https://dotnetfiddle.net/AFFUFI)
 
 ***
 
