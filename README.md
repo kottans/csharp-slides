@@ -2,6 +2,8 @@ csharp-slides
 =============
 ## Currently CSharp slides are in development and accesible via links:
 
+[Public slides](kottans.org/csharp-slides/)
+
 [Wiki](https://github.com/Kottans/csharp-slides/wiki)    
 [Course program](https://docs.google.com/document/d/19Gfj71qbpKlHXIiye7m_PZDk4jA7M1G21bxRzauVP8w/edit#)
 
