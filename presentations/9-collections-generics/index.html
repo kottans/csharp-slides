@@ -1,0 +1,794 @@
+﻿<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>CSharp - Colections and generics</title>
+    <meta name="description" content="Colections and generics">
+    <meta name="author" content="Valentine Radchuk">
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <script src="//code.jquery.com/jquery-1.8.0.js"></script>
+    <script src="//code.jquery.com/ui/1.8.23/jquery-ui.js"></script>
+    <script src="//netdna.bootstrapcdn.com/twitter-bootstrap/2.2.1/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link href="//netdna.bootstrapcdn.com/twitter-bootstrap/2.2.1/css/bootstrap-combined.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="../../shared/css/reveal.css">
+    <link rel="stylesheet" href="../../shared/css/theme/league.css" id="theme">
+    <link type="text/css" rel="stylesheet" href="../../shared/fsharp.formatting/styles/style.css" />
+    <link type="text/css" rel="stylesheet" href="../../shared/fsharp.formatting/styles/deedle.css" />
+    <link type="text/css" rel="stylesheet" href="../../shared/css/custom.css" />
+    <script src="../../shared/fsharp.formatting/styles/tips.js" type="text/javascript"></script>
+    <link rel="shortcut icon" type="image/png" href="https://webloft.at/fileadmin/images/content/NET-Framework.png">
+    <!-- For syntax highlighting -->
+    <link rel="stylesheet" href="../../shared/lib/css/zenburn.css">
+    <!-- If the query includes 'print-pdf', include the PDF print sheet -->
+    <script>
+			if( window.location.search.match( /print-pdf/gi ) ) {
+				var link = document.createElement( 'link' );
+				link.rel = 'stylesheet';
+				link.type = 'text/css';
+				link.href = '../../shared/css/print/pdf.css';
+				document.getElementsByTagName( 'head' )[0].appendChild( link );
+			}
+    </script>
+    <!--[if lt IE 9]>
+    <script src="../../shared/lib/js/html5shiv.js"></script>
+    <![endif]-->
+</head>
+<body>
+    <div class="reveal">
+        
+        <!-- Any section element inside of this container is displayed as a slide -->
+        <div class="slides">
+            <section >
+
+<h2>C# course</h2>
+
+<h4>Lecture 8</h4>
+
+<h1>Collections and generics</h1>
+
+</section>
+
+<section >
+
+<h3>What are generics?</h3>
+
+<p>Generics brings to C# concept of type parameters. Once designed, class (or method) can be reused with other data type substituted during instatiation</p>
+
+<ul>
+<li>brings better quality of code and force developers write reusable and easy maintainable code</li>
+<li>bring significant performance boost</li>
+<li>in C# are similar to C++ concept of templates</li>
+</ul>
+
+</section>
+
+<section >
+
+<h3>Why generics are required?</h3>
+
+<ul>
+<li>generics are type-safe</li>
+<li>increase performance (no boxing-unboxing when work with value-types)</li>
+<li>reduce code duplicates</li>
+<li>allow to create single piece of code and reuse it for multiple different types</li>
+</ul>
+
+<a href="https://dotnetfiddle.net/bGonny">Example</a>
+
+</section>
+
+<section >
+
+<h3>Generic overview</h3>
+
+<ul>
+<li><strong>default</strong> value - allow to initialize generic variable regardless of its real type</li>
+<li>constraints - constraints are used to allow pass as a parameter only specific types</li>
+<li>inheritance - generic types can be inherited and extended with generic parameters</li>
+<li>generics might be applied for static members as well</li>
+<li>generic are applied to classes and methods</li>
+</ul>
+
+</section>
+
+<section >
+
+<section >
+
+<h3>Generic classes</h3>
+
+<p>Generic types encapsulate operations that are not specific to a particular data type</p>
+
+<h4>Stages of creation of instance of generic type</h4>
+
+<ul>
+<li>declare generic type and all its members using type-template</li>
+<li>provide actual data type to substitute placeholder (creating constructed type)</li>
+<li>create instance of filled-in class definition</li>
+</ul>
+
+<p><img src="images/generic_classes.png" alt="Generic classes" /></p>
+
+</section>
+
+<section author="Valentine Radchuk" description="Colections and generics" theme="league" title="CSharp - Colections and generics" transition="default">
+
+<h3>Generic class declaration</h3>
+
+<ul>
+<li>place a matching set of angle brackets after the class name.</li>
+<li>between angle brackets place a comma-separated list of type parameters</li>
+<li>use the type parameters throughout the body of the declaration to represent the types that should be substituted in.</li>
+</ul>
+
+<div>
+
+<table class="pre"><tr><td><pre lang="cs"><span class="k">class</span> MyGenericCass &lt;T1, T2&gt; 
+{
+    <span class="k">public</span> T1 someVar;
+    <span class="k">public</span> T ReturnDefaultGenericValue1(){
+        <span class="k">return</span> <span class="k">default</span>(T1); 
+    }
+
+    <span class="k">public</span> T ReturnDefaultGenericValue2(){
+        <span class="k">return</span> <span class="k">default</span>(T2); 
+    }
+}
+
+</pre></td></tr></table>
+
+</div>
+
+</section>
+
+<section author="Valentine Radchuk" description="Colections and generics" theme="league" title="CSharp - Colections and generics" transition="default">
+
+<h3>Creating Constructed type</h3>
+
+<p>You cannot create instance from a generic type. First you need to create constructed type:</p>
+
+<p><img src="images/Constructing_type.png" alt="Constructing type" /></p>
+
+<div>
+
+<table class="pre"><tr><td><pre lang="cs"><span class="k">class</span> SomeClass&lt;T1, T2&gt; {
+    T1 var1;
+    T2 var2;
+}
+</pre></td></tr></table>
+
+</div>
+
+<div>
+
+<table class="pre"><tr><td><pre lang="cs"><span class="k">class</span> SomeClass&lt;<span class="k">int</span>, <span class="k">double</span>&gt; {
+    <span class="k">int</span> var1;
+    <span class="k">double</span> var2;
+}
+</pre></td></tr></table>
+
+</div>
+
+</section>
+
+</section>
+
+<section >
+
+<h3>Creating variables and instances</h3>
+
+<p>Constructed type is used as a regular type to construct instances and references:</p>
+
+<h4>Non-generic type</h4>
+
+<div>
+
+<table class="pre"><tr><td><pre lang="cs"><span class="k">var</span> someVar <span class="o">=</span> <span class="k">new</span> SomeClass();
+</pre></td></tr></table>
+
+</div>
+
+<h4>Generic type</h4>
+
+<div>
+
+<table class="pre"><tr><td><pre lang="cs"><span class="k">var</span> someVar <span class="o">=</span> <span class="k">new</span> SomeClass&lt;<span class="k">int</span>, <span class="k">double</span>&gt;();
+</pre></td></tr></table>
+
+</div>
+
+</section>
+
+<section >
+
+<h3>Generic vs Non-generic</h3>
+
+<p><img src="images/generic_vs_nongeneric.png" alt="Generic vs Non-generic" /></p>
+
+</section>
+
+<section >
+
+<section >
+
+<h3>Constraints on type parameter</h3>
+
+<ul>
+<li>restrictions to the kind of types that client code can use for type arguments</li>
+<li>constraints can be applied for all type parameters in a list</li>
+</ul>
+
+<h4>Types of constraints</h4>
+
+<p><img src="images/types_of_constraints.png" alt="Types of constraints" /></p>
+
+</section>
+
+<section author="Valentine Radchuk" description="Colections and generics" theme="league" title="CSharp - Colections and generics" transition="default">
+
+<h3>Constraints syntax</h3>
+
+<p>Constraints are listed as <strong>where</strong> clauses:</p>
+
+<ul>
+<li>each type parameter that has constraints has its own <strong>where</strong> clause.</li>
+<li>if a parameter has multiple constraints, they are listed in the <strong>where</strong> clause, separated by commas</li>
+<li>the <strong>where</strong> clauses can be listed in any order</li>
+</ul>
+
+<div>
+
+<table class="pre"><tr><td><pre lang="cs"><span class="k">class</span> SomeClass &lt;T1, T2&gt; <span class="k">where</span> T1 <span class="o">:</span> <span class="k">class</span>, <span class="k">new</span>()
+                         <span class="k">where</span> T2 <span class="o">:</span> IEnumerable
+{
+    …
+}
+</pre></td></tr></table>
+
+</div>
+
+</section>
+
+<section author="Valentine Radchuk" description="Colections and generics" theme="league" title="CSharp - Colections and generics" transition="default">
+
+<h3>Constrainots - additional rules</h3>
+
+<ul>
+<li>there can be at most one primary constraint (ClassName, <strong>class</strong>, <strong>struct</strong>), and if there is one, it must be listed first</li>
+<li>there can be any number of InterfaceName constraints.</li>
+<li>if the constructor constraint is present, it must be listed last</li>
+</ul>
+
+</section>
+
+</section>
+
+<section >
+
+<section >
+
+<h3>Generic methods</h3>
+
+<p>Generic methods might be declared in both generic and nongeneric classes, and in structs and interfaces.</p>
+
+<h4>Generic method has 2 sets of parameters:</h4>
+
+<ul>
+<li>method formal parameters (in parentheses)</li>
+<li>method type parameters (in angle brackets)</li>
+</ul>
+
+</section>
+
+<section author="Valentine Radchuk" description="Colections and generics" theme="league" title="CSharp - Colections and generics" transition="default">
+
+<h3>Generic methods</h3>
+
+<p>Generic methods have constraints section as well as class:</p>
+
+<div>
+
+<table class="pre"><tr><td><pre lang="cs"><span class="k">public</span> T1 SomeMethod&lt;T1, T2&gt;(T2 input) <span class="k">where</span> T1 <span class="o">:</span> <span class="k">class</span> T2 <span class="o">:</span> <span class="k">new</span>() 
+{
+    <span class="c">/* … */</span>
+}
+</pre></td></tr></table>
+
+</div>
+
+<p>Generic methods could be invoked with actual type parameters:</p>
+
+<div>
+
+<table class="pre"><tr><td><pre lang="cs"><span class="k">var</span> val <span class="o">=</span> SomeMethod&lt;MyClass, MyClassWithCtor&gt;;(<span class="k">new</span> MyClassWithCtor());
+</pre></td></tr></table>
+
+</div>  
+
+<p><strong>Important note:</strong> if type can be determined by a compiler from passed parameter, declaration of type can be omitted</p>
+
+<div>
+
+<table class="pre"><tr><td><pre lang="cs"><span class="k">public</span> <span class="k">void</span> SomeMethod&lt;T&gt;(T someVal) {<span class="c">/* … */</span>}
+<span class="o">.</span><span class="o">.</span><span class="o">.</span>
+<span class="k">var</span> val <span class="o">=</span> SomeMethod&lt;<span class="k">int</span>&gt;(myIntVal); 
+<span class="c">//the same as  </span>
+<span class="k">var</span> val <span class="o">=</span> SomeMethod(myIntVal);
+</pre></td></tr></table>
+
+</div>  
+
+<a href="https://dotnetfiddle.net/8FaVcC">Demo</a>
+
+</section>
+
+</section>
+
+<section >
+
+<h3>Generic extension methods</h3>
+
+<a href="https://dotnetfiddle.net/eUV2lI">Demo</a>
+
+</section>
+
+<section >
+
+<h3>Other generic types</h3>
+
+<p>Generic structure:</p>
+
+<div>
+
+<table class="pre"><tr><td><pre lang="cs"><span class="k">public</span> <span class="k">struct</span> MyStruct&lt;T&gt; <span class="k">where</span> T <span class="o">:</span> <span class="k">class</span> 
+{ <span class="c">/* … */</span> }
+</pre></td></tr></table>
+
+</div>  
+
+<p>Generic interfaces:</p>
+
+<div>
+
+<table class="pre"><tr><td><pre lang="cs"><span class="k">public</span> <span class="k">interface</span> MyInterface&lt;T&gt; <span class="k">where</span> T <span class="o">:</span> <span class="k">class</span> 
+{ <span class="c">/* … */</span> }
+</pre></td></tr></table>
+
+</div>
+
+<div>
+
+<table class="pre"><tr><td><pre lang="cs"><span class="k">public</span> <span class="k">class</span> MyClass <span class="o">:</span> MyInterface&lt;MyClass1&gt;, MyInterface&lt;MyClass2&gt; 
+{<span class="c">/* … interface implementation … */</span>}
+</pre></td></tr></table>
+
+</div>
+
+<p>Generic delegates:</p>
+
+<div>
+
+<table class="pre"><tr><td><pre lang="cs"><span class="k">public</span> <span class="k">delegate</span> <span class="k">void</span> MyDelegate&lt;T&gt;(T <span class="k">value</span>); <span class="c">// Generic delegate</span>
+<span class="c">//…</span>
+<span class="k">var</span> myDel <span class="o">=</span> <span class="k">new</span> MyDelegate&lt;<span class="k">string</span>&gt;(PrintString); <span class="c">// Create inst of delegate</span>
+myDel <span class="o">+</span><span class="o">=</span> PrintUpperString; <span class="c">// Add a method</span>
+</pre></td></tr></table>
+
+</div>
+
+</section>
+
+<section >
+
+<h3>Collections</h3>
+
+<p>Collections are:</p>
+
+<ul>
+<li>objects that allows you to group other objects</li>
+<li>most of collection implement the same interface - ICollection, which introduces very basic members of each collection</li>
+<li>always of reference types</li>
+<li>enumerable types, where elements might usually be accessed by index or key</li>
+</ul>
+
+</section>
+
+<section >
+
+<h3>Namespaces and Interfaces</h3>
+
+<p>Collections are usually stored in following namespaces:</p>
+
+<div>
+
+<table class="pre"><tr><td><pre lang="cs">System.Collections
+System.Collections.Generics
+</pre></td></tr></table>
+
+</div>
+
+<p>Most of collections are derived from following interfaces:</p>
+
+<div>
+
+<table class="pre"><tr><td><pre lang="cs">IEnumerable <span class="c">// basic interface that outlines enumerable object</span>
+ICollection <span class="c">// the most basic collection interface</span>
+IList <span class="c">// interface for simple list of items</span>
+ISet <span class="c">// defines sets. Allows to combine sets and introduces operations to manipulate sets.</span>
+IDictionary <span class="c">// for hash tables and dictionaries (key-value pair collections)</span>
+IComparer <span class="c">// introduces comparers an usually used by collections to sort elements.   </span>
+</pre></td></tr></table>
+
+</div>
+
+</section>
+
+<section >
+
+<section >
+
+<h3>IEnumerable interface</h3>
+
+<ul>
+<li>IEnumerable - exposes an enumerator, which supports a simple iteration over a collection.</li>
+</ul>
+
+<p>Members of <strong>IEnumerable</strong>:</p>
+
+<ul>
+<li><strong>GetEnumerator()</strong> - returns an enumerator that iterates through a collection</li>
+</ul>
+
+</section>
+
+<section author="Valentine Radchuk" description="Colections and generics" theme="league" title="CSharp - Colections and generics" transition="default">
+
+<h3>IEnumerator interfaces</h3>
+
+<ul>
+<li>IEnumerator - supports a simple iteration over a collection.</li>
+</ul>
+
+<p>Members of <strong>IEnumerator</strong>:</p>
+
+<ul>
+<li><strong>Current</strong> - property that gets current element of a collection. Returns null if MoveNext wan not called at least once.</li>
+<li><strong>MoveNext</strong> - advances the enumerator to the next element of the collection.</li>
+<li><strong>Reset</strong> - sets the enumerator to its initial position, which is before the first element in the collection.</li>
+</ul>
+
+</section>
+
+</section>
+
+<section >
+
+<section >
+
+<h3>Collections - Interfaces</h3>
+
+<p><img src="images/Collections_interfaces.png" alt="Collections - Interfaces" /></p>
+
+<ul>
+<li><strong>IEnumeration</strong> - enables iteration with foreach operator</li>
+<li><strong>ICollection</strong> - enables very basic functionality of collection types like Add, Remove, Clear, Contains, CopyTo</li>
+<li><strong>IList</strong> - list-specific operations like IndexOf, Insert, Remove</li>
+<li><strong>ISet</strong> - set-specific operations like UnionWith, IsSubsetOf, IsSupersetOf, IntersectWith</li>
+</ul>
+
+</section>
+
+<section author="Valentine Radchuk" description="Colections and generics" theme="league" title="CSharp - Colections and generics" transition="default">
+
+<h3>Simple collections</h3>
+
+<p><img src="images/simple_collections_interfaces.png" alt="Simple collections" /></p>
+
+</section>
+
+</section>
+
+<section >
+
+<section >
+
+<h3>Generic Collections - Interfaces</h3>
+
+<p><img src="images/generic_collections_interfaces.png" alt="Generic Collections - Interfaces" /></p>
+
+</section>
+
+<section author="Valentine Radchuk" description="Colections and generics" theme="league" title="CSharp - Colections and generics" transition="default">
+
+<h3>Generic Collections</h3>
+
+<p><img src="images/generic_collections.png" alt="" /></p>
+
+</section>
+
+</section>
+
+<section >
+
+<h3>List</h3>
+
+<ul>
+<li><strong>List<T></strong> - strong-typed storage for set of elements.</li>
+<li>Alternative for ArrayList</li>
+</ul>
+
+<div>
+
+<table class="pre"><tr><td><pre lang="cs"><span class="k">var</span> lst <span class="o">=</span> <span class="k">new</span> List&lt;<span class="k">int</span>&gt;();
+lst.Add(1); <span class="c">// { 1 }</span>
+lst.AddRange(<span class="k">new</span>[] { 2, 3, 7, 6, 5, 4 }); <span class="c">// { 1, 2, 3, 7, 6, 5, 4 }</span>
+lst.Insert(index: 0, item: 0); <span class="c">// { 0, 1, 2, 3, 7, 6, 5, 4 }</span>
+lst.RemoveAt(index: 4); <span class="c">// { 0, 1, 2, 3, 6, 5, 4 }</span>
+lst.Remove(item: 1); <span class="c">// { 0, 2, 3, 6, 5, 4 }</span>
+lst.RemoveRange(index: 2, count: 3); <span class="c">// { 0, 2, 4 }</span>
+lst.Reverse(); <span class="c">// { 4, 2, 0 }</span>
+lst.Sort(); <span class="c">// { 0, 2, 4 }</span>
+<span class="k">bool</span> hasTwo <span class="o">=</span> lst.Contains(2); <span class="c">// true</span>
+<span class="k">int</span> two <span class="o">=</span> lst[1]; <span class="c">// 2</span>
+</pre></td></tr></table>
+
+</div>
+
+</section>
+
+<section >
+
+<h3>Linked list</h3>
+
+<p><strong>LinkedList<T></strong> - strong-typed storage for double-linked elements so that you can navigate through elements and keep their order.</p>
+
+<div>
+
+<table class="pre"><tr><td><pre lang="cs"><span class="k">var</span> lst <span class="o">=</span> <span class="k">new</span> LinkedList&lt;<span class="k">string</span>&gt;(); <span class="c">// create linked list</span>
+
+<span class="k">var</span> elem1 <span class="o">=</span> lst.AddFirst(“isn’t”); <span class="c">//add first element</span>
+<span class="k">var</span> elem2 <span class="o">=</span> lst.AddBefore(elem1, “This”);  <span class="c">//add element just before the first one</span>
+<span class="k">var</span> elem3 <span class="o">=</span> lst.AddAfter(elem1, “a”); <span class="c">//add element after element1</span>
+<span class="k">var</span> elem4 <span class="o">=</span> lst.AddLast(“list”); <span class="c">//add an element into the tail</span>
+<span class="k">var</span> elem5 <span class="o">=</span> lst.AddBefore(elem4, “singly”); <span class="c">//add an element before element 4</span>
+<span class="k">var</span> elem6 <span class="o">=</span> lst.AddAfter(elem5, “linked”); <span class="c">//add an element after element 5</span>
+lst.Last.Previous.Previous.Value <span class="o">=</span> “doubly”; <span class="c">// use nav properties to navigate through values</span>
+
+lst.First.Next.Value <span class="o">=</span> “<span class="k">is</span>”; 
+<span class="k">foreach</span> (<span class="k">var</span> word <span class="k">in</span> lst) print elements
+    Console.Write(word <span class="o">+</span> “ “);
+</pre></td></tr></table>
+
+</div>
+
+</section>
+
+<section >
+
+<h3>Dictionary</h3>
+
+<ul>
+<li><strong>Dictionary<TKey, TValue></strong> - strong-typed storage for set of key-value pairs, where key should be unique.</li>
+<li>The biggest advantage of Dictionary - fast access to required element by its key.</li>
+<li>Alternative for HashTable.</li>
+</ul>
+
+<div>
+
+<table class="pre"><tr><td><pre lang="cs"><span class="k">var</span> dictionary <span class="o">=</span> <span class="k">new</span> Dictionary&lt;<span class="k">int</span>, <span class="k">string</span>&gt;(); <span class="c">// create dictionary</span>
+dictionary.Add(1, <span class="s">"one"</span>); <span class="c">//add first element</span>
+dictionary[2] <span class="o">=</span> <span class="s">"two"</span>; <span class="c">// add second element</span>
+dictionary[2]<span class="o">=</span> <span class="s">"updated_two"</span>; <span class="c">// update second element</span>
+dictionary.Remove(2); <span class="c">// remove second element</span>
+<span class="k">if</span> (!dictionary.ContainsKey(2)) <span class="c">// check if element with index 2 exists</span>
+    dictionary.Add(2, <span class="s">"two"</span>); <span class="c">// add second element</span>
+
+<span class="k">foreach</span>(<span class="k">var</span> a <span class="k">in</span> dictionary)
+    Console.Write(a.Value);
+</pre></td></tr></table>
+
+</div>
+
+</section>
+
+<section >
+
+<h3>Class Queue<T></h3>
+
+<p><strong>Queue<T></strong> - class that implements FIFO algorithm on set of elements of fixed type</p>
+
+<p><img src="images/queue.png" alt="Queue" /></p>
+
+<div>
+
+<table class="pre"><tr><td><pre lang="cs"><span class="k">var</span> queue <span class="o">=</span> <span class="k">new</span> Queue&lt;<span class="k">int</span>&gt;(); <span class="c">// init queue</span>
+queue.Enqueue(1);  <span class="c">// add first element to queue</span>
+queue.Enqueue(2);  <span class="c">// add second element to queue       </span>
+<span class="k">var</span> peekValue <span class="o">=</span> queue.Peek(); <span class="c">// retrieve value from queue peek without deleting element (1)</span>
+<span class="k">var</span> topItem <span class="o">=</span> queue.Dequeue(); <span class="c">// get first element from top of the queue (1)</span>
+</pre></td></tr></table>
+
+</div>
+
+</section>
+
+<section >
+
+<h3>Class Stack<T></h3>
+
+<p><strong>Stack<T></strong> - class that implements LIFO algorithm on set of elements of fixed type</p>
+
+<p><img src="images/Stack.png" alt="Stack" /></p>
+
+<div>
+
+<table class="pre"><tr><td><pre lang="cs"><span class="k">var</span> stack <span class="o">=</span> <span class="k">new</span> Stack&lt;<span class="k">int</span>&gt;(); <span class="c">// init stack</span>
+stack.Push(1);  <span class="c">// add first element to stack</span>
+stack.Push(2);  <span class="c">// add second element to stack      </span>
+<span class="k">var</span> peekValue <span class="o">=</span> stack.Peek(); <span class="c">// get value from top of stack without deleting element (2)</span>
+<span class="k">var</span> topItem <span class="o">=</span> stack.Pop(); <span class="c">// get the most recently added element (2)</span>
+</pre></td></tr></table>
+
+</div>
+
+</section>
+
+<section >
+
+<h3>Sets</h3>
+
+<p><strong>Set</strong> - is a collection of unique elements.</p>
+
+<p><img src="images/Set.png" alt="Set" /></p>
+
+<div>
+
+<table class="pre"><tr><td><pre lang="cs"><span class="k">var</span> ss1 <span class="o">=</span> <span class="k">new</span> SortedSet&lt;<span class="k">char</span>&gt; {`A`,`B`,`C`,`D`};  <span class="c">//init first set</span>
+<span class="k">var</span> ss2 <span class="o">=</span> <span class="k">new</span> SortedSet&lt;<span class="k">char</span>&gt;{`E`,`D`,`F`} ; <span class="c">// init second set</span>
+
+ss1.Add(`Q`); <span class="c">// add new item to set 1</span>
+ss1.Remove(`A`); <span class="c">// remove an item from set 1</span>
+ss1.UnionWith(ss2); <span class="c">// union sets and store results to first set</span>
+ss1.ExceptWith(ss2); <span class="c">//remove set 2 from set 1</span>
+</pre></td></tr></table>
+
+</div>
+
+</section>
+
+<section >
+
+<h3>SortedList vs SortedDictionary</h3>
+
+<p>Both classes represent a collection of keys and values pair of data sorted by key.</p>
+
+<p><img src="images/SortedList_vs_SortedDict.png" alt="SortedList vs SortedDictionary" />
+<br />
+<a href="http://stackoverflow.com/questions/935621/whats-the-difference-between-sortedlist-and-sorteddictionary">Details</a></p>
+
+</section>
+
+<section >
+
+<h3>Collection initializers</h3>
+
+<div>
+
+<table class="pre"><tr><td><pre lang="cs"><span class="k">var</span> list <span class="o">=</span> <span class="k">new</span> List&lt;<span class="k">int</span>&gt; {1, 2, 3, 4};
+
+<span class="c">//equals to</span>
+
+<span class="k">var</span> __temp <span class="o">=</span> <span class="k">new</span> List&lt;<span class="k">int</span>&gt;();
+__temp.Add(1);
+__temp.Add(2);
+__temp.Add(3);
+__temp.Add(4);
+<span class="k">var</span> list <span class="o">=</span> __temp;
+</pre></td></tr></table>
+
+</div>
+
+<p>The main condition for this feature - collection should support <strong>Add</strong> method</p>
+
+<div>
+
+<table class="pre"><tr><td><pre lang="cs"><span class="k">var</span> ages <span class="o">=</span> <span class="k">new</span> Dictionary { { “Bart”, 26 }, { “John”, 62 } };
+
+<span class="c">//equals to</span>
+
+<span class="k">var</span> __temp <span class="o">=</span> <span class="k">new</span> Dictionary();
+__temp.Add(“Bart”, 26); 
+__temp.Add(“John”, 62); 
+<span class="k">var</span> ages <span class="o">=</span> __temp;
+</pre></td></tr></table>
+
+</div>
+
+</section>
+
+<section >
+
+<h3>How to compare elements in collections?</h3>
+
+<ul>
+<li>IComparable - interface that вefines a generalized comparison method that a class implements to create a type-specific comparison method for ordering instances.</li>
+</ul>
+
+<div>
+
+<table class="pre"><tr><td><pre lang="cs"><span class="k">int</span> CompareTo&lt;T&gt;(T other)
+</pre></td></tr></table>
+
+</div>
+
+<ul>
+<li>IComparer - defines a method that a type implements to compare two objects.</li>
+</ul>
+
+<div>
+
+<table class="pre"><tr><td><pre lang="cs"><span class="k">int</span> Compare(T x, T y)
+</pre></td></tr></table>
+
+</div>
+
+<br />
+<a href="Example https://dotnetfiddle.net/RFNIVq">Example</a>
+
+</section>
+
+<section >
+
+<h3>3rd party collections. Power collections</h3>
+
+<a href="https://powercollections.codeplex.com/">Power collections</a> - community project to build set of collection not present in .NET BCL
+
+<ul>
+<li>Deque - union of stack and queue</li>
+<li>Bag - set with duplicates</li>
+<li>MultyDictionary - associates multiple values with a key</li>
+<li>Pair, Triple - stores 2 or 3 objects in single object</li>
+</ul>
+
+</section>
+
+
+
+        </div>
+    </div>
+    <script src="../../shared/lib/js/head.min.js"></script>
+    <script src="../../shared/js/reveal.js"></script>
+    <script>
+
+        // Full list of configuration options available here:
+        // https://github.com/hakimel/reveal.js#configuration
+        Reveal.initialize({
+            controls: true,
+            progress: true,
+            history: true,
+            center: true,
+
+            transition: 'default', // default/cube/page/concave/zoom/linear/fade/none
+
+            // Parallax scrolling
+            // parallaxBackgroundImage: 'https://s3.amazonaws.com/hakim-static/reveal-js/reveal-parallax-1.jpg',
+            // parallaxBackgroundSize: '2100px 900px',
+
+            // Optional libraries used to extend on reveal.js
+            dependencies: [
+                { src: '../../shared/lib/js/classList.js', condition: function () { return !document.body.classList; } },
+                { src: '../../shared/plugin/markdown/marked.js', condition: function () { return !!document.querySelector('[data-markdown]'); } },
+                { src: '../../shared/plugin/markdown/markdown.js', condition: function () { return !!document.querySelector('[data-markdown]'); } },
+                { src: '../../shared/plugin/highlight/highlight.js', async: true, callback: function () { hljs.initHighlightingOnLoad(); } },
+                { src: '../../shared/plugin/zoom-js/zoom.js', async: true, condition: function () { return !!document.body.classList; } },
+                { src: '../../shared/plugin/notes/notes.js', async: true, condition: function () { return !!document.body.classList; } }
+            ]
+        });
+
+    </script>
+</body>
+</html>
+
