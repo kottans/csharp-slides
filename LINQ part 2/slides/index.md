@@ -508,3 +508,151 @@ select { a.City, s.Name }
 ***
 
 ### Aggregation
+
+Aggregators are extensions that return some single result which is not collection, in other words they are mostly statistical operators
+
+- Count
+- LongCount
+- Sum
+- Min
+- Max
+- Average
+- Aggregate
+
+---
+
+#### Count and LongCount
+
+Returns a count of elements which satisfy passed condition (can be ommited):
+
+```cs
+
+int[] nums = {500,100,50,20,10,5,2,1,1000};
+var count = nums.Count(); // 9
+
+```
+
+---
+
+#### Sum
+
+```cs
+
+int[] nums = {500,100,50,20,10,5,2,1,1000};
+var count = nums.Sum(); // 1688
+
+```
+
+<div class="fragment">
+
+Can be more complex:
+
+```cs
+
+var totalAge = people.Sum(p => p.Age);
+
+```
+
+</div>
+
+---
+#### Min and Max
+
+```cs
+
+int[] nums = {500,100,50,20,10,5,2,1,1000};
+var min = nums.Min(); // 1
+var max = nums.Max(); // 1000
+
+```
+
+---
+
+#### Average
+
+```cs
+
+int[] nums = {500,100,50,20,10,5,2,1,1000};
+var min = nums.Average(); // 187.555555555556
+
+```
+
+---
+
+#### Aggregate
+
+Performs custom aggregation:
+
+```cs
+
+int[] nums = {500,100,50,20,10,5,2,1,1000};
+var sum = nums.Aggregate(0, (total, n) => total + n); // 1688
+
+```
+
+***
+
+### Other popular operators
+
+- Any
+- All
+- Distinct
+- OfType
+- Cast
+
+#### Any
+
+```cs
+
+var values = new[] { "1", "2", "3", "AAA", "ABB" };
+bool hasAAA = values.Any(i => i.StartsWith(“A”)); // true
+
+```
+
+---
+
+#### All
+
+```cs
+
+var values = new[] { "1", "2", "3", "AAA", "ABB" };
+bool hasAAA = values.All(i => i.StartsWith("A")); // false
+
+```
+
+---
+
+#### Distinct
+
+```cs
+
+var values = new[] { "1", "1", "2", "2", "3", "3", "3" };
+IEnumerable<string> strings = values.Distinct(); // "1", "2", "3"
+
+```
+
+---
+
+#### OfType
+
+```cs
+
+object[] values = new object[] {"1", "2", "3", "AAA", 5};
+IEnumerable<string> strings = values.OfType<string>(); // Last element witll be omited since it is not string
+
+```
+
+---
+
+#### Cast
+
+```cs
+
+object[] values = new object[] {"1", "2", "3", "AAA", 5};
+IEnumerable<string> strings = values.Cast<string>(); // an exception will be thrown because the last element is not string
+
+```
+
+Additional resources:
+
+- https://weblogs.asp.net/dixin/linq-via-csharp

@@ -15,9 +15,9 @@
 - LINQ & collections (needs of LINQ while working with collections)
 - extension methods in LINQ context
 - syntax forms
+- LINQ to Objects
 - understanding var and IEnumerable in LINQ context
 - functional programming and lambda in context
-- LINQ to Objects
 
 ***
 ##What is LINQ?
@@ -232,10 +232,12 @@ OR
 - Query Expression
 
 ***
+
 ###LINQ and collections
 ![LINQ and collections](images/LINQandCollections.png)
 
 ***
+
 ###Extension methods in LINQ context
 How horrible it looks without extension methods:
 
@@ -319,6 +321,7 @@ SampleData.AllDefects.Join(SampleData.AllSubscriptions,
 ```
 
 ---
+
 ###Query expression vs fluent syntax
 And ordering:
 
@@ -335,6 +338,7 @@ instead of:
 ```
 
 ---
+
 ###Query expression vs fluent syntax
 But bear in mind that you cannot write everything in query expressions
 
@@ -348,6 +352,7 @@ But bear in mind that you cannot write everything in query expressions
 ```
 
 ---
+
 ###Query expression == fluent sytax
 From compiler perspective query expressions are just syntactic sugar and it always translates them into method calls
 
@@ -396,6 +401,16 @@ int res = (from s in sequance
 ```
 
 ***
+
+### LINQ to Objects
+
+Subset of LINQ which 
+- is executed in memory 
+- with any .NET collection which implements IEnumerable interface 
+- without any intermediate provider such as LINQ to SQL or LINQ to XML
+
+***
+
 ###Why to use VAR in LINQ context
 Always use VAR storing result of query because...
 
@@ -423,6 +438,7 @@ It can be an enumeration of anonymous types:
 var result = from person in people
              select new {person.Name, person.Surname};
 ```
+
 </div>
 
 ---
@@ -448,3 +464,205 @@ var result = from person in people
 ```
 
 </div>
+
+***
+
+### What is Lambda (λ-calculus)?
+
+Lambda calculus is a formal system to use functions and function application to express computation
+In simple words it says that any computation can be built by applying simple function which may compose complex (high-order) functions
+
+It was introduced in 1930s by Alonzo Church, the doctoral advisor of Alan Turing
+
+---
+
+### Lambda in C# context
+
+Is fancy feature introduced in C# 3.0:
+
+```cs
+
+MyDel del = delegate(int x)    { return x + 1; } ;     // Anonymous method 
+MyDel le1 =         (int x) => { return x + 1; } ;     // Lambda expression 
+MyDel le2 =             (x) => { return x + 1; } ;     // Lambda expression 
+MyDel le3 =              x  => { return x + 1; } ;     // Lambda expression 
+MyDel le4 =              x  =>          x + 1    ;     // Lambda expression
+
+```
+
+***
+
+### Functional programming in LINQ context
+
+Main paradigms of FP:
+- Closure
+- Currying
+- Memoization
+
+---
+
+### Closure
+
+Using variables from scope out of the func:
+
+```cs
+
+int age = 20;
+Func<int, int> getOlderOn = x => age + x;
+
+```
+
+In LINQ context:
+
+var filter = "Compare";
+ 
+```cs
+
+var query = from m in typeof(String).GetMethods()
+            where m.Name.Contains(filter)
+            select new { m.Name, ParameterCount = m.GetParameters().Length };
+
+```
+
+---
+
+### Currying
+
+Create functions that create other functions by adding arguments one by one
+
+```cs
+
+var grep = Curry<Regex, IEnumerable<string>, IEnumerable<string>>(
+                (regex, list) => from s in list
+                                 where regex.Match(s).Success
+                                 select s);
+var grepFoo = grep(new Regex("foo"));
+
+```
+
+---
+
+### Memoization
+
+Simply cache results of functions:
+
+```cs
+
+Func<uint, uint> fib = null;
+fib = x => x > 1 ? fib(x - 1) + fib(x - 2) : x;
+
+fib = fib.Memoize();
+
+```
+
+---
+
+### Memize
+
+```cs
+
+public static Func<A, R> Memoize<A, R>(this Func<A, R> f)
+{
+    var d = new Dictionary<A, R>();
+    return a=>
+    {
+        R r;
+        if (!d.TryGetValue(a, out r))
+        {
+          r = f(a);
+          d.Add(a, r);
+        }
+        return r;
+    };
+}
+
+
+```
+
+---
+
+#### Main benefits of FP:
+- Composability
+- Lazy evaluation
+- Immutability
+- Parallelizable
+- Declarative
+
+---
+
+#### Composability
+
+Ability to compose complex things with a banch of simple ones.
+
+```cs
+
+var results = source.Where(item => item > 0 && item < 10)
+                    .OrderBy(item => item)
+                    .Select(item => item.ToString(CultureInfo.InvariantCulture));
+
+```
+
+---
+
+#### Lazy evaluation
+
+The query is not evaluated until you iterate it.
+
+```cs
+
+var result = from person in people
+             where person.Age > 21
+             select new { person.Name, person.Surname };
+//at this moment result is not calculated
+
+var realResult = result.ToList();
+
+```
+
+---
+
+#### Immutability
+
+The result of any operation is new value
+
+```cs
+
+var results = source.Where(item => item > 0 && item < 10) //new enumeration
+                    .OrderBy(item => item)                //new enumeration
+                    .Select(item => item.ToString());     //new enumeration
+
+```
+
+---
+
+#### Parallelizable
+
+Since everything is immutable - it easier to parallelize
+
+```cs
+
+Enumerable.Range(1, 10000)
+          .AsParallel()
+          .AsOrdered()
+          .Where(IsPrimeNumber)
+          .ToList()
+
+```
+
+---
+
+#### Declarative
+
+Allows to write more expressive code
+
+```cs
+
+from d in ds.Doctors
+join c in ds.Calls
+on d.Initials equals c.Initials
+where c.DateOfCall >= new DateTime(2015, 10, 1) &&
+      c.DateOfCall <= new DateTime(2015, 10, 31)
+group c by d.Initials into g
+select g;
+
+```
