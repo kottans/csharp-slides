@@ -2,8 +2,9 @@ csharp-slides
 =============
 ## Currently CSharp slides are in development and accesible via links:
 
+[Public slides](http://kottans.org/csharp-slides/)   
 [Wiki](https://github.com/Kottans/csharp-slides/wiki)    
-[Course program](https://docs.google.com/document/d/19Gfj71qbpKlHXIiye7m_PZDk4jA7M1G21bxRzauVP8w/edit#)
+[Course program](https://docs.google.com/document/d/19Gfj71qbpKlHXIiye7m_PZDk4jA7M1G21bxRzauVP8w/edit#)   
 
 - [x] [Lecture 1 - .NET, infra, tools, basics](https://drive.google.com/open?id=1HMd2B0FErbFMT2v7Z4SDXhUHX_x6fkXMf2QS9yV4X3A&authuser=0)
 - [x] [Lecture 2 - C# language essentials](https://drive.google.com/open?id=1-0KDxmndJU2j483mBdqipdx1b4KdZvgncVraBUvqcu0&authuser=0)
