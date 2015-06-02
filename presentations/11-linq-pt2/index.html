@@ -1,0 +1,818 @@
+﻿<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>C# LINQ part 2</title>
+    <meta name="description" content="C# LINQ part 2">
+    <meta name="author" content="Alex Aza">
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <script src="//code.jquery.com/jquery-1.8.0.js"></script>
+    <script src="//code.jquery.com/ui/1.8.23/jquery-ui.js"></script>
+    <script src="//netdna.bootstrapcdn.com/twitter-bootstrap/2.2.1/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link href="//netdna.bootstrapcdn.com/twitter-bootstrap/2.2.1/css/bootstrap-combined.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="../../shared/css/reveal.css">
+    <link rel="stylesheet" href="../../shared/css/theme/league.css" id="theme">
+    <link type="text/css" rel="stylesheet" href="../../shared/fsharp.formatting/styles/style.css" />
+    <link type="text/css" rel="stylesheet" href="../../shared/fsharp.formatting/styles/deedle.css" />
+    <link type="text/css" rel="stylesheet" href="../../shared/css/custom.css" />
+    <script src="../../shared/fsharp.formatting/styles/tips.js" type="text/javascript"></script>
+    <link rel="shortcut icon" type="image/png" href="../../shared/favicon.png">
+    <!-- For syntax highlighting -->
+    <link rel="stylesheet" href="../../shared/lib/css/zenburn.css">
+    <!-- If the query includes 'print-pdf', include the PDF print sheet -->
+    <script>
+			if( window.location.search.match( /print-pdf/gi ) ) {
+				var link = document.createElement( 'link' );
+				link.rel = 'stylesheet';
+				link.type = 'text/css';
+				link.href = '../../shared/css/print/pdf.css';
+				document.getElementsByTagName( 'head' )[0].appendChild( link );
+			}
+    </script>
+    <!--[if lt IE 9]>
+    <script src="../../shared/lib/js/html5shiv.js"></script>
+    <![endif]-->
+</head>
+<body>
+    <div class="reveal">
+        
+        <!-- Any section element inside of this container is displayed as a slide -->
+        <div class="slides">
+            <section >
+
+<h2>C# course</h2>
+
+<h4>Lecture 10</h4>
+
+<h1>LINQ part 2</h1>
+
+</section>
+
+<section >
+
+<h2>Agenda</h2>
+
+<ul>
+<li>IEnumerable vs IQueryable</li>
+<li>Entity Framework</li>
+<li>deferred execution</li>
+<li>sortings</li>
+<li>groupings</li>
+<li>joins</li>
+<li>aggregation</li>
+</ul>
+
+</section>
+
+<section >
+
+<section >
+
+<h3>IEnumerable vs IQueryable</h3>
+
+<p>IQueryable derives from IEnumerable changing it's behaviour drastically</p>
+
+<div class="fragment">
+    - Represents data about code in order to translate it to query
+</div>
+
+</section>
+
+<section author="Alex Aza" description="C# LINQ part 2" theme="league" title="C# LINQ part 2" transition="default">
+
+<p>For example following code:</p>
+
+<table class="pre"><tr><td><pre lang="cs">    ctx.Students.Where(stud <span class="o">=</span><span class="o">&gt;</span> stud.City <span class="o">=</span><span class="o">=</span> <span class="s">"Kiev"</span>)
+                .Select(stud <span class="o">=</span><span class="o">&gt;</span> <span class="k">new</span> { stud.FirstName, stud.LastName });
+</pre></td></tr></table>
+
+<p>may be translated to:
+<div class="fragment"></p>
+
+<table class="pre"><tr><td><pre lang="sql"> <span class="k">SELECT</span> c.FirstName, c.LastName
+ <span class="k">FROM</span> [dbo].[Student] c
+ <span class="k">WHERE</span> c.City = `Kiev`
+
+</pre></td></tr></table>
+
+</div>
+
+</section>
+
+<section author="Alex Aza" description="C# LINQ part 2" theme="league" title="C# LINQ part 2" transition="default">
+
+<h3>Step by step guide</h3>
+
+<p>Step 1:</p>
+
+<table class="pre"><tr><td><pre lang="cs">    ctx.Students.Where(stud <span class="o">=</span><span class="o">&gt;</span> stud.City <span class="o">=</span><span class="o">=</span> <span class="s">"Kiev"</span>)
+                .Select(stud <span class="o">=</span><span class="o">&gt;</span> <span class="k">new</span> { stud.FirstName, stud.LastName });
+</pre></td></tr></table>
+
+<div class="fragment">
+
+<p>translated by C# compiler to:</p>
+
+<table class="pre"><tr><td><pre lang="cs"><span class="k">var</span> qry <span class="o">=</span> Queryable.Select(
+              Queryable.Where(
+                  ctx.Students,
+                  stud <span class="o">=</span><span class="o">&gt;</span> stud.City <span class="o">=</span><span class="o">=</span> <span class="s">"Kiev"</span>),
+              stud <span class="o">=</span><span class="o">&gt;</span> <span class="k">new</span> { stud.FirstName, stud.LastName });
+</pre></td></tr></table>
+
+</div>
+
+</section>
+
+<section author="Alex Aza" description="C# LINQ part 2" theme="league" title="C# LINQ part 2" transition="default">
+
+<h3>Step by step guide</h3>
+
+<p>Step 2:</p>
+
+<table class="pre"><tr><td><pre lang="cs"><span class="k">var</span> qry <span class="o">=</span> Queryable.Select(
+              Queryable.Where(
+                  ctx.Students,
+                  stud <span class="o">=</span><span class="o">&gt;</span> stud.City <span class="o">=</span><span class="o">=</span> <span class="s">"Kiev"</span>),
+              stud <span class="o">=</span><span class="o">&gt;</span> <span class="k">new</span> { stud.FirstName, stud.LastName });
+</pre></td></tr></table>
+
+<div class="fragment">
+
+<p>Then expression trees <code>stud =&gt; stud.City == "Kiev"</code> would be translated to:</p>
+
+<table class="pre"><tr><td><pre lang="cs"><span class="k">var</span> stud <span class="o">=</span> Expression.Parameter(<span class="k">typeof</span>(Student), <span class="s">"stud"</span>);
+<span class="k">var</span> lambda <span class="o">=</span> Expression.Lambda&lt;Func&lt;Student,<span class="k">bool</span>&gt;<span class="o">&gt;</span>(
+                  Expression.Equal(
+                      Expression.Property(stud, <span class="s">"City"</span>),
+                      Expression.Constant(<span class="s">"Kiev"</span>)
+                  ), cust);
+
+</pre></td></tr></table>
+
+<div>
+
+</section>
+
+<section author="Alex Aza" description="C# LINQ part 2" theme="league" title="C# LINQ part 2" transition="default">
+
+<p>Which graphically whould be represented as:</p>
+
+<p><img src="http://yuml.me/6bdd4fd7" alt="Expression tree" /></p>
+
+</section>
+
+<section author="Alex Aza" description="C# LINQ part 2" theme="league" title="C# LINQ part 2" transition="default">
+
+<h3>Purpose of expression trees</h3>
+
+<p>The only purpose to represent code as data
+which in future may be translated in other language</p>
+
+</section>
+
+</section>
+
+<section >
+
+<section >
+
+<h3>Entity Framework</h3>
+
+<p>Object-Relational Mapping (ORM) which allows you:</p>
+
+<ul>
+<li>Work with data-store in object-oriented way</li>
+<li>Query any supported data source</li>
+<li>Potantially change data source</li>
+<li>Has own change tracking system which can be extended</li>
+<li>Business specifications can be reused throughout your project</li>
+<li>Currently prefered data access in wich Microsoft invests the most</li>
+</ul>
+
+</section>
+
+<section author="Alex Aza" description="C# LINQ part 2" theme="league" title="C# LINQ part 2" transition="default">
+
+<h3>Entity Framework main concepts:</h3>
+
+<h4>DbContext</h4>
+
+<p>It is a bridge between your domain or entity classes and the database.</p>
+
+<p><img src="http://yuml.me/0199201a" alt="DbContext" /></p>
+
+</section>
+
+<section author="Alex Aza" description="C# LINQ part 2" theme="league" title="C# LINQ part 2" transition="default">
+
+<h4>DbContext diagram explanation</h4>
+
+<div data-markdown class="fragment">
+
+<p>DbSets</p>
+
+<p>DbContext contains entity set (<code>DbSet&lt;TEntity&gt;</code>) for all the entities which is mapped to DB tables</p>
+
+</div>
+
+<div data-markdown class="fragment">
+
+<p>Change Tracking</p>
+
+<p>It keeps track of changes occurred in the entities after it has been querying from the database</p>
+
+</div>
+
+<div data-markdown class="fragment">
+
+<p>Caching</p>
+
+<p>DbContext does first level caching by default. It stores the entities which has been retrieved during the life time of a context class.</p>
+
+</div>
+
+<div data-markdown class="fragment">
+
+<p>Querying</p>
+
+<p>DbContext converts LINQ-to-Entities queries to SQL query and send it to the database.</p>
+
+</div>
+
+<div data-markdown class="fragment">
+
+<p>Persistance</p>
+
+<p>It also performs the Insert, update and delete operations to the database, based on the entity states.</p>
+
+</div>
+
+</section>
+
+<section author="Alex Aza" description="C# LINQ part 2" theme="league" title="C# LINQ part 2" transition="default">
+
+<h4>DbContext</h4>
+
+<p>Example:</p>
+
+<table class="pre"><tr><td><pre lang="cs">  ctx.Students.Where(stud <span class="o">=</span><span class="o">&gt;</span> stud.City <span class="o">=</span><span class="o">=</span> <span class="s">"Kiev"</span>)
+                .Select(stud <span class="o">=</span><span class="o">&gt;</span> <span class="k">new</span> { stud.FirstName, stud.LastName });
+</pre></td></tr></table>
+
+<div data-markdown class="fragment">
+
+<p>You already saw this query. But in this case <code>ctx</code> is instance of DbContext.</p>
+
+</div>
+
+</section>
+
+<section author="Alex Aza" description="C# LINQ part 2" theme="league" title="C# LINQ part 2" transition="default">
+
+<h4>Ways to generate DbContext</h4>
+
+<ul>
+<li>Code-First</li>
+<li>Db-First</li>
+</ul>
+
+</section>
+
+<section author="Alex Aza" description="C# LINQ part 2" theme="league" title="C# LINQ part 2" transition="default">
+
+<h3>Entity Framework 7</h3>
+
+<ul>
+<li>Supports new types of storages (SQLite, NoSQL)</li>
+<li>Thanks to CLR Core can be run on any platform (Linux, Mac)</li>
+<li>Lightweight and modular</li>
+</ul>
+
+</section>
+
+<section author="Alex Aza" description="C# LINQ part 2" theme="league" title="C# LINQ part 2" transition="default">
+
+<h3>Entity Framework resources</h3>
+
+<p><a href="http://www.entityframeworktutorial.net/">Entity Framework tutorial</a></p>
+
+</section>
+
+</section>
+
+<section >
+
+<section >
+
+<h3>Deferred execution</h3>
+
+<p>Execute not when constructed, but when enumerated 
+(when MoveNext is called)</p>
+
+<div class="fragment">
+    Deferred execution is important because it decouples query construction from query execution.   
+</div>
+
+</section>
+
+<section author="Alex Aza" description="C# LINQ part 2" theme="league" title="C# LINQ part 2" transition="default">
+
+<h3>Deferred execution</h3>
+
+<p>All standard query operators provide deferred execution, with the following exceptions:</p>
+
+<ul>
+<li>Operators that return a single element or scalar value, such as:
+<ul>
+<li><code>First</code></li>
+<li><code>Count</code></li>
+</ul></li>
+<li>The following conversion operators:
+<ul>
+<li><code>ToArray</code></li>
+<li><code>ToList</code></li>
+<li><code>ToDictionary</code></li>
+<li><code>ToLookup</code></li>
+</ul></li>
+</ul>
+
+</section>
+
+<section author="Alex Aza" description="C# LINQ part 2" theme="league" title="C# LINQ part 2" transition="default">
+
+<h3>Multiple enumeration</h3>
+
+<p>IEnumerable is cool when it is used for right job.
+In some cases it can introduce performance overhead:</p>
+
+<div class="fragment">
+
+<p>Please do not write such "magnificent code":</p>
+
+<table class="pre"><tr><td><pre lang="cs"><span class="k">public</span> <span class="k">static</span> IEnumerable&lt;PersonWithDish&gt; GiveDishesBadWay(IEnumerable&lt;Person&gt; people, IEnumerable&lt;Dish&gt; dishes)
+{
+  <span class="k">for</span>(<span class="k">int</span> i <span class="o">=</span> 0; i <span class="o">&lt;</span> people.Count(); i+<span class="o">+</span>)
+  {
+    <span class="k">yield</span> <span class="k">return</span> <span class="k">new</span> PersonWithDish()
+    {
+      PersonName <span class="o">=</span> people.ElementAt(i).Name, 
+      DishName <span class="o">=</span> dishes.ElementAt(i).Name
+    };
+  }
+}
+
+</pre></td></tr></table>
+
+</div>
+
+</section>
+
+<section author="Alex Aza" description="C# LINQ part 2" theme="league" title="C# LINQ part 2" transition="default">
+
+<h3>Multiple enumeration</h3>
+
+<p>Other way to avoid it could be just cache result of execution with <code>ToList</code> or <code>ToArray</code> and get needed element by indexer;</p>
+
+<p>Or choose right parameter type for your method:</p>
+
+<table class="pre"><tr><td><pre lang="cs"><span class="k">public</span> <span class="k">static</span> IEnumerable&lt;PersonWithDish&gt; GiveDishesBetterWay(IReadOnlyList&lt;Person&gt; people, IReadOnlyList&lt;Dish&gt; dishes)
+{
+    <span class="k">for</span> (<span class="k">int</span> i <span class="o">=</span> 0; i <span class="o">&lt;</span> people.Count; i+<span class="o">+</span>)
+    {
+        <span class="k">yield</span> <span class="k">return</span> <span class="k">new</span> PersonWithDish()
+        {
+            PersonName <span class="o">=</span> people[i].Name,
+            DishName <span class="o">=</span> dishes[i].Name
+        };
+    }
+}
+
+</pre></td></tr></table>
+
+</section>
+
+<section author="Alex Aza" description="C# LINQ part 2" theme="league" title="C# LINQ part 2" transition="default">
+
+<h3>Multiple enumeration</h3>
+
+<p>In this case to avoid multiple enumeration just use built-in method <code>Zip</code> :</p>
+
+<table class="pre"><tr><td><pre lang="cs"><span class="k">public</span> <span class="k">static</span> IEnumerable&lt;PersonWithDish&gt; GiveDishesBestWay(IEnumerable&lt;Person&gt; people, IEnumerable&lt;Dish&gt; dishes)
+{
+    <span class="k">return</span> people.Zip(dishes, (p, d) <span class="o">=</span><span class="o">&gt;</span> <span class="k">new</span> PersonWithDish
+                                        {
+                                            PersonName <span class="o">=</span> p.Name, 
+                                            DishName <span class="o">=</span> d.Name
+                                        }))
+}
+</pre></td></tr></table>
+
+<p><a href="https://dotnetfiddle.net/AFFUFI">a link to the code</a></p>
+
+</section>
+
+</section>
+
+<section >
+
+<section >
+
+<h3>Sortings</h3>
+
+<p>LINQ queries do not provide any particular order unless you specify some</p>
+
+</section>
+
+<section author="Alex Aza" description="C# LINQ part 2" theme="league" title="C# LINQ part 2" transition="default">
+
+<p>You can sort in acsending order using <code>orderby</code> syntax:</p>
+
+<table class="pre"><tr><td><pre lang="cs"><span class="k">from</span> s <span class="k">in</span> Students
+<span class="k">orderby</span> s.FirstName <span class="k">ascending</span>
+<span class="k">select</span> s;
+
+</pre></td></tr></table>
+
+<p>or</p>
+
+<table class="pre"><tr><td><pre lang="cs">Students.OrderBy(s <span class="o">=</span><span class="o">&gt;</span> s.FirstName);
+
+</pre></td></tr></table>
+
+</section>
+
+<section author="Alex Aza" description="C# LINQ part 2" theme="league" title="C# LINQ part 2" transition="default">
+
+<p>In order to sort in descending order you need to write 'descending' keyword:</p>
+
+<table class="pre"><tr><td><pre lang="cs"><span class="k">from</span> s <span class="k">in</span> Students
+<span class="k">orderby</span> s.FirstName <span class="k">descending</span>
+<span class="k">select</span> s;
+
+</pre></td></tr></table>
+
+<p>or</p>
+
+<table class="pre"><tr><td><pre lang="cs">Students.OrderByDescending(s <span class="o">=</span><span class="o">&gt;</span> s.FirstName);
+
+</pre></td></tr></table>
+
+</section>
+
+<section author="Alex Aza" description="C# LINQ part 2" theme="league" title="C# LINQ part 2" transition="default">
+
+<p>Note that there is possibility to write dependent ordering:</p>
+
+<table class="pre"><tr><td><pre lang="cs"><span class="k">from</span> s <span class="k">in</span> Students
+<span class="k">orderby</span> s.FirstName <span class="k">ascending</span>, s.LastName <span class="k">descending</span>
+<span class="k">select</span> s;
+
+</pre></td></tr></table>
+
+<p>or</p>
+
+<table class="pre"><tr><td><pre lang="cs">Students.OrderBy(s <span class="o">=</span><span class="o">&gt;</span> s.FirstName)
+        .ThenBy(s <span class="o">=</span><span class="o">&gt;</span> s.LastName)
+
+</pre></td></tr></table>
+
+</section>
+
+</section>
+
+<section >
+
+<h3>Groupings</h3>
+
+<p>Used when you need to precess several items grouping them by some criterea:</p>
+
+<table class="pre"><tr><td><pre lang="cs"><span class="k">from</span> s <span class="k">in</span> Students
+<span class="k">group</span> s by s.LastName
+
+</pre></td></tr></table>
+
+<p>or</p>
+
+<table class="pre"><tr><td><pre lang="cs">Students.GroupBy(s <span class="o">=</span><span class="o">&gt;</span> s.LastName);
+
+</pre></td></tr></table>
+
+</section>
+
+<section >
+
+<section >
+
+<h3>Joins</h3>
+
+<ul>
+<li>Inner join</li>
+<li>Group join</li>
+<li>Left join</li>
+<li>Cross outer join</li>
+</ul>
+
+</section>
+
+<section author="Alex Aza" description="C# LINQ part 2" theme="league" title="C# LINQ part 2" transition="default">
+
+<h4>Inner join</h4>
+
+<p>Inner join returns only those records or rows that match or exists in both the sources.</p>
+
+<table class="pre"><tr><td><pre lang="cs"><span class="k">from</span> s <span class="k">in</span> Students
+<span class="k">join</span> c <span class="k">in</span> Cities <span class="k">on</span> s.CityID <span class="k">equals</span> c.CityID
+<span class="k">select</span> <span class="k">new</span> { StudentName <span class="o">=</span> s.FirstName, CityName <span class="o">=</span> c.Name }
+
+</pre></td></tr></table>
+
+</section>
+
+<section author="Alex Aza" description="C# LINQ part 2" theme="league" title="C# LINQ part 2" transition="default">
+
+<h4>Inner join</h4>
+
+<p>We can match items by complex criterea using anonymous types:</p>
+
+<table class="pre"><tr><td><pre lang="cs"><span class="k">from</span> s <span class="k">in</span> Students
+<span class="k">join</span> a <span class="k">in</span> Addresses <span class="k">on</span> <span class="k">new</span> { s.CityID, s.RegionID } <span class="k">equals</span> <span class="k">new</span> { a.CityID, a.RegionID }
+<span class="k">select</span> <span class="k">new</span> { StudentName <span class="o">=</span> s.FirstName, CityName <span class="o">=</span> a.CityName }
+
+</pre></td></tr></table>
+
+<div class="fragment">
+    Note that you need to have the same names for anonymous type properties
+</div>
+
+</section>
+
+<section author="Alex Aza" description="C# LINQ part 2" theme="league" title="C# LINQ part 2" transition="default">
+
+<h4>Group join</h4>
+
+<p>A group join produces a sequence of object arrays based on properties equivalence of left collection and right collection. If right collection has no matching elements with left collection then an empty array will be produced.</p>
+
+</section>
+
+<section author="Alex Aza" description="C# LINQ part 2" theme="league" title="C# LINQ part 2" transition="default">
+
+<h4>Group join</h4>
+
+<table class="pre"><tr><td><pre lang="cs"><span class="k">from</span> s <span class="k">in</span> Students
+<span class="k">join</span> c <span class="k">in</span> Courses <span class="k">on</span> s.StudentID <span class="k">equals</span> a.StudentID <span class="k">into</span> t
+<span class="k">select</span> { StudentName <span class="o">=</span> s.Name, Courses <span class="o">=</span> t }
+
+</pre></td></tr></table>
+
+</section>
+
+<section author="Alex Aza" description="C# LINQ part 2" theme="league" title="C# LINQ part 2" transition="default">
+
+<h4>Left join</h4>
+
+<p>LEFT JOIN returns all records or rows from left table and from right table returns only matched records. 
+If there are no columns matching in the right table, it returns NULL values.</p>
+
+</section>
+
+<section author="Alex Aza" description="C# LINQ part 2" theme="league" title="C# LINQ part 2" transition="default">
+
+<h4>Left join</h4>
+
+<table class="pre"><tr><td><pre lang="cs"><span class="k">from</span> s <span class="k">in</span> Students
+<span class="k">join</span> a <span class="k">in</span> Addresses <span class="k">on</span> s.AddressID <span class="k">equals</span> a.AddressID <span class="k">into</span> t
+<span class="k">from</span> st <span class="k">in</span> t.DefaultIfEmpty()
+<span class="k">select</span> { AddressID <span class="o">=</span> (<span class="k">int</span>?)st.AddressID, st.City, StudentName <span class="o">=</span> s.Name }
+
+</pre></td></tr></table>
+
+</section>
+
+<section author="Alex Aza" description="C# LINQ part 2" theme="league" title="C# LINQ part 2" transition="default">
+
+<h4>Cross outer join</h4>
+
+<p>Cross join returns records or rows that are multiplication of record number from both the tables means each row on left table will related to each row of right table</p>
+
+</section>
+
+<section author="Alex Aza" description="C# LINQ part 2" theme="league" title="C# LINQ part 2" transition="default">
+
+<table class="pre"><tr><td><pre lang="cs"><span class="k">from</span> s <span class="k">in</span> Students
+<span class="k">from</span> a <span class="k">in</span> Addresses
+<span class="k">select</span> { a.City, s.Name }
+
+</pre></td></tr></table>
+
+</section>
+
+</section>
+
+<section >
+
+<section >
+
+<h3>Aggregation</h3>
+
+<p>Aggregators are extensions that return some single result which is not collection, in other words they are mostly statistical operators</p>
+
+<ul>
+<li>Count</li>
+<li>LongCount</li>
+<li>Sum</li>
+<li>Min</li>
+<li>Max</li>
+<li>Average</li>
+<li>Aggregate</li>
+</ul>
+
+</section>
+
+<section author="Alex Aza" description="C# LINQ part 2" theme="league" title="C# LINQ part 2" transition="default">
+
+<h4>Count and LongCount</h4>
+
+<p>Returns a count of elements which satisfy passed condition (can be ommited):</p>
+
+<table class="pre"><tr><td><pre lang="cs"><span class="k">int</span>[] nums <span class="o">=</span> {500,100,50,20,10,5,2,1,1000};
+<span class="k">var</span> count <span class="o">=</span> nums.Count(); <span class="c">// 9</span>
+
+</pre></td></tr></table>
+
+</section>
+
+<section author="Alex Aza" description="C# LINQ part 2" theme="league" title="C# LINQ part 2" transition="default">
+
+<h4>Sum</h4>
+
+<table class="pre"><tr><td><pre lang="cs"><span class="k">int</span>[] nums <span class="o">=</span> {500,100,50,20,10,5,2,1,1000};
+<span class="k">var</span> count <span class="o">=</span> nums.Sum(); <span class="c">// 1688</span>
+
+</pre></td></tr></table>
+
+<div class="fragment">
+
+<p>Can be more complex:</p>
+
+<table class="pre"><tr><td><pre lang="cs"><span class="k">var</span> totalAge <span class="o">=</span> people.Sum(p <span class="o">=</span><span class="o">&gt;</span> p.Age);
+
+</pre></td></tr></table>
+
+</div>
+
+</section>
+
+<section author="Alex Aza" description="C# LINQ part 2" theme="league" title="C# LINQ part 2" transition="default">
+
+<h4>Min and Max</h4>
+
+<table class="pre"><tr><td><pre lang="cs"><span class="k">int</span>[] nums <span class="o">=</span> {500,100,50,20,10,5,2,1,1000};
+<span class="k">var</span> min <span class="o">=</span> nums.Min(); <span class="c">// 1</span>
+<span class="k">var</span> max <span class="o">=</span> nums.Max(); <span class="c">// 1000</span>
+
+</pre></td></tr></table>
+
+</section>
+
+<section author="Alex Aza" description="C# LINQ part 2" theme="league" title="C# LINQ part 2" transition="default">
+
+<h4>Average</h4>
+
+<table class="pre"><tr><td><pre lang="cs"><span class="k">int</span>[] nums <span class="o">=</span> {500,100,50,20,10,5,2,1,1000};
+<span class="k">var</span> min <span class="o">=</span> nums.Average(); <span class="c">// 187.555555555556</span>
+
+</pre></td></tr></table>
+
+</section>
+
+<section author="Alex Aza" description="C# LINQ part 2" theme="league" title="C# LINQ part 2" transition="default">
+
+<h4>Aggregate</h4>
+
+<p>Performs custom aggregation:</p>
+
+<table class="pre"><tr><td><pre lang="cs"><span class="k">int</span>[] nums <span class="o">=</span> {500,100,50,20,10,5,2,1,1000};
+<span class="k">var</span> sum <span class="o">=</span> nums.Aggregate(0, (total, n) <span class="o">=</span><span class="o">&gt;</span> total <span class="o">+</span> n); <span class="c">// 1688</span>
+
+</pre></td></tr></table>
+
+</section>
+
+</section>
+
+<section >
+
+<section >
+
+<h3>Other popular operators</h3>
+
+<ul>
+<li>Any</li>
+<li>All</li>
+<li>Distinct</li>
+<li>OfType</li>
+<li>Cast</li>
+</ul>
+
+<h4>Any</h4>
+
+<table class="pre"><tr><td><pre lang="cs"><span class="k">var</span> values <span class="o">=</span> <span class="k">new</span>[] { <span class="s">"1"</span>, <span class="s">"2"</span>, <span class="s">"3"</span>, <span class="s">"AAA"</span>, <span class="s">"ABB"</span> };
+<span class="k">bool</span> hasAAA <span class="o">=</span> values.Any(i <span class="o">=</span><span class="o">&gt;</span> i.StartsWith(“A”)); <span class="c">// true</span>
+
+</pre></td></tr></table>
+
+</section>
+
+<section author="Alex Aza" description="C# LINQ part 2" theme="league" title="C# LINQ part 2" transition="default">
+
+<h4>All</h4>
+
+<table class="pre"><tr><td><pre lang="cs"><span class="k">var</span> values <span class="o">=</span> <span class="k">new</span>[] { <span class="s">"1"</span>, <span class="s">"2"</span>, <span class="s">"3"</span>, <span class="s">"AAA"</span>, <span class="s">"ABB"</span> };
+<span class="k">bool</span> hasAAA <span class="o">=</span> values.All(i <span class="o">=</span><span class="o">&gt;</span> i.StartsWith(<span class="s">"A"</span>)); <span class="c">// false</span>
+
+</pre></td></tr></table>
+
+</section>
+
+<section author="Alex Aza" description="C# LINQ part 2" theme="league" title="C# LINQ part 2" transition="default">
+
+<h4>Distinct</h4>
+
+<table class="pre"><tr><td><pre lang="cs"><span class="k">var</span> values <span class="o">=</span> <span class="k">new</span>[] { <span class="s">"1"</span>, <span class="s">"1"</span>, <span class="s">"2"</span>, <span class="s">"2"</span>, <span class="s">"3"</span>, <span class="s">"3"</span>, <span class="s">"3"</span> };
+IEnumerable&lt;<span class="k">string</span>&gt; strings <span class="o">=</span> values.Distinct(); <span class="c">// "1", "2", "3"</span>
+
+</pre></td></tr></table>
+
+</section>
+
+<section author="Alex Aza" description="C# LINQ part 2" theme="league" title="C# LINQ part 2" transition="default">
+
+<h4>OfType</h4>
+
+<table class="pre"><tr><td><pre lang="cs"><span class="k">object</span>[] values <span class="o">=</span> <span class="k">new</span> <span class="k">object</span>[] {<span class="s">"1"</span>, <span class="s">"2"</span>, <span class="s">"3"</span>, <span class="s">"AAA"</span>, 5};
+IEnumerable&lt;<span class="k">string</span>&gt; strings <span class="o">=</span> values.OfType&lt;<span class="k">string</span>&gt;(); <span class="c">// Last element witll be omited since it is not string</span>
+
+</pre></td></tr></table>
+
+</section>
+
+<section author="Alex Aza" description="C# LINQ part 2" theme="league" title="C# LINQ part 2" transition="default">
+
+<h4>Cast</h4>
+
+<table class="pre"><tr><td><pre lang="cs"><span class="k">object</span>[] values <span class="o">=</span> <span class="k">new</span> <span class="k">object</span>[] {<span class="s">"1"</span>, <span class="s">"2"</span>, <span class="s">"3"</span>, <span class="s">"AAA"</span>, 5};
+IEnumerable&lt;<span class="k">string</span>&gt; strings <span class="o">=</span> values.Cast&lt;<span class="k">string</span>&gt;(); <span class="c">// an exception will be thrown because the last element is not string</span>
+
+</pre></td></tr></table>
+
+<p>Additional resources:</p>
+
+<ul>
+<li><a href="https://weblogs.asp.net/dixin/linq-via-csharp">https://weblogs.asp.net/dixin/linq-via-csharp</a></li>
+</ul>
+
+</section>
+
+</section>
+
+
+
+        </div>
+    </div>
+    <script src="../../shared/lib/js/head.min.js"></script>
+    <script src="../../shared/js/reveal.js"></script>
+    <script>
+
+        // Full list of configuration options available here:
+        // https://github.com/hakimel/reveal.js#configuration
+        Reveal.initialize({
+            controls: true,
+            progress: true,
+            history: true,
+            center: true,
+
+            transition: 'default', // default/cube/page/concave/zoom/linear/fade/none
+
+            // Parallax scrolling
+            // parallaxBackgroundImage: 'https://s3.amazonaws.com/hakim-static/reveal-js/reveal-parallax-1.jpg',
+            // parallaxBackgroundSize: '2100px 900px',
+
+            // Optional libraries used to extend on reveal.js
+            dependencies: [
+                { src: '../../shared/lib/js/classList.js', condition: function () { return !document.body.classList; } },
+                { src: '../../shared/plugin/markdown/marked.js', condition: function () { return !!document.querySelector('[data-markdown]'); } },
+                { src: '../../shared/plugin/markdown/markdown.js', condition: function () { return !!document.querySelector('[data-markdown]'); } },
+                { src: '../../shared/plugin/highlight/highlight.js', async: true, callback: function () { hljs.initHighlightingOnLoad(); } },
+                { src: '../../shared/plugin/zoom-js/zoom.js', async: true, condition: function () { return !!document.body.classList; } },
+                { src: '../../shared/plugin/notes/notes.js', async: true, condition: function () { return !!document.body.classList; } }
+            ]
+        });
+
+    </script>
+</body>
+</html>
+
