@@ -1,0 +1,892 @@
+﻿<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>C# LINQ part 1</title>
+    <meta name="description" content="C# LINQ part 1">
+    <meta name="author" content="Alex Aza">
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <script src="//code.jquery.com/jquery-1.8.0.js"></script>
+    <script src="//code.jquery.com/ui/1.8.23/jquery-ui.js"></script>
+    <script src="//netdna.bootstrapcdn.com/twitter-bootstrap/2.2.1/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link href="//netdna.bootstrapcdn.com/twitter-bootstrap/2.2.1/css/bootstrap-combined.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="../../shared/css/reveal.css">
+    <link rel="stylesheet" href="../../shared/css/theme/league.css" id="theme">
+    <link type="text/css" rel="stylesheet" href="../../shared/fsharp.formatting/styles/style.css" />
+    <link type="text/css" rel="stylesheet" href="../../shared/fsharp.formatting/styles/deedle.css" />
+    <link type="text/css" rel="stylesheet" href="../../shared/css/custom.css" />
+    <script src="../../shared/fsharp.formatting/styles/tips.js" type="text/javascript"></script>
+    <link rel="shortcut icon" type="image/png" href="../../shared/favicon.png">
+    <!-- For syntax highlighting -->
+    <link rel="stylesheet" href="../../shared/lib/css/zenburn.css">
+    <!-- If the query includes 'print-pdf', include the PDF print sheet -->
+    <script>
+			if( window.location.search.match( /print-pdf/gi ) ) {
+				var link = document.createElement( 'link' );
+				link.rel = 'stylesheet';
+				link.type = 'text/css';
+				link.href = '../../shared/css/print/pdf.css';
+				document.getElementsByTagName( 'head' )[0].appendChild( link );
+			}
+    </script>
+    <!--[if lt IE 9]>
+    <script src="../../shared/lib/js/html5shiv.js"></script>
+    <![endif]-->
+</head>
+<body>
+    <div class="reveal">
+        
+        <!-- Any section element inside of this container is displayed as a slide -->
+        <div class="slides">
+            <section >
+
+<h2>C# course</h2>
+
+<h4>Lecture 9</h4>
+
+<h1>LINQ part 1</h1>
+
+</section>
+
+<section >
+
+<h2>Agenda</h2>
+
+<ul>
+<li>explanation, motivation</li>
+<li>LINQ &amp; collections (needs of LINQ while working with collections)</li>
+<li>extension methods in LINQ context</li>
+<li>syntax forms</li>
+<li>LINQ to Objects</li>
+<li>understanding var and IEnumerable in LINQ context</li>
+<li>functional programming and lambda in context</li>
+</ul>
+
+</section>
+
+<section >
+
+<section >
+
+<h2>What is LINQ?</h2>
+
+<ul>
+<li>stands for “Language INtegrated Query”</li>
+<li>is a set of features that extends powerful query capabilities to the language syntax of C# and Visual Basic</li>
+<li>introduces standard, easily-learned patterns for querying and updating data,</li>
+</ul>
+
+</section>
+
+<section author="Alex Aza" description="C# LINQ part 1" theme="league" title="C# LINQ part 1" transition="default">
+
+<h2>What is LINQ?</h2>
+
+<ul>
+<li>the technology can be extended to support potentially any kind of data store.</li>
+<li>Visual Studio includes LINQ provider assemblies that enable the use of LINQ with
+<ul>
+<li>.NET Framework collections</li>
+<li>SQL Server databases</li>
+<li>ADO.NET Datasets</li>
+<li>XML documents</li>
+</ul></li>
+</ul>
+
+<p><code>http://msdn.microsoft.com/en-us/netframework/aa904594.aspx</code> <a href="http://weblogs.asp.net/dixin/introducing-linq-1-what-is-linq">http://weblogs.asp.net/dixin/introducing-linq-1-what-is-linq</a></p>
+
+</section>
+
+</section>
+
+<section >
+
+<h2>Motivation</h2>
+
+<h5>LINQ to Objects</h5>
+
+<p>Suppose you have a data source:</p>
+
+<table class="pre"><tr><td><pre lang="cs"><span class="k">int</span>[] source <span class="o">=</span> { 0, -5, 12, -54, 5, -67, 3, 6 };
+</pre></td></tr></table>
+
+<div data-markdown class="fragment" data-fragment-index="1">
+you need **to find** positive integers: 
+</div>
+
+<div class="fragment" data-fragment-index="1">
+
+<table class="pre"><tr><td><pre lang="cs">{ 12, 5, 3, 6 };
+</pre></td></tr></table>
+
+</div>
+
+<div data-markdown class="fragment" data-fragment-index="2">
+and **to sort** them from larger to smoller
+</div>
+<div class="fragment" data-fragment-index="2">
+
+<table class="pre"><tr><td><pre lang="cs">{ 12, 6, 5, 3 };
+</pre></td></tr></table>
+
+</div>
+
+</section>
+
+<section >
+
+<h3>C# 2.0:</h3>
+
+<div class="fragment">
+
+<table class="pre"><tr><td><pre lang="cs">List&lt;<span class="k">int</span>&gt; results <span class="o">=</span> <span class="k">new</span> List&lt;<span class="k">int</span>&gt;();
+<span class="k">foreach</span> (<span class="k">var</span> i <span class="k">in</span> source)
+{
+    <span class="k">if</span> (i <span class="o">&gt;</span> 0)
+    {
+        results.Add(i);
+    }
+}
+
+results.Sort((x1, x2) <span class="o">=</span><span class="o">&gt;</span> x2 <span class="o">-</span> x1);
+</pre></td></tr></table>
+
+</div>
+
+</section>
+
+<section >
+
+<h3>LINQ to Objects</h3>
+
+<div class="fragment">
+Fluent or query methods sytax:
+
+<table class="pre"><tr><td><pre lang="cs"><span class="k">var</span> results <span class="o">=</span> source.Where(i <span class="o">=</span><span class="o">&gt;</span> i <span class="o">&gt;</span> 0)
+                    .OrderByDescending(i <span class="o">=</span><span class="o">&gt;</span> i);
+</pre></td></tr></table>
+
+</div>
+
+<div class="fragment">
+Query expression syntax:
+
+<table class="pre"><tr><td><pre lang="cs"><span class="k">var</span> results <span class="o">=</span> <span class="k">from</span> i <span class="k">in</span> source
+              <span class="k">where</span> i <span class="o">&gt;</span> 0
+              <span class="k">orderby</span> i <span class="k">descending</span>
+              <span class="k">select</span> i;
+</pre></td></tr></table>
+
+</div>
+
+</section>
+
+<section >
+
+<h3>LINQ to SQL</h3>
+
+<p>Only changinge data source we can query SQL database</p>
+
+<div class="fragment">
+fluently
+
+<table class="pre"><tr><td><pre lang="cs">database.Products
+        .Where(p <span class="o">=</span><span class="o">&gt;</span> p.ProductName <span class="o">=</span><span class="o">=</span> <span class="s">"Beverages"</span>)
+        .Select(p <span class="o">=</span><span class="o">&gt;</span> <span class="k">new</span> Product
+        {
+            ProductName <span class="o">=</span> p.ProductName,
+            UnitPrice <span class="o">=</span> p.UnitPrice
+        });
+</pre></td></tr></table>
+
+</div>
+
+<div class="fragment">
+or with an expression
+
+<table class="pre"><tr><td><pre lang="cs"><span class="k">from</span> product <span class="k">in</span> database.Products
+<span class="k">where</span> product.Category.CategoryName <span class="o">=</span><span class="o">=</span> <span class="s">"Beverages"</span>
+<span class="k">select</span> <span class="k">new</span> Product
+{
+    ProductName <span class="o">=</span> product.ProductName,
+    UnitPrice <span class="o">=</span> product.UnitPrice
+};
+</pre></td></tr></table>
+
+</div>
+
+</section>
+
+<section >
+
+<h3>One way to query different data sources</h3>
+
+<h5>LINQ to Wikipedia</h5>
+
+<table class="pre"><tr><td><pre lang="cs">wiki.Query.categorymembers()
+    .Where(c <span class="o">=</span><span class="o">&gt;</span> c.title <span class="o">=</span><span class="o">=</span> <span class="s">"Category:Mammals of Indonesia"</span>)
+    .Select(c <span class="o">=</span><span class="o">&gt;</span> c.title)
+    .ToEnumerable();
+
+</pre></td></tr></table>
+
+<p>OR</p>
+
+<table class="pre"><tr><td><pre lang="cs">(<span class="k">from</span> cm <span class="k">in</span> wiki.Query.categorymembers()
+ <span class="k">where</span> cm.title <span class="o">=</span><span class="o">=</span> <span class="s">"Category:Mammals of Indonesia"</span>
+ <span class="k">select</span> cm.title)
+.ToEnumerable();
+
+</pre></td></tr></table>
+
+</section>
+
+<section >
+
+<h3>Infrastructure of LINQ</h3>
+
+<p><img src="images/InfrastructureOfLINQ.png" alt="Infrastructure of LINQ" /></p>
+
+</section>
+
+<section >
+
+<section >
+
+<h3>LINQ providers</h3>
+
+<table>
+<thead>
+<tr class="header">
+<th></th>
+<th></th>
+<th></th>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><p><a href="http://weblogs.asp.net/fmarguerie/archive/2006/06/26/Introducing-Linq-to-Amazon.aspx">LINQ to Amazon</a></p></td>
+<td><p><a href="http://i4o.codeplex.com/releases/view/3519">LINQ to Indexes</a></p></td>
+<td><p><a href="http://linqtogeo.codeplex.com/">LINQ To Geo</a></p></td>
+<td><p><a href="http://community.bartdesmet.net/blogs/bart/archive/2007/04/05/the-iqueryable-tales-linq-to-ldap-part-0.aspx">LINQ to LDAP</a></p></td>
+<td><p><a href="http://xlslinq.codeplex.com/">LINQ to Excel</a></p></td>
+</tr>
+<tr class="even">
+<td><p><a href="http://linqtoad.codeplex.com/">LINQ to Active Directory</a></p></td>
+<td><p><a href="http://weblogs.asp.net/fbouma/beta-of-linq-to-llblgen-pro-released">LINQ to LLBLGen Pro</a></p></td>
+<td><p><a href="http://metalinq.codeplex.com/">LINQ to Expressions (MetaLinq)</a></p></td>
+<td><p><a href="http://linqtolucene.codeplex.com/">LINQ to Lucene</a></p></td>
+<td></td>
+</tr>
+<tr class="odd">
+<td><p><a href="https://github.com/assaframan/FacebookLinq2">LINQ to Facebook</a></p></td>
+<td><p><a href="http://james.newtonking.com/archive/2008/02/11/linq-to-json-beta">LINQ to JSON</a></p></td>
+<td><p><a href="http://www.codeplex.com/LinqExtender">LINQ Extender</a></p></td>
+<td><p><a href="http://metawebtolinq.codeplex.com/">LINQ to Metaweb(freebase)</a></p></td>
+<td><p><a href="http://www.codeplex.com/LINQFlickr">LINQ to Flickr</a></p></td>
+</tr>
+</tbody>
+</table>
+
+
+</section>
+
+<section author="Alex Aza" description="C# LINQ part 1" theme="league" title="C# LINQ part 1" transition="default">
+
+<table>
+<thead>
+<tr class="header">
+<th></th>
+<th></th>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><p><a href="http://www.codeplex.com/LinqOverCSharp">LINQ over C# project</a></p></td>
+<td><p><a href="http://ayende.com/blog/2227/implementing-linq-for-nhibernate-a-how-to-guide-part-1">LINQ to NHibernate</a></p></td>
+<td><p><a href="http://linqtosimpledb.codeplex.com/">LINQ to SimpleDB</a></p></td>
+<td><p><a href="http://slinq.codeplex.com/">LINQ to Streams</a></p></td>
+</tr>
+<tr class="even">
+<td><p><a href="http://linqtocrm.codeplex.com/">LINQ to CRM</a></p></td>
+<td><p><a href="http://www.codeplex.com/JSLINQ">LINQ to JavaScript</a></p></td>
+<td><p><a href="http://cs.rthand.com/blogs/blog_with_righthand/archive/2008/02/23/LINQ-to-XtraGrid.aspx">LINQ to XtraGrid</a></p></td>
+<td><p><a href="http://dblinq.codeplex.com/">LINQ to MySQL, Oracle and PostgreSql (DbLinq)</a></p></td>
+</tr>
+<tr class="odd">
+<td><p><a href="https://opf3.codeplex.com/">LINQ to Opf3</a></p></td>
+<td><p><a href="http://linq2wmi.codeplex.com/">LINQ to WMI</a></p></td>
+<td><p><a href="http://blogs.msdn.com/b/hartmutm/archive/2006/06/12/628382.aspx">LINQ to WebQueries</a></p></td>
+<td><p><a href="http://linqtosharepoint.codeplex.com/">LINQ to Sharepoint</a></p></td>
+</tr>
+<tr class="even">
+<td><p><a href="http://glinq.codeplex.com/">LINQ to Google</a></p></td>
+<td><p><a href="https://msdn.microsoft.com/en-us/library/dd997425(v=vs.110).aspx">LINQ to Parallel (PLINQ)</a></p></td>
+<td><p><a href="http://blogs.msdn.com/b/hartmutm/archive/2006/07/24/677200.aspx">LINQ to RDF Files</a></p></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+
+
+</section>
+
+</section>
+
+<section >
+
+<h3>Key benefits</h3>
+
+<ul>
+<li>Independent to data source</li>
+<li>Strong typing</li>
+<li>Query compilation</li>
+<li>Deferred execution</li>
+</ul>
+
+</section>
+
+<section >
+
+<h3>What does LINQ consists of?</h3>
+
+<ul>
+<li>Automatic Property</li>
+<li>Object Initializer And Collection Initializer</li>
+<li>Type Inference</li>
+<li>Anonymous Type</li>
+<li>Extension Method</li>
+<li>Lambda Expression</li>
+<li>Query Expression</li>
+</ul>
+
+</section>
+
+<section >
+
+<h3>LINQ and collections</h3>
+
+<p><img src="images/LINQandCollections.png" alt="LINQ and collections" /></p>
+
+</section>
+
+<section >
+
+<h3>Extension methods in LINQ context</h3>
+
+<p>How horrible it looks without extension methods:</p>
+
+<table class="pre"><tr><td><pre lang="cs">IEnumerable&lt;<span class="k">string</span>&gt; query <span class="o">=</span>
+  Enumerable.Select(
+    Enumerable.OrderBy(
+      Enumerable.Where(
+        names, n <span class="o">=</span><span class="o">&gt;</span> n.Contains(<span class="s">"a"</span>)
+      ), n <span class="o">=</span><span class="o">&gt;</span> n.Length
+    ), n <span class="o">=</span><span class="o">&gt;</span> n.ToUpper()
+  );
+</pre></td></tr></table>
+
+<div class="fragment">
+But with them:
+
+<table class="pre"><tr><td><pre lang="cs">IEnumerable&lt;<span class="k">string</span>&gt; query <span class="o">=</span> names.Where(n <span class="o">=</span><span class="o">&gt;</span> n.Contains(<span class="s">"a"</span>))
+                                 .OrderBy(n <span class="o">=</span><span class="o">&gt;</span> n.Length)
+                                 .Select(n <span class="o">=</span><span class="o">&gt;</span> n.ToUpper());
+
+</pre></td></tr></table>
+
+</div>
+
+</section>
+
+<section >
+
+<h3>Extension methods in LINQ context</h3>
+
+<p>It could be even readable like this:</p>
+
+<table class="pre"><tr><td><pre lang="cs"><span class="k">var</span> period <span class="o">=</span> 8.June(2014).To(DateTime.Today)
+                         .Step(1.Days())
+                         .Select(d <span class="o">=</span><span class="o">&gt;</span> d.Date);
+
+<span class="k">foreach</span> (DateTime day <span class="k">in</span> period)
+{
+    Console.WriteLine(day);
+}
+
+</pre></td></tr></table>
+
+</section>
+
+<section >
+
+<section >
+
+<h3>Query expression vs fluent syntax</h3>
+
+<p>Fluent syntax is shorter with simple where:</p>
+
+<table class="pre"><tr><td><pre lang="cs"><span class="k">var</span> adults <span class="o">=</span> people.Where(person <span class="o">=</span><span class="o">&gt;</span> person.Age <span class="o">&gt;</span><span class="o">=</span> 18);
+</pre></td></tr></table>
+
+<p>vs</p>
+
+<table class="pre"><tr><td><pre lang="cs"><span class="k">var</span> adults <span class="o">=</span> <span class="k">from</span> person <span class="k">in</span> people
+             <span class="k">where</span> person.Age <span class="o">&gt;</span><span class="o">=</span> 18
+             <span class="k">select</span> person;
+</pre></td></tr></table>
+
+</section>
+
+<section author="Alex Aza" description="C# LINQ part 1" theme="league" title="C# LINQ part 1" transition="default">
+
+<h3>Query expression vs fluent syntax</h3>
+
+<p>Query expressions shine with joins:</p>
+
+<table class="pre"><tr><td><pre lang="cs"><span class="k">from</span> defect <span class="k">in</span> SampleData.AllDefects
+<span class="k">join</span> subscription <span class="k">in</span> SampleData.AllSubscriptions
+  <span class="k">on</span> defect.Project <span class="k">equals</span> subscription.Project
+<span class="k">select</span> <span class="k">new</span> { defect.Summary, subscription.EmailAddress };
+</pre></td></tr></table>
+
+<p>vs</p>
+
+<table class="pre"><tr><td><pre lang="cs">SampleData.AllDefects.Join(SampleData.AllSubscriptions, 
+                defect <span class="o">=</span><span class="o">&gt;</span> defect.Project,
+                subscription <span class="o">=</span><span class="o">&gt;</span> subscription.Project,
+                (defect, subscription) <span class="o">=</span><span class="o">&gt;</span> <span class="k">new</span>
+                {
+                    defect.Summary,
+                    subscription.EmailAddress
+                });
+
+</pre></td></tr></table>
+
+</section>
+
+<section author="Alex Aza" description="C# LINQ part 1" theme="league" title="C# LINQ part 1" transition="default">
+
+<h3>Query expression vs fluent syntax</h3>
+
+<p>And ordering:</p>
+
+<table class="pre"><tr><td><pre lang="cs"><span class="k">orderby</span> item.Rating <span class="k">descending</span>, item.Price, item.Name
+</pre></td></tr></table>
+
+<p>instead of:</p>
+
+<table class="pre"><tr><td><pre lang="cs">.OrderByDescending(item <span class="o">=</span><span class="o">&gt;</span> item.Rating)
+.ThenBy(item <span class="o">=</span><span class="o">&gt;</span> item.Price)
+.ThenBy(item <span class="o">=</span><span class="o">&gt;</span> item.Name);
+</pre></td></tr></table>
+
+</section>
+
+<section author="Alex Aza" description="C# LINQ part 1" theme="league" title="C# LINQ part 1" transition="default">
+
+<h3>Query expression vs fluent syntax</h3>
+
+<p>But bear in mind that you cannot write everything in query expressions</p>
+
+<table class="pre"><tr><td><pre lang="cs">(<span class="k">from</span> product <span class="k">in</span> SampleData.AllProducts
+ <span class="k">where</span> product.Category.CategoryName <span class="o">=</span><span class="o">=</span> <span class="s">"Beverages"</span>
+ <span class="k">orderby</span> product.ProductName
+ <span class="k">select</span> product) <span class="c">// Query expression cannot do pagination.</span>
+.Skip(50)       <span class="c">// So it has to be mixed with query methods.</span>
+.Take(10);
+</pre></td></tr></table>
+
+</section>
+
+<section author="Alex Aza" description="C# LINQ part 1" theme="league" title="C# LINQ part 1" transition="default">
+
+<h3>Query expression == fluent sytax</h3>
+
+<p>From compiler perspective query expressions are just syntactic sugar and it always translates them into method calls</p>
+
+<p>For example following code</p>
+
+<table class="pre"><tr><td><pre lang="cs"><span class="k">from</span> person <span class="k">in</span> people
+<span class="k">where</span> person.Age <span class="o">&gt;</span><span class="o">=</span> 18
+<span class="k">select</span> person;
+</pre></td></tr></table>
+
+<div class="fragment">
+will be translated to 
+
+<table class="pre"><tr><td><pre lang="cs"><span class="k">var</span> adults <span class="o">=</span> people.Where(person <span class="o">=</span><span class="o">&gt;</span> person.Age <span class="o">&gt;</span><span class="o">=</span> 18);
+
+</pre></td></tr></table>
+
+</div>
+
+<div class="fragment">
+It is the same as preprocessing (if it's familiar to you)
+</div>
+
+</section>
+
+</section>
+
+<section >
+
+<h3>IEnumerable helps to LINQ to rock and roll</h3>
+
+<p>LINQ query can produce one of two results:</p>
+
+<p>enumeration</p>
+
+<table class="pre"><tr><td><pre lang="cs">IEnumerable&lt;<span class="k">int</span>&gt; res <span class="o">=</span> <span class="k">from</span> s <span class="k">in</span> sequance
+                       <span class="k">where</span> s <span class="o">&gt;</span> 3
+                       <span class="k">select</span> s;
+</pre></td></tr></table>
+
+<p>scalar (statistic)</p>
+
+<table class="pre"><tr><td><pre lang="cs"><span class="k">int</span> res <span class="o">=</span> (<span class="k">from</span> s <span class="k">in</span> sequance
+          <span class="k">where</span> s <span class="o">&gt;</span> 3
+          <span class="k">select</span> s).Count();
+</pre></td></tr></table>
+
+</section>
+
+<section >
+
+<h3>LINQ to Objects</h3>
+
+<p>Subset of LINQ which 
+- is executed in memory 
+- with any .NET collection which implements IEnumerable interface 
+- without any intermediate provider such as LINQ to SQL or LINQ to XML</p>
+
+</section>
+
+<section >
+
+<section >
+
+<h3>Why to use VAR in LINQ context</h3>
+
+<p>Always use VAR storing result of query because...</p>
+
+<div class="fragment">
+Type of result can be a little bit clumsy:
+
+<table class="pre"><tr><td><pre lang="cs">IEnumerable&lt;IGrouping&lt;<span class="k">string</span>, Person&gt;<span class="o">&gt;</span> result <span class="o">=</span> people.GroupBy(n <span class="o">=</span><span class="o">&gt;</span> n.Name);
+</pre></td></tr></table>
+
+<p>vs</p>
+
+<table class="pre"><tr><td><pre lang="cs"><span class="k">var</span> result <span class="o">=</span> people.GroupBy(n <span class="o">=</span><span class="o">&gt;</span> n.Name);
+</pre></td></tr></table>
+
+</div>
+
+</section>
+
+<section author="Alex Aza" description="C# LINQ part 1" theme="league" title="C# LINQ part 1" transition="default">
+
+<h3>Why to use VAR in LINQ context</h3>
+
+<p>It can be an enumeration of anonymous types:</p>
+
+<div class="fragment">
+
+<table class="pre"><tr><td><pre lang="cs"><span class="k">var</span> result <span class="o">=</span> <span class="k">from</span> person <span class="k">in</span> people
+             <span class="k">select</span> <span class="k">new</span> {person.Name, person.Surname};
+</pre></td></tr></table>
+
+</div>
+
+</section>
+
+<section author="Alex Aza" description="C# LINQ part 1" theme="league" title="C# LINQ part 1" transition="default">
+
+<h3>Why to use VAR in LINQ context</h3>
+
+<p>You never know how you will change your LINQ query therefore VAR will help you to not change resulting type with a small change:</p>
+
+<div class="fragment">
+for example query was
+
+<table class="pre"><tr><td><pre lang="cs"><span class="k">var</span> result <span class="o">=</span> <span class="k">from</span> person <span class="k">in</span> people
+             <span class="k">select</span> <span class="k">new</span> Person { Name <span class="o">=</span> person.Name, Surname <span class="o">=</span> person.Surname };
+</pre></td></tr></table>
+
+</div>
+
+<div class="fragment">
+But someone decided to group it
+
+<table class="pre"><tr><td><pre lang="cs"><span class="k">var</span> result <span class="o">=</span> <span class="k">from</span> person <span class="k">in</span> people
+             <span class="k">group</span> person by person.Name;
+</pre></td></tr></table>
+
+</div>
+
+</section>
+
+</section>
+
+<section >
+
+<section >
+
+<h3>What is Lambda (λ-calculus)?</h3>
+
+<p>Lambda calculus is a formal system to use functions and function application to express computation
+In simple words it says that any computation can be built by applying simple function which may compose complex (high-order) functions</p>
+
+<p>It was introduced in 1930s by Alonzo Church, the doctoral advisor of Alan Turing</p>
+
+</section>
+
+<section author="Alex Aza" description="C# LINQ part 1" theme="league" title="C# LINQ part 1" transition="default">
+
+<h3>Lambda in C# context</h3>
+
+<p>Is fancy feature introduced in C# 3.0:</p>
+
+<table class="pre"><tr><td><pre lang="cs">MyDel del <span class="o">=</span> <span class="k">delegate</span>(<span class="k">int</span> x)    { <span class="k">return</span> x <span class="o">+</span> 1; } ;     <span class="c">// Anonymous method </span>
+MyDel le1 <span class="o">=</span>         (<span class="k">int</span> x) <span class="o">=</span><span class="o">&gt;</span> { <span class="k">return</span> x <span class="o">+</span> 1; } ;     <span class="c">// Lambda expression </span>
+MyDel le2 <span class="o">=</span>             (x) <span class="o">=</span><span class="o">&gt;</span> { <span class="k">return</span> x <span class="o">+</span> 1; } ;     <span class="c">// Lambda expression </span>
+MyDel le3 <span class="o">=</span>              x  <span class="o">=</span><span class="o">&gt;</span> { <span class="k">return</span> x <span class="o">+</span> 1; } ;     <span class="c">// Lambda expression </span>
+MyDel le4 <span class="o">=</span>              x  <span class="o">=</span><span class="o">&gt;</span>          x <span class="o">+</span> 1    ;     <span class="c">// Lambda expression</span>
+
+</pre></td></tr></table>
+
+</section>
+
+</section>
+
+<section >
+
+<section >
+
+<h3>Functional programming in LINQ context</h3>
+
+<p>Main paradigms of FP:
+- Closure
+- Currying
+- Memoization</p>
+
+</section>
+
+<section author="Alex Aza" description="C# LINQ part 1" theme="league" title="C# LINQ part 1" transition="default">
+
+<h3>Closure</h3>
+
+<p>Using variables from scope out of the func:</p>
+
+<table class="pre"><tr><td><pre lang="cs"><span class="k">int</span> age <span class="o">=</span> 20;
+Func&lt;<span class="k">int</span>, <span class="k">int</span>&gt; getOlderOn <span class="o">=</span> x <span class="o">=</span><span class="o">&gt;</span> age <span class="o">+</span> x;
+
+</pre></td></tr></table>
+
+<p>In LINQ context:</p>
+
+<p>var filter = "Compare";</p>
+
+<table class="pre"><tr><td><pre lang="cs"><span class="k">var</span> query <span class="o">=</span> <span class="k">from</span> m <span class="k">in</span> <span class="k">typeof</span>(String).GetMethods()
+            <span class="k">where</span> m.Name.Contains(filter)
+            <span class="k">select</span> <span class="k">new</span> { m.Name, ParameterCount <span class="o">=</span> m.GetParameters().Length };
+
+</pre></td></tr></table>
+
+</section>
+
+<section author="Alex Aza" description="C# LINQ part 1" theme="league" title="C# LINQ part 1" transition="default">
+
+<h3>Currying</h3>
+
+<p>Create functions that create other functions by adding arguments one by one</p>
+
+<table class="pre"><tr><td><pre lang="cs"><span class="k">var</span> grep <span class="o">=</span> Curry&lt;Regex, IEnumerable&lt;<span class="k">string</span>&gt;, IEnumerable&lt;<span class="k">string</span>&gt;<span class="o">&gt;</span>(
+                (regex, list) <span class="o">=</span><span class="o">&gt;</span> <span class="k">from</span> s <span class="k">in</span> list
+                                 <span class="k">where</span> regex.Match(s).Success
+                                 <span class="k">select</span> s);
+<span class="k">var</span> grepFoo <span class="o">=</span> grep(<span class="k">new</span> Regex(<span class="s">"foo"</span>));
+
+</pre></td></tr></table>
+
+</section>
+
+<section author="Alex Aza" description="C# LINQ part 1" theme="league" title="C# LINQ part 1" transition="default">
+
+<h3>Memoization</h3>
+
+<p>Simply cache results of functions:</p>
+
+<table class="pre"><tr><td><pre lang="cs">Func&lt;<span class="k">uint</span>, <span class="k">uint</span>&gt; fib <span class="o">=</span> <span class="k">null</span>;
+fib <span class="o">=</span> x <span class="o">=</span><span class="o">&gt;</span> x <span class="o">&gt;</span> 1 <span class="o">?</span> fib(x <span class="o">-</span> 1) <span class="o">+</span> fib(x <span class="o">-</span> 2) <span class="o">:</span> x;
+
+fib <span class="o">=</span> fib.Memoize();
+
+</pre></td></tr></table>
+
+</section>
+
+<section author="Alex Aza" description="C# LINQ part 1" theme="league" title="C# LINQ part 1" transition="default">
+
+<h3>Memize</h3>
+
+<table class="pre"><tr><td><pre lang="cs"><span class="k">public</span> <span class="k">static</span> Func&lt;A, R&gt; Memoize&lt;A, R&gt;(<span class="k">this</span> Func&lt;A, R&gt; f)
+{
+    <span class="k">var</span> d <span class="o">=</span> <span class="k">new</span> Dictionary&lt;A, R&gt;();
+    <span class="k">return</span> a=<span class="o">&gt;</span>
+    {
+        R r;
+        <span class="k">if</span> (!d.TryGetValue(a, <span class="k">out</span> r))
+        {
+          r <span class="o">=</span> f(a);
+          d.Add(a, r);
+        }
+        <span class="k">return</span> r;
+    };
+}
+
+
+</pre></td></tr></table>
+
+</section>
+
+<section author="Alex Aza" description="C# LINQ part 1" theme="league" title="C# LINQ part 1" transition="default">
+
+<h4>Main benefits of FP:</h4>
+
+<ul>
+<li>Composability</li>
+<li>Lazy evaluation</li>
+<li>Immutability</li>
+<li>Parallelizable</li>
+<li>Declarative</li>
+</ul>
+
+</section>
+
+<section author="Alex Aza" description="C# LINQ part 1" theme="league" title="C# LINQ part 1" transition="default">
+
+<h4>Composability</h4>
+
+<p>Ability to compose complex things with a banch of simple ones.</p>
+
+<table class="pre"><tr><td><pre lang="cs"><span class="k">var</span> results <span class="o">=</span> source.Where(item <span class="o">=</span><span class="o">&gt;</span> item <span class="o">&gt;</span> 0 <span class="o">&amp;</span><span class="o">&amp;</span> item <span class="o">&lt;</span> 10)
+                    .OrderBy(item <span class="o">=</span><span class="o">&gt;</span> item)
+                    .Select(item <span class="o">=</span><span class="o">&gt;</span> item.ToString(CultureInfo.InvariantCulture));
+
+</pre></td></tr></table>
+
+</section>
+
+<section author="Alex Aza" description="C# LINQ part 1" theme="league" title="C# LINQ part 1" transition="default">
+
+<h4>Lazy evaluation</h4>
+
+<p>The query is not evaluated until you iterate it.</p>
+
+<table class="pre"><tr><td><pre lang="cs"><span class="k">var</span> result <span class="o">=</span> <span class="k">from</span> person <span class="k">in</span> people
+             <span class="k">where</span> person.Age <span class="o">&gt;</span> 21
+             <span class="k">select</span> <span class="k">new</span> { person.Name, person.Surname };
+<span class="c">//at this moment result is not calculated</span>
+
+<span class="k">var</span> realResult <span class="o">=</span> result.ToList();
+
+</pre></td></tr></table>
+
+</section>
+
+<section author="Alex Aza" description="C# LINQ part 1" theme="league" title="C# LINQ part 1" transition="default">
+
+<h4>Immutability</h4>
+
+<p>The result of any operation is new value</p>
+
+<table class="pre"><tr><td><pre lang="cs"><span class="k">var</span> results <span class="o">=</span> source.Where(item <span class="o">=</span><span class="o">&gt;</span> item <span class="o">&gt;</span> 0 <span class="o">&amp;</span><span class="o">&amp;</span> item <span class="o">&lt;</span> 10) <span class="c">//new enumeration</span>
+                    .OrderBy(item <span class="o">=</span><span class="o">&gt;</span> item)                <span class="c">//new enumeration</span>
+                    .Select(item <span class="o">=</span><span class="o">&gt;</span> item.ToString());     <span class="c">//new enumeration</span>
+
+</pre></td></tr></table>
+
+</section>
+
+<section author="Alex Aza" description="C# LINQ part 1" theme="league" title="C# LINQ part 1" transition="default">
+
+<h4>Parallelizable</h4>
+
+<p>Since everything is immutable - it easier to parallelize</p>
+
+<table class="pre"><tr><td><pre lang="cs">Enumerable.Range(1, 10000)
+          .AsParallel()
+          .AsOrdered()
+          .Where(IsPrimeNumber)
+          .ToList()
+
+</pre></td></tr></table>
+
+</section>
+
+<section author="Alex Aza" description="C# LINQ part 1" theme="league" title="C# LINQ part 1" transition="default">
+
+<h4>Declarative</h4>
+
+<p>Allows to write more expressive code</p>
+
+<table class="pre"><tr><td><pre lang="cs"><span class="k">from</span> d <span class="k">in</span> ds.Doctors
+<span class="k">join</span> c <span class="k">in</span> ds.Calls
+<span class="k">on</span> d.Initials <span class="k">equals</span> c.Initials
+<span class="k">where</span> c.DateOfCall <span class="o">&gt;</span><span class="o">=</span> <span class="k">new</span> DateTime(2015, 10, 1) <span class="o">&amp;</span><span class="o">&amp;</span>
+      c.DateOfCall <span class="o">&lt;</span><span class="o">=</span> <span class="k">new</span> DateTime(2015, 10, 31)
+<span class="k">group</span> c by d.Initials <span class="k">into</span> g
+<span class="k">select</span> g;
+
+</pre></td></tr></table>
+
+</section>
+
+</section>
+
+
+
+        </div>
+    </div>
+    <script src="../../shared/lib/js/head.min.js"></script>
+    <script src="../../shared/js/reveal.js"></script>
+    <script>
+
+        // Full list of configuration options available here:
+        // https://github.com/hakimel/reveal.js#configuration
+        Reveal.initialize({
+            controls: true,
+            progress: true,
+            history: true,
+            center: true,
+
+            transition: 'default', // default/cube/page/concave/zoom/linear/fade/none
+
+            // Parallax scrolling
+            // parallaxBackgroundImage: 'https://s3.amazonaws.com/hakim-static/reveal-js/reveal-parallax-1.jpg',
+            // parallaxBackgroundSize: '2100px 900px',
+
+            // Optional libraries used to extend on reveal.js
+            dependencies: [
+                { src: '../../shared/lib/js/classList.js', condition: function () { return !document.body.classList; } },
+                { src: '../../shared/plugin/markdown/marked.js', condition: function () { return !!document.querySelector('[data-markdown]'); } },
+                { src: '../../shared/plugin/markdown/markdown.js', condition: function () { return !!document.querySelector('[data-markdown]'); } },
+                { src: '../../shared/plugin/highlight/highlight.js', async: true, callback: function () { hljs.initHighlightingOnLoad(); } },
+                { src: '../../shared/plugin/zoom-js/zoom.js', async: true, condition: function () { return !!document.body.classList; } },
+                { src: '../../shared/plugin/notes/notes.js', async: true, condition: function () { return !!document.body.classList; } }
+            ]
+        });
+
+    </script>
+</body>
+</html>
+
