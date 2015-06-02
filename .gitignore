@@ -184,3 +184,6 @@ release.cmd
 *.bak
 *.orig
 docs
+
+# connection to gh-pages
+/gh-pages
