@@ -26,7 +26,7 @@ csharp-slides
 ----
 ##How to prepare FsReveal presentation
 1. Choose folder for according presentation or create new one
-2. Edit content of file <presentation_folder>\index.md and add used images to folder <presentation_folder>\images
+2. Edit content of file `<presentation_folder>\index.md` and add used images to folder `<presentation_folder>\images`
 3. Run `build "<presentation_folder>"` in `cmd` to build presentation and raise up local http server and continuous build of markup file to html presentation
-4. In order to publish - run ReleaseSlides `build  "<presentation_folder>"`
+4. In order to publish - run `build ReleaseSlides "<presentation_folder>"`
 That's it
