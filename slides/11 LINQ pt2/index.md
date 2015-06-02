@@ -7,7 +7,7 @@
 ***
 
 ## C# course
-#### Lecture 10
+#### Lecture 11
 # LINQ part 2
 
 ***
