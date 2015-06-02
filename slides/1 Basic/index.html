@@ -1,0 +1,407 @@
+﻿<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>.NET basics</title>
+    <meta name="description" content=".NET: infrastructure, tools, basics">
+    <meta name="author" content="Valentine Radchuk">
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <script src="//code.jquery.com/jquery-1.8.0.js"></script>
+    <script src="//code.jquery.com/ui/1.8.23/jquery-ui.js"></script>
+    <script src="//netdna.bootstrapcdn.com/twitter-bootstrap/2.2.1/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link href="//netdna.bootstrapcdn.com/twitter-bootstrap/2.2.1/css/bootstrap-combined.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="../../shared/css/reveal.css">
+    <link rel="stylesheet" href="../../shared/css/theme/league.css" id="theme">
+    <link type="text/css" rel="stylesheet" href="../../shared/fsharp.formatting/styles/style.css" />
+    <link type="text/css" rel="stylesheet" href="../../shared/fsharp.formatting/styles/deedle.css" />
+    <link type="text/css" rel="stylesheet" href="../../shared/css/custom.css" />
+    <script src="../../shared/fsharp.formatting/styles/tips.js" type="text/javascript"></script>
+    <link rel="shortcut icon" type="image/png" href="../../shared/favicon.png">
+    <!-- For syntax highlighting -->
+    <link rel="stylesheet" href="../../shared/lib/css/zenburn.css">
+    <!-- If the query includes 'print-pdf', include the PDF print sheet -->
+    <script>
+			if( window.location.search.match( /print-pdf/gi ) ) {
+				var link = document.createElement( 'link' );
+				link.rel = 'stylesheet';
+				link.type = 'text/css';
+				link.href = '../../shared/css/print/pdf.css';
+				document.getElementsByTagName( 'head' )[0].appendChild( link );
+			}
+    </script>
+    <!--[if lt IE 9]>
+    <script src="../../shared/lib/js/html5shiv.js"></script>
+    <![endif]-->
+</head>
+<body>
+    <div class="reveal">
+        
+        <!-- Any section element inside of this container is displayed as a slide -->
+        <div class="slides">
+            <section >
+
+<h2>C# course</h2>
+
+<h4>Lecture 1</h4>
+
+<h1>.NET basics</h1>
+
+</section>
+
+<section >
+
+<h2>Agenda</h2>
+
+<ul>
+<li>.NET history</li>
+<li>available versions of .NET frameworks</li>
+<li>CLR, Managed code, MSIL overview, JIT-compilation</li>
+<li>C# and other languages in .NET family</li>
+<li>Visual Studio overview</li>
+<li>How to organize code</li>
+</ul>
+
+</section>
+
+<section >
+
+<h3>.NET history</h3>
+
+<p><img src="images/dotNet_history.png" alt=".NET history" /></p>
+
+</section>
+
+<section >
+
+<section >
+
+<h3>.NET key features</h3>
+
+<ul>
+<li>Object-oriented programming</li>
+<li>Support for multiple languages</li>
+<li>Easy component-based development (assembly concept - metadata, version and code in the same place, no head files required)</li>
+<li>Simplified application deployment (just xcopy)</li>
+<li>Rich base class library support</li>
+<li>Unified runtime infrastructure</li>
+<li>Exception handling</li>
+</ul>
+
+</section>
+
+<section author="Valentine Radchuk" description=".NET: infrastructure, tools, basics" theme="league" title=".NET basics" transition="default">
+
+<h3>.NET Languages</h3>
+
+<p><img src="images/LangCloud.png" alt=".NET history" /></p>
+
+</section>
+
+</section>
+
+<section >
+
+<h3>.NET Framework architecture</h3>
+
+<p><img src="images/dotNet_FW_architecture.png" alt=".NET Framework architecture" /></p>
+
+</section>
+
+<section >
+
+<section >
+
+<h3>CLR - common language runtime</h3>
+
+<p>CLR is a runtime environment that manages the execution of code and provides services that improves development, deployment and run time.</p>
+
+<h4>Services provided by CLR:</h4>
+
+<ul>
+<li><a href="https://msdn.microsoft.com/en-us/library/windows/desktop/bb318664%28v=vs.85%29.aspx">managed code</a></li>
+<li>cross-language operability</li>
+<li>JIT compiler</li>
+<li>common type system (CTS)</li>
+<li>code and memory management</li>
+<li>reflection</li>
+<li>garbage collection</li>
+<li>debugging, profiling and diagnostics</li>
+</ul>
+
+</section>
+
+<section author="Valentine Radchuk" description=".NET: infrastructure, tools, basics" theme="league" title=".NET basics" transition="default">
+
+<h3>CLR architecture</h3>
+
+<p><img src="images/CLR_Architecture.png" alt=".NET types sets" /></p>
+
+</section>
+
+</section>
+
+<section >
+
+<section >
+
+<h3>Buzzwords</h3>
+
+<ul>
+<li><strong>.NET</strong> - is the most general name of technology that MS provides (includes tools, infrastructure, code framework etc)</li>
+<li><strong>CLR</strong> - runtime which runs code and does a lot of additional services (heart of .NET)</li>
+<li><strong>CLI</strong> - public specification of .NET (using this specification project MONO was created)</li>
+<li><strong>CTS</strong> - subset of types which must be supported of all languages to support interoperability</li>
+<li><strong>CLS</strong> - is a set of rules on which all .NET languages should be based to make sure no types are exposed that some languages cannot deal with.</li>
+</ul>
+
+</section>
+
+<section author="Valentine Radchuk" description=".NET: infrastructure, tools, basics" theme="league" title=".NET basics" transition="default">
+
+<h3>Types sets</h3>
+
+<p><img src="images/buzzwords.png" alt=".NET types sets" /></p>
+
+</section>
+
+<section author="Valentine Radchuk" description=".NET: infrastructure, tools, basics" theme="league" title=".NET basics" transition="default">
+
+<h3>CTS - Common Type System</h3>
+
+<p><img src="images/CTS.png" alt="Common type system" /></p>
+
+</section>
+
+</section>
+
+<section >
+
+<section >
+
+<h3>JIT compilation</h3>
+
+<ul>
+<li>Explicit vs Implicit compilation</li>
+<li>MSIL - MS Intermediate language (low level instructions code)</li>
+<li>MSIL ≠ Machine code (every time, MSIL runs, it’s recompiled again to machine code)</li>
+<li>JIT compiler ≠ Bytecode interpreter (JIT compiles code at runtime and re-use compiled code at next invocations)</li>
+<li>JIT uses such techniques as adaptive optimization and dynamic recompilation which may significantly increase productivity in comparison with static compilation</li>
+</ul>
+
+</section>
+
+<section author="Valentine Radchuk" description=".NET: infrastructure, tools, basics" theme="league" title=".NET basics" transition="default">
+
+<h3>Compilation Flow</h3>
+
+<p><img src="images/CompillationFlow.png" alt="Compilation flow" /></p>
+
+</section>
+
+</section>
+
+<section >
+
+<h3>Managed code</h3>
+
+<blockquote>
+  <p>“Managed code is a term coined by Microsoft to identify computer program source code that requires and will execute only under 
+the management of a Common Language Runtime virtual machine, typically the .NET Framework, or Mono.” 
+© <a href="www.wikipedia.org">Wikipedia</a></p>
+</blockquote>
+
+<ul>
+<li>machine independent.</li>
+<li>is code that runs on CLR and is fully managed by CLR (including cleaning up memory, reflecting metadata etc)</li>
+<li>provided with metadata which describe types and allows different tools inspect types.</li>
+</ul>
+
+</section>
+
+<section >
+
+<section >
+
+<h3>.NET Assemblies</h3>
+
+<ul>
+<li><strong>Assembly</strong> - is a chunk of MSIL code that can be run in .NET runtime</li>
+<li><strong>Assembly</strong> - is a logical unit, not physical (can include multiple classes, resources and can be executable)</li>
+</ul>
+
+<h4>Assembly contains:</h4>
+
+<ul>
+<li>manifest (metadata about the assembly itself - name, version, culture, public key and digital signature)</li>
+<li>type metadata (Completely describes all types defined in an assembly + attributes)</li>
+<li>managed code</li>
+<li>resources</li>
+</ul>
+
+</section>
+
+<section author="Valentine Radchuk" description=".NET: infrastructure, tools, basics" theme="league" title=".NET basics" transition="default">
+
+<h3>.NET Assemblies - GAC</h3>
+
+<p><strong>GAC</strong> - Global Assembly Cache:
+- a solution to keep DLLs globally accessible without worrying about conflicts <br />
+- stores assemblies shared across few applications
+- located at C:\Windows\Assembly
+- to add an assembly to GAC, use <a href="https://msdn.microsoft.com/en-us/library/ex0ss12c%28v=vs.110%29.aspx">gacutil</a></p>
+
+</section>
+
+</section>
+
+<section >
+
+<h3>CLI (<a href="http://www.ecma-international.org/publications/standards/Ecma-335.htm">ECMA 335</a>)</h3>
+
+<p>CLI - Common Language Infrastructure - is an open specification developed by Microsoft and standardized by ISO and ECMA that describes the executable code and runtime environment.</p>
+
+<h4>CLI describes:</h4>
+
+<ul>
+<li>The Common Type System (CTS)</li>
+<li>Metadata</li>
+<li>CTS</li>
+<li>CLS</li>
+</ul>
+
+<h4>Existing implementations:</h4>
+
+<ul>
+<li><a href="https://github.com/Microsoft/dotnet">.NET</a> / <a href="https://msdn.microsoft.com/en-us/library/f44bbwa1%28v=vs.90%29.aspx">.NET compact</a> / <a href="https://netmf.codeplex.com/">.NET micro framework</a></li>
+<li><a href="http://www.mono-project.com/">Mono dev platform</a></li>
+<li><a href="http://www.gnu.org/software/dotgnu/">Portable .NET (dotGnu project)</a></li>
+</ul>
+
+</section>
+
+<section >
+
+<section >
+
+<h3>About:C#</h3>
+
+<p><img src="images/AndersHejlsberg.png" alt="Anders Hejlsberg Photo" /></p>
+
+<ul>
+<li>is a object oriented language derived from C++ and Java.</li>
+<li>a mainstream language in .NET family and whole .NET framework was written in this language</li>
+<li>Author - Anders Hejlsberg (1960, Copenhagen) - Turbo Pascal, Delphi, C#</li>
+<li>standard  - <a href="http://www.ecma-international.org/publications/standards/Ecma-334.htm">ECMA 334</a> / <a href="http://www.iso.org/iso/catalogue_detail.htm?csnumber=36768">ISO 23270</a></li>
+</ul>
+
+</section>
+
+<section author="Valentine Radchuk" description=".NET: infrastructure, tools, basics" theme="league" title=".NET basics" transition="default">
+
+<h3>C# key features</h3>
+
+<ul>
+<li><strong>Strong-typed</strong> - all types are strongly controlled by runtime</li>
+<li><strong>Modern</strong> -  supports, automatic garbage collection, modern approach to debugging, rich model for error handling, decimal data type for financial application and robust security model.</li>
+<li><strong>Type-Safe</strong> - does not permit unsafe casts, enforces overflow checking, use of any uninitialized variables produces an error</li>
+<li><strong>Compatible</strong> - enforces the .NET CLS and allows interoperation with other .NET language</li>
+<li><strong>Flexible</strong> - delegate classses instead of pointers</li>
+<li><strong>Inter-Operability</strong> - supports COM objects and native API</li>
+</ul>
+
+</section>
+
+</section>
+
+<section >
+
+<section >
+
+<h3>Source Code Editors</h3>
+
+<ul>
+<li><a href="https://www.visualstudio.com/">Visual Studio 20xx</a> (commercial/free) - supports the latest version of C#</li>
+<li><a href = "http://www.icsharpcode.net/">SharpDevelop</a> (free) - still alive :)</li>
+<li><a href="http://www.monodevelop.com/">MonoDevelop</a> (free) - supports C# 4</li>
+</ul>
+
+<h4>Exotic:</h4>
+
+<ul>
+<li><a href="https://www.linqpad.net/">LinqPad</a> (commercial/free) - for test purposes</li>
+<li><a href="https://notepad-plus-plus.org/">Notepad++</a> (free) - your are always welcome to use plain text editors for programming</li>
+</ul>
+
+</section>
+
+<section author="Valentine Radchuk" description=".NET: infrastructure, tools, basics" theme="league" title=".NET basics" transition="default">
+
+<h3>Visual Studio</h3>
+
+<ul>
+<li><strong>Ultimate</strong> - full possible functionality</li>
+<li><strong>Premium</strong> - for development. testing and prototyping</li>
+<li><strong>Profesional</strong> - might be used for development</li>
+<li><strong>Express</strong> (outdated) - limited version of Professional</li>
+<li><strong>Community</strong> - free for even commercial use - the same functionality as Profesional</li>
+</ul>
+
+</section>
+
+<section author="Valentine Radchuk" description=".NET: infrastructure, tools, basics" theme="league" title=".NET basics" transition="default">
+
+<h3>Visual Studio - code organization</h3>
+
+<p>Visual Studio provides two containers to help you efficiently manage the items that are required by your development effort - solutions and projects</p>
+
+<ul>
+<li><strong>Solution</strong> - contain items that you need in order to create your application. Solution contains projects, solution folders, solution files and metadata.</li>
+<li><strong>Project</strong> - are used in a solution to logically manage, build, and debug the items that make up your application.</li>
+</ul>
+
+<p>Filetypes: <em>.cs, </em>.vb, <em>.csproj, </em>.sln, *.suo etc</p>
+
+</section>
+
+</section>
+
+
+
+        </div>
+    </div>
+    <script src="../../shared/lib/js/head.min.js"></script>
+    <script src="../../shared/js/reveal.js"></script>
+    <script>
+
+        // Full list of configuration options available here:
+        // https://github.com/hakimel/reveal.js#configuration
+        Reveal.initialize({
+            controls: true,
+            progress: true,
+            history: true,
+            center: true,
+
+            transition: 'default', // default/cube/page/concave/zoom/linear/fade/none
+
+            // Parallax scrolling
+            // parallaxBackgroundImage: 'https://s3.amazonaws.com/hakim-static/reveal-js/reveal-parallax-1.jpg',
+            // parallaxBackgroundSize: '2100px 900px',
+
+            // Optional libraries used to extend on reveal.js
+            dependencies: [
+                { src: '../../shared/lib/js/classList.js', condition: function () { return !document.body.classList; } },
+                { src: '../../shared/plugin/markdown/marked.js', condition: function () { return !!document.querySelector('[data-markdown]'); } },
+                { src: '../../shared/plugin/markdown/markdown.js', condition: function () { return !!document.querySelector('[data-markdown]'); } },
+                { src: '../../shared/plugin/highlight/highlight.js', async: true, callback: function () { hljs.initHighlightingOnLoad(); } },
+                { src: '../../shared/plugin/zoom-js/zoom.js', async: true, condition: function () { return !!document.body.classList; } },
+                { src: '../../shared/plugin/notes/notes.js', async: true, condition: function () { return !!document.body.classList; } }
+            ]
+        });
+
+    </script>
+</body>
+</html>
+
