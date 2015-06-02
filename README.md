@@ -15,8 +15,8 @@ csharp-slides
 - [ ] Lecture 6 - Working with strings and text
 - [x] [Lecture 7 - Delegates, Events and Lambdas](https://drive.google.com/open?id=18aWj-E13-jcpo7Za-RlsZhyRGr2sPPNm9MGKhWinS20&authuser=0)
 - [x] [Lecture 8 - Collections and generics](https://drive.google.com/open?id=1x_GryQXEDeWE6vE6X7St8epIFr7cnfgl3eofp9ITqhw&authuser=0)
-- [ ] Lecture 9 - LINQ Pt.1
-- [ ] Lecture 10 - LINQ Pt.2
+- [x] Lecture 9 - LINQ Pt.1 (http://kottans.org/csharp-slides/presentations/10-linq-pt1/#/)
+- [x] Lecture 10 - LINQ Pt.2 (http://kottans.org/csharp-slides/presentations/11-linq-pt2/#/)
 - [x] [Lecture 11 - Garbage collection](https://docs.google.com/presentation/d/1n_K-LopzpyI5hMPMftK5WQdULmTUsZxBQ5TtER118FM/edit?usp=sharing)
 - [ ] Lecture 12 - Reflection
 - [ ] Lecture 13 - Multithreading Pt.1
@@ -25,9 +25,8 @@ csharp-slides
 
 ----
 ##How to prepare FsReveal presentation
-1. Copy existing presentation folder and rename it accordingly
-2. Edit content of file <presentation_folder>\slides\index.md and add used images to folder <presentation_folder>\slides\images
-3. run build.cmd to build presentation and raise up local http server and continouos build of markup file to html presentation
-4. When ready, run script <presentation_folder>\GenerateReleaseSlides.cmd which will produce Release folder
-5. Copy contents of Release folder to the branch gh-pages into related folder
+1. Choose folder for according presentation or create new one
+2. Edit content of file <presentation_folder>\index.md and add used images to folder <presentation_folder>\images
+3. Run `build "<presentation_folder>"` in `cmd` to build presentation and raise up local http server and continuous build of markup file to html presentation
+4. In order to publish - run ReleaseSlides `build  "<presentation_folder>"`
 That's it
