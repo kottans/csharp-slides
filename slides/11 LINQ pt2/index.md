@@ -146,47 +146,33 @@ It is a bridge between your domain or entity classes and the database.
 
 ---
 
-#### DbContext diagram explanation
+#### DbSets
 
-<div data-markdown class="fragment">
+DbContext contains entity set (`DbSet<TEntity>`) for all the entities which is mapped to DB tables
 
-  DbSets 
+---
 
-  DbContext contains entity set (`DbSet<TEntity>`) for all the entities which is mapped to DB tables
+####Change Tracking 
 
-</div>
+It keeps track of changes occurred in the entities after it has been querying from the database
 
-<div data-markdown class="fragment">
+---
 
-  Change Tracking 
+####Caching
 
-  It keeps track of changes occurred in the entities after it has been querying from the database
+DbContext does first level caching by default. It stores the entities which has been retrieved during the life time of a context class.
 
-</div>
+---
 
-<div data-markdown class="fragment">
+####Querying
 
-  Caching
+DbContext converts LINQ-to-Entities queries to SQL query and send it to the database.
 
-  DbContext does first level caching by default. It stores the entities which has been retrieved during the life time of a context class.
+---
 
-</div>
+####Persistance
 
-<div data-markdown class="fragment">
-
-  Querying
-
-  DbContext converts LINQ-to-Entities queries to SQL query and send it to the database.
-
-</div>
-
-<div data-markdown class="fragment">
-
-  Persistance
-
-  It also performs the Insert, update and delete operations to the database, based on the entity states.
-
-</div>
+It also performs the Insert, update and delete operations to the database, based on the entity states.
 
 ---
 
@@ -599,6 +585,9 @@ var sum = nums.Aggregate(0, (total, n) => total + n); // 1688
 - Distinct
 - OfType
 - Cast
+- SelectMany
+
+---
 
 #### Any
 
@@ -638,7 +627,8 @@ IEnumerable<string> strings = values.Distinct(); // "1", "2", "3"
 ```cs
 
 object[] values = new object[] {"1", "2", "3", "AAA", 5};
-IEnumerable<string> strings = values.OfType<string>(); // Last element witll be omited since it is not string
+IEnumerable<string> strings = values.OfType<string>(); 
+// Last element witll be omited since it is not string
 
 ```
 
@@ -649,9 +639,31 @@ IEnumerable<string> strings = values.OfType<string>(); // Last element witll be 
 ```cs
 
 object[] values = new object[] {"1", "2", "3", "AAA", 5};
-IEnumerable<string> strings = values.Cast<string>(); // an exception will be thrown because the last element is not string
+IEnumerable<string> strings = values.Cast<string>(); 
+// an exception will be thrown 
+//because the last element is not string
 
 ```
+
+---
+
+#### SelectMany
+
+```cs
+
+var values = new[]
+{
+    new[] { "1", "2" }, 
+    new[] { "3", "4" }, 
+    new[] { "5" }
+};
+
+var flatten = values.SelectMany(s => s); 
+// one array ["1", "2", "3", "4", "5"]
+
+```
+
+---
 
 Additional resources:
 
