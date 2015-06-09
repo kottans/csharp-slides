@@ -59,6 +59,7 @@ The `System.Type` class defines a number of members that can be used to examine 
 |`IsEnum`| 
 |`IsGenericTypeDefinition`|
 |...|
+
 ---
 |Type|Meaning in Life|
 |:---:|:---|
@@ -70,6 +71,7 @@ The `System.Type` class defines a number of members that can be used to examine 
 |`GetMethods()`| 
 |`GetNestedTypes()`| 
 |`GetProperties()`| 
+
 ---
 |Type|Meaning in Life|
 |:---:|:---|
@@ -94,21 +96,26 @@ The act of loading external assemblies on demand is known as a dynamic load.
          public static Assembly Load(String assemblyString);
 }
 ```
+
 ---
 The CLR forbids any code in the assembly from executing while using  ReflectionOnlyLoadFrom or ReflectionOnlyLoad. (Suitable for types investigation).
+
 ```cs
 public class Assembly {
    public static Assembly ReflectionOnlyLoadFrom(String assemblyFile);
    public static Assembly ReflectionOnlyLoad(String assemblyString);
 }
 ```
+
 ***
 ###Reflection Performance
-#####... reflection is slow.
+####... reflection is slow.
+
 ---
 If you’re writing an application that will dynamically discover and construct type instances, you should take one of the following approaches:
 * Have the types derive from a base type that is known at compile time. At run time, construct an instance of the derived type, place the reference in a variable that is of the base type (by way of a cast), and call virtual methods defined by the base type.
 * Have the type implement an interface that is known at compile time. At run time, construct an instance of the type, place the reference in a variable that is of the interface type (by way of a cast), and call the methods defined by the interface.
+
 ***
 ###Late Binding
 Late binding is a technique in which you are able to create an instance of a given type and invoke its members at runtime without having hard-coded compile-time knowledge of its existence.
@@ -117,4 +124,4 @@ Late binding is a technique in which you are able to create an instance of a giv
 ###The `System.Activator` Class
 The `System.Activator` class (defined in `mscorlib.dll`) is the key to the .NET late-binding process.
 ######[Simple Activator Demo](https://dotnetfiddle.net/G9cwuz)
-######[Activator with generic Demo](https://dotnetfiddle.net/V8rnFW)
+######[Activator with generics Demo](https://dotnetfiddle.net/V8rnFW)
