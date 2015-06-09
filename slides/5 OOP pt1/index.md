@@ -20,10 +20,10 @@
 <br/>
    
 <div class="fragment">
-####More OOP pronciples
+####More OOP principles
 
 - Coupling/Cohesion
-- Abstration
+- Abstraction
 - S.O.L.I.D.
 </div>
 
