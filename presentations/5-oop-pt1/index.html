@@ -66,11 +66,11 @@
 
 <div class="fragment">
 
-<h4>More OOP pronciples</h4>
+<h4>More OOP principles</h4>
 
 <ul>
 <li>Coupling/Cohesion</li>
-<li>Abstration</li>
+<li>Abstraction</li>
 <li>S.O.L.I.D.
 </div></li>
 </ul>
@@ -91,7 +91,19 @@
 
 <div class="fragment">
 
-<table class="pre"><tr><td><pre lang="cs"><span class="k">namespace</span> Test {
+<table class="pre"><tr><td class="lines"><pre class="fssnip">
+<span class="l">1: </span>
+<span class="l">2: </span>
+<span class="l">3: </span>
+<span class="l">4: </span>
+<span class="l">5: </span>
+<span class="l">6: </span>
+<span class="l">7: </span>
+<span class="l">8: </span>
+<span class="l">9: </span>
+</pre>
+</td>
+<td class="snippet"><pre class="fssnip" lang="cs"><span class="k">namespace</span> Test {
     <span class="k">public</span> <span class="k">class</span> Accesibility {
         <span class="k">private</span>            <span class="k">int</span> _private <span class="o">=</span> 10; <span class="c">// this var will be available within this class only</span>
         <span class="k">public</span>             <span class="k">int</span> _public <span class="o">=</span> 20; <span class="c">// this var will be accessible anywhere</span>
@@ -133,7 +145,16 @@
 
 <div>
 
-<table class="pre"><tr><td><pre lang="cs"><span class="k">public</span> <span class="k">interface</span> ISomeInterface1 {
+<table class="pre"><tr><td class="lines"><pre class="fssnip">
+<span class="l">1: </span>
+<span class="l">2: </span>
+<span class="l">3: </span>
+<span class="l">4: </span>
+<span class="l">5: </span>
+<span class="l">6: </span>
+</pre>
+</td>
+<td class="snippet"><pre class="fssnip" lang="cs"><span class="k">public</span> <span class="k">interface</span> ISomeInterface1 {
     <span class="k">void</span> SomeMethod(); <span class="c">// declare a method</span>
     <span class="k">int</span> SomeProperty {get; set;}  <span class="c">// declare a property</span>
     <span class="k">event</span> EventHandler SomeEvent;  <span class="c">// declare an event</span>
@@ -208,7 +229,28 @@ Should be declared as private or protected</li>
 <div class="fragment">
 Example of encapsulation:
 
-<table class="pre"><tr><td><pre lang="cs"><span class="k">class</span> Counter {
+<table class="pre"><tr><td class="lines"><pre class="fssnip">
+<span class="l"> 1: </span>
+<span class="l"> 2: </span>
+<span class="l"> 3: </span>
+<span class="l"> 4: </span>
+<span class="l"> 5: </span>
+<span class="l"> 6: </span>
+<span class="l"> 7: </span>
+<span class="l"> 8: </span>
+<span class="l"> 9: </span>
+<span class="l">10: </span>
+<span class="l">11: </span>
+<span class="l">12: </span>
+<span class="l">13: </span>
+<span class="l">14: </span>
+<span class="l">15: </span>
+<span class="l">16: </span>
+<span class="l">17: </span>
+<span class="l">18: </span>
+</pre>
+</td>
+<td class="snippet"><pre class="fssnip" lang="cs"><span class="k">class</span> Counter {
     <span class="k">private</span> <span class="k">int</span> _id, _i;
     <span class="k">private</span> <span class="k">static</span> <span class="k">int</span> s_n;
 
@@ -311,7 +353,11 @@ Example of encapsulation:
 
 <div>
 
-<table class="pre"><tr><td><pre lang="cs"><span class="k">public</span> <span class="k">class</span> DerivedClass <span class="o">:</span> BaseClass
+<table class="pre"><tr><td class="lines"><pre class="fssnip">
+<span class="l">1: </span>
+</pre>
+</td>
+<td class="snippet"><pre class="fssnip" lang="cs"><span class="k">public</span> <span class="k">class</span> DerivedClass <span class="o">:</span> BaseClass
 </pre></td></tr></table>
 
 </div>
@@ -320,7 +366,11 @@ Example of encapsulation:
 
 <div>
 
-<table class="pre"><tr><td><pre lang="cs"><span class="k">public</span> <span class="k">interface</span> IDerived <span class="o">:</span> IBase1, IBase2
+<table class="pre"><tr><td class="lines"><pre class="fssnip">
+<span class="l">1: </span>
+</pre>
+</td>
+<td class="snippet"><pre class="fssnip" lang="cs"><span class="k">public</span> <span class="k">interface</span> IDerived <span class="o">:</span> IBase1, IBase2
 </pre></td></tr></table>
 
 </div>
@@ -329,7 +379,12 @@ Example of encapsulation:
 
 <div>
 
-<table class="pre"><tr><td><pre lang="cs"><span class="k">public</span> <span class="k">class</span> DerivedClass <span class="o">:</span> IBase1, IBase2
+<table class="pre"><tr><td class="lines"><pre class="fssnip">
+<span class="l">1: </span>
+<span class="l">2: </span>
+</pre>
+</td>
+<td class="snippet"><pre class="fssnip" lang="cs"><span class="k">public</span> <span class="k">class</span> DerivedClass <span class="o">:</span> IBase1, IBase2
 <span class="k">public</span> <span class="k">class</span> DerivedClass <span class="o">:</span> IBase1, IBase2
 </pre></td></tr></table>
 
@@ -401,7 +456,7 @@ Example of encapsulation:
 <li>C# does not support multiple inheritance</li>
 <li>Static members could not be inherited</li>
 <li>Constructors could not be inherited (you must declare own constructor and define inheritance rules)</li>
-<li>Inheritance is transitive: if B -> (derived from) A and C -> B, then C -> A</li>
+<li>Inheritance is transitive: if B -&gt; (derived from) A and C -&gt; B, then C -&gt; A</li>
 <li>Inheritance could be closed with keyword sealed. If class declared with this keyword it cannot have derived classes</li>
 </ul>
 
@@ -474,7 +529,11 @@ Example of encapsulation:
 
 <div>   
 
-<table class="pre"><tr><td><pre lang="cs"><span class="k">public</span> <span class="k">virtual</span> <span class="k">void</span> VirtualMethod()
+<table class="pre"><tr><td class="lines"><pre class="fssnip">
+<span class="l">1: </span>
+</pre>
+</td>
+<td class="snippet"><pre class="fssnip" lang="cs"><span class="k">public</span> <span class="k">virtual</span> <span class="k">void</span> VirtualMethod()
 </pre></td></tr></table>
 
 </div>
@@ -540,7 +599,11 @@ Example of encapsulation:
 
 <div>
 
-<table class="pre"><tr><td><pre lang="cs"><span class="k">public</span> <span class="k">new</span> <span class="k">void</span> VirtualMethod() {<span class="o">.</span><span class="o">.</span><span class="o">.</span>}
+<table class="pre"><tr><td class="lines"><pre class="fssnip">
+<span class="l">1: </span>
+</pre>
+</td>
+<td class="snippet"><pre class="fssnip" lang="cs"><span class="k">public</span> <span class="k">new</span> <span class="k">void</span> VirtualMethod() {<span class="o">.</span><span class="o">.</span><span class="o">.</span>}
 </pre></td></tr></table>
 
 <div>
@@ -549,7 +612,11 @@ Example of encapsulation:
 
 <div>
 
-<table class="pre"><tr><td><pre lang="cs"><span class="k">public</span> <span class="k">new</span> <span class="k">virtual</span> <span class="k">void</span> VirtualMethod() {<span class="o">.</span><span class="o">.</span><span class="o">.</span>}
+<table class="pre"><tr><td class="lines"><pre class="fssnip">
+<span class="l">1: </span>
+</pre>
+</td>
+<td class="snippet"><pre class="fssnip" lang="cs"><span class="k">public</span> <span class="k">new</span> <span class="k">virtual</span> <span class="k">void</span> VirtualMethod() {<span class="o">.</span><span class="o">.</span><span class="o">.</span>}
 </pre></td></tr></table>
 
 <div>
