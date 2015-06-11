@@ -17,11 +17,11 @@
 - Threads
 - Creating and starting threads
 - Thread lifecycle
+- Error handling
 - Thread Pooling
 - Memory model for multithreading
 - Synchronization concepts
 - Immutable objects and synchronization
-- Error handling
 
 ***
 
@@ -164,3 +164,14 @@ There are a number of ways to stop thread:
 - thread could be named with property Name - <a href="http://www.codeproject.com/KB/cs/MasteringInDebugging/debug43_small.png">example</a>
 - thread execution priority (<a href="https://msdn.microsoft.com/ru-ru/library/system.threading.thread.priority(v=vs.110).aspx">Priority</a>)
 - state of a thread (<a href="https://msdn.microsoft.com/ru-ru/library/system.threading.thread.threadstate(v=vs.110).aspx">ThreadState</a>)
+
+***
+###Error handling
+
+- exception could be cought within a thread (not outside it)
+- unhandled exception occured at any thread terminates entire application
+- it does not make sense to catch ThreadAbortException (caused by Thread.Abort() method)
+- you can catch globally unhandled exception by event <a href="https://msdn.microsoft.com/en-us/library/system.appdomain.unhandledexception%28v=vs.110%29.aspx">AppDomain.CurrentDomain.UnhandledException</a>, however it's impossible to prevent application from closing
+
+***
+###Thread pooling
