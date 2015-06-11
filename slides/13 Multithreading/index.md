@@ -133,5 +133,34 @@ Once thread created it should be run for execution:
 
 <a href="https://dotnetfiddle.net/zDZ1V2">Create thread - demo</a>
 
----
+***
 ###Thread lifecycle
+![Thread lifecycle](images/threadStates.png)
+
+  <aside class="notes">
+        Oh hey, these are some notes.
+  </aside>
+
+---
+###Thread lifecycle details
+![Thread states with descriptions](images\threadStates_details.png)
+
+<a href="http://www.codeproject.com/Articles/26675/Beginner-s-Guide-to-Threading-in-NET-Part-of-n">More about multithreading</a>
+
+***
+###Stopping and aborting threads
+There are a number of ways to stop thread:
+
+- Let thread exits by itself
+- Let thread dead by natural causes (exit from entry method)
+- Call <a href="https://msdn.microsoft.com/ru-ru/library/ty8d3wta(v=vs.110).aspx">Thread.Abort()</a> method (depricated)
+- Call <a href="https://msdn.microsoft.com/ru-ru/library/system.threading.thread.suspend(v=vs.110).aspx">Thread.Suspend()</a> method (depricated)
+- Call <a href="https://msdn.microsoft.com/ru-ru/library/system.threading.thread.interrupt(v=vs.110).aspx">Thread.Interrupt()</a> method to exit from SleepWaitJoin state
+
+***
+###Thread characteristics
+
+- <a href="http://www.c-sharpcorner.com/uploadfile/40e97e/what-is-foreground-or-background-thread/">background vs foreground threads (IsBackground)</a>
+- thread could be named with property Name - <a href="http://www.codeproject.com/KB/cs/MasteringInDebugging/debug43_small.png">example</a>
+- thread execution priority (<a href="https://msdn.microsoft.com/ru-ru/library/system.threading.thread.priority(v=vs.110).aspx">Priority</a>)
+- state of a thread (<a href="https://msdn.microsoft.com/ru-ru/library/system.threading.thread.threadstate(v=vs.110).aspx">ThreadState</a>)
