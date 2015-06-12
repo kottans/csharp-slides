@@ -225,6 +225,7 @@ Creating thread consumes is an expensive operation. Thread pool cuts these overh
 	- volatile keyword
 	- Interlocked class
 	- use immutable objects	
+
 ---
 ### Simple blocking methods
 
