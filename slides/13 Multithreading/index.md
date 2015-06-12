@@ -219,19 +219,12 @@ Creating thread consumes is an expensive operation. Thread pool cuts these overh
 ###Synchronization primitives
 
 - Simple blocking methods
-	- Sleep \ Join
 - Locking constructs 
-	- lock (Monitor.Enter \ Monitor.Exit)
-	- Mutex
-	- SpinLock
 - Signaling constructs 
-	- Monitor.Wait \ Monitor.Pulse
-	- CountdownEvent
-	- Barrier
 - Nonblocking synchronization constructs
 	- volatile keyword
 	- Interlocked class
-
+	- use immutable objects	
 ---
 ### Simple blocking methods
 
@@ -240,3 +233,16 @@ Creating thread consumes is an expensive operation. Thread pool cuts these overh
 
 ---
 ###Locking
+
+Exclusive locking is used to ensure that only one thread can enter particular sections of code at a time
+
+- lock (Monitor.Enter \ Monitor.Exit) - <a href="https://dotnetfiddle.net/H6zPDU">lock example</a>, <a href="https://dotnetfiddle.net/wNooFx">Monitor example</a>
+- mutex - <a href="https://dotnetfiddle.net/4X6s7i">example</a>
+- semaphore - <a href="https://dotnetfiddle.net/S1Kg5T">example</a>
+
+---
+###Signaling
+
+- AutoResetEvent -<a href="https://dotnetfiddle.net/9Q1Ala">example</a>
+- ManualResetEvent
+- CountdownEvent - <a href="https://dotnetfiddle.net/pG4hCf">example</a>
