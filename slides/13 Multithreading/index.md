@@ -19,7 +19,6 @@
 - Thread lifecycle
 - Error handling
 - Thread Pooling
-- Memory model for multithreading
 - Synchronization concepts
 - Immutable objects and synchronization
 
@@ -67,27 +66,40 @@ When multithreading might be awkward?
 
 ![Context switching](images/Context_switching.png)
 
+***
+###Threads vs Processes
+
+Do not mix Threads and Processes
+
+![Task manager in Windows](images/WindowsTaskManager.png)
+
 ---
-###Thread vs Process
+###Thread vs Process - Processes
 
-Do not mix Threads and Process
 
-- Thread - execution path within a process
-	- share memory of containing process
-	- share resources dedicated for containing process
-	- has own stack withing process memory
-	- requiere synchronization
 
-<br/>
+Thread - execution path within a process
 
-- Process - is an instance of a program
-	- each process has own dedicated memory space
-	- few processes might represent the same program
-	- syncronization almost not required
+- contains running code
+- share memory of containing process
+- share resources dedicated for containing process
+- has own stack withing process memory
+- requiere synchronization
+
+---
+###Thread vs Process - Threads
+
+Process - is an instance of a program
+
+- each process has own dedicated memory space
+- contains at least 1 thread
+- few processes might represent the same program
+- syncronization almost not required
 
 <br />
 
 <a href="https://dotnetfiddle.net/zDZ1V2">Example of code with multiple threads</a>
+
 
 ***
 ###Threads in C#
@@ -175,3 +187,56 @@ There are a number of ways to stop thread:
 
 ***
 ###Thread pooling
+
+Creating thread consumes is an expensive operation. Thread pool cuts these overheads.
+####Ways to enter the thread pool: 
+- via the <a href="http://www.codeproject.com/Articles/152765/Task-Parallel-Library-of-n">Task Parallel Library</a>
+- <a href="https://msdn.microsoft.com/en-us/library/system.threading.threadpool.queueuserworkitem(v=vs.110).aspx">ThreadPool.QueueUserWorkItem</a> - <a href="https://dotnetfiddle.net/4ea3Ss">example</a>
+- via <a href="http://www.codeproject.com/Articles/426120/Calling-a-method-in-Csharp-asynchronously-using-de">asynchronous delegates </a>
+- via <a href="https://msdn.microsoft.com/en-us/library/system.componentmodel.backgroundworker(v=vs.110).aspx">BackgroundWorker</a>
+
+---
+###Thread pooling - schema
+
+![Thread Pool](images\ThreadPool.png)
+
+***
+###Common synchronization problems
+
+- **atomicity** - make critical code atomic
+- **visibility** - if read/write operations are in diff threads, no guarantee that reading thread will read written value
+- **reordering** - code order might be changed by CLR - this might be critical for app logic
+- **race condition** - occurs when correctness of computation depends on data access time
+- **livelock** - thread fails operation and returns data for re-processing
+- **starvation** - mutual lock caused by inapropriate thread priorities
+- **deadlock** - mutual lock of 2 or more threads
+
+  <aside class="notes">
+        more details <a href="http://www.somanyword.com/2014/03/common-problems-of-concurrency-multi-threading-in-java/">here</a>
+  </aside>
+
+***
+###Synchronization primitives
+
+- Simple blocking methods
+	- Sleep \ Join
+- Locking constructs 
+	- lock (Monitor.Enter \ Monitor.Exit)
+	- Mutex
+	- SpinLock
+- Signaling constructs 
+	- Monitor.Wait \ Monitor.Pulse
+	- CountdownEvent
+	- Barrier
+- Nonblocking synchronization constructs
+	- volatile keyword
+	- Interlocked class
+
+---
+### Simple blocking methods
+
+- Sleep - pause thread execution for specified time
+- Join - invoking thread pauses until other thread finish its execution
+
+---
+###Locking
