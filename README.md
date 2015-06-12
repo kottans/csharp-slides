@@ -18,7 +18,7 @@ csharp-slides
 - [x] [Lecture 9 - LINQ Pt.1] (http://kottans.org/csharp-slides/presentations/10-linq-pt1/#/)
 - [x] [Lecture 10 - LINQ Pt.2] (http://kottans.org/csharp-slides/presentations/11-linq-pt2/#/)
 - [x] [Lecture 11 - Garbage collection](https://docs.google.com/presentation/d/1n_K-LopzpyI5hMPMftK5WQdULmTUsZxBQ5TtER118FM/edit?usp=sharing)
-- [ ] Lecture 12 - Reflection
+- [x] Lecture 12 - Reflection
 - [ ] Lecture 13 - Multithreading Pt.1
 - [ ] Lecture 14 - Multithreading Pt.2   
 - [ ] Lecture 15 - Dynamic programming   
