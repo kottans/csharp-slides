@@ -20,11 +20,11 @@ bool == Boolean
 ---
 ###Operators
 ####Relational Operators
-![Relational Operators](images/operators_1.png)
+![Relational Operators](images/operators_1.PNG)
 
 ---
 ####Logical Operators
-![Logical Operators](images/operators_2.png)
+![Logical Operators](images/operators_2.PNG)
 
 ***
 ##Branching
@@ -220,14 +220,14 @@ class ExceptionsDemo
 
 ---
 ###Result
-![Exception screen](images/exception_screen.png)
+![Exception screen](images/exception_screen.PNG)
 
 ---
 ###Catching Exception in C#
 After a method throws an exception, CLR is looking for an exception handler that can process the error.
 
 ---
-![Exception flow](images/exception_flow.png)
+![Exception flow](images/exception_flow.PNG)
 
 ***
 ##Throwing/Catching Exceptions
