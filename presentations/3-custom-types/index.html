@@ -1,0 +1,1193 @@
+﻿<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>C# Custom types</title>
+    <meta name="description" content="C# Custom types">
+    <meta name="author" content="Alex Aza">
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <script src="//code.jquery.com/jquery-1.8.0.js"></script>
+    <script src="//code.jquery.com/ui/1.8.23/jquery-ui.js"></script>
+    <script src="//netdna.bootstrapcdn.com/twitter-bootstrap/2.2.1/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link href="//netdna.bootstrapcdn.com/twitter-bootstrap/2.2.1/css/bootstrap-combined.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="../../shared/css/reveal.css">
+    <link rel="stylesheet" href="../../shared/css/theme/league.css" id="theme">
+    <link type="text/css" rel="stylesheet" href="../../shared/fsharp.formatting/styles/style.css" />
+    <link type="text/css" rel="stylesheet" href="../../shared/fsharp.formatting/styles/deedle.css" />
+    <link type="text/css" rel="stylesheet" href="../../shared/css/custom.css" />
+    <script src="../../shared/fsharp.formatting/styles/tips.js" type="text/javascript"></script>
+    <link rel="shortcut icon" type="image/png" href="../../shared/favicon.png">
+    <!-- For syntax highlighting -->
+    <link rel="stylesheet" href="../../shared/lib/css/zenburn.css">
+    <!-- If the query includes 'print-pdf', include the PDF print sheet -->
+    <script>
+			if( window.location.search.match( /print-pdf/gi ) ) {
+				var link = document.createElement( 'link' );
+				link.rel = 'stylesheet';
+				link.type = 'text/css';
+				link.href = '../../shared/css/print/pdf.css';
+				document.getElementsByTagName( 'head' )[0].appendChild( link );
+			}
+    </script>
+    <!--[if lt IE 9]>
+    <script src="../../shared/lib/js/html5shiv.js"></script>
+    <![endif]-->
+</head>
+<body>
+    <div class="reveal">
+        
+        <!-- Any section element inside of this container is displayed as a slide -->
+        <div class="slides">
+            <section >
+
+<h2>C# course</h2>
+
+<h4>Lecture 3</h4>
+
+<h1>Custom types</h1>
+
+</section>
+
+<section >
+
+<h2>Agenda</h2>
+
+<ul>
+<li>Classes &amp;&amp; (objects || class instances)</li>
+<li>Access modifiers</li>
+<li>Members</li>
+<li>Structs</li>
+<li>Namespaces and Assemblies</li>
+<li>The Object type</li>
+<li>Enums</li>
+<li>Anonymous types</li>
+<li>Interfaces</li>
+</ul>
+
+</section>
+
+<section >
+
+<section >
+
+<h2>Classes &amp;&amp; (objects || class instances)</h2>
+
+<p>A class is a code template for creating objects.</p>
+
+<p>It can contain:</p>
+
+<ul>
+<li>data members aka. state</li>
+<li>behavior aka. function members</li>
+</ul>
+
+</section>
+
+<section author="Alex Aza" description="C# Custom types" theme="league" title="C# Custom types" transition="default">
+
+<p>Simplest class ever:</p>
+
+<table class="pre"><tr><td class="lines"><pre class="fssnip">
+<span class="l">1: </span>
+<span class="l">2: </span>
+<span class="l">3: </span>
+<span class="l">4: </span>
+<span class="l">5: </span>
+<span class="l">6: </span>
+<span class="l">7: </span>
+<span class="l">8: </span>
+</pre>
+</td>
+<td class="snippet"><pre class="fssnip" lang="cs">    <span class="k">class</span> Kottan 
+    {
+    <span class="c">/* here is kottan’s body ;)</span>
+<span class="c">        /\_/\</span>
+<span class="c">      =( ^.^ )=</span>
+<span class="c">       (“)_(“)</span>
+<span class="c">    */</span>
+    }
+
+</pre></td></tr></table>
+
+</section>
+
+<section author="Alex Aza" description="C# Custom types" theme="league" title="C# Custom types" transition="default">
+
+<p>In order to give birth to our Kottan (class) we need to use <code>new</code> operator:</p>
+
+<p><img src="images/newKottan.png" alt="Kottan" /></p>
+
+</section>
+
+<section author="Alex Aza" description="C# Custom types" theme="league" title="C# Custom types" transition="default">
+
+<h2>Static</h2>
+
+<h3>Static members</h3>
+
+<ul>
+<li>belong to type (not object instance)</li>
+<li>static constructor can’t have any parameters</li>
+</ul>
+
+<p><a href="https://dotnetfiddle.net/h42jQF">example</a></p>
+
+</section>
+
+<section author="Alex Aza" description="C# Custom types" theme="league" title="C# Custom types" transition="default">
+
+<h3>Static classes</h3>
+
+<ul>
+<li>can only have static members</li>
+<li>there is no possibility to instantiate (new up) static class</li>
+</ul>
+
+</section>
+
+<section author="Alex Aza" description="C# Custom types" theme="league" title="C# Custom types" transition="default">
+
+<h3>PartialClasses</h3>
+
+<ul>
+<li>Definition can split between multiple files, but only in one assembly.</li>
+<li>Can have partial methods as extensibility points (only void)</li>
+<li>Usually used to split generated and user code.</li>
+</ul>
+
+<p><a href="https://dotnetfiddle.net/Bu2p4A">example</a></p>
+
+</section>
+
+<section author="Alex Aza" description="C# Custom types" theme="league" title="C# Custom types" transition="default">
+
+<h3>SealedClasses</h3>
+
+<p>Cannot be inherited</p>
+
+<p>Why do we need this?</p>
+
+<ul>
+<li>Prevent extensibility or misuse</li>
+<li>Some framework classes sealed for performance and security implications</li>
+</ul>
+
+<p><a href="https://dotnetfiddle.net/PQTTjT">example</a></p>
+
+</section>
+
+<section author="Alex Aza" description="C# Custom types" theme="league" title="C# Custom types" transition="default">
+
+<h3>Anonymous types</h3>
+
+<ul>
+<li>Classes created by the compiler on the fly</li>
+<li>Has overridden Equals method</li>
+<li>You can omit the name of property passing variable to AT</li>
+</ul>
+
+<p><a href="https://dotnetfiddle.net/C7YoEY">example</a></p>
+
+</section>
+
+</section>
+
+<section >
+
+<section >
+
+<h2>Access modifiers</h2>
+
+<p>Keywords to declare the accessibility of a type or member</p>
+
+<table>
+<thead>
+<tr class="header">
+<th><p>Keyword</p></th>
+<th><p>ApplicableTo</p></th>
+<th><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><p>private</p></td>
+<td><p>Member</p></td>
+<td><p>Access limited to the class</p></td>
+</tr>
+<tr class="even">
+<td><p>protected</p></td>
+<td><p>Member</p></td>
+<td><p>Access limited to the class or derived classes</p></td>
+</tr>
+<tr class="odd">
+<td><p>internal</p></td>
+<td><p>Class, Member</p></td>
+<td><p>Access limited to the current assembly</p></td>
+</tr>
+</tbody>
+</table>
+
+
+</section>
+
+<section author="Alex Aza" description="C# Custom types" theme="league" title="C# Custom types" transition="default">
+
+<table>
+<thead>
+<tr class="header">
+<th><p>Keyword</p></th>
+<th><p>ApplicableTo</p></th>
+<th><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><p>protected internal</p></td>
+<td><p>Member</p></td>
+<td><p>Access limited to current assembly and derived types</p></td>
+</tr>
+<tr class="even">
+<td><p>public</p></td>
+<td><p>Class, Member</p></td>
+<td><p>No restrictions</p></td>
+</tr>
+</tbody>
+</table>
+
+
+</section>
+
+<section author="Alex Aza" description="C# Custom types" theme="league" title="C# Custom types" transition="default">
+
+<h2>Access modifiers (Defaults)</h2>
+
+<ul>
+<li>Class is internal by default</li>
+<li>Member is private by default</li>
+</ul>
+
+</section>
+
+<section author="Alex Aza" description="C# Custom types" theme="league" title="C# Custom types" transition="default">
+
+<p>Therefore the following declaration:</p>
+
+<table class="pre"><tr><td class="lines"><pre class="fssnip">
+<span class="l">1: </span>
+<span class="l">2: </span>
+<span class="l">3: </span>
+<span class="l">4: </span>
+</pre>
+</td>
+<td class="snippet"><pre class="fssnip" lang="cs">    <span class="k">class</span> Kottan 
+    { 
+        <span class="k">string</span> Name <span class="o">=</span> <span class="s">""</span>; 
+    }
+</pre></td></tr></table>
+
+<p>is equivalent to:</p>
+
+<table class="pre"><tr><td class="lines"><pre class="fssnip">
+<span class="l">1: </span>
+<span class="l">2: </span>
+<span class="l">3: </span>
+<span class="l">4: </span>
+</pre>
+</td>
+<td class="snippet"><pre class="fssnip" lang="cs">    <span class="k">internal</span> <span class="k">class</span> Kottan
+    {
+        <span class="k">private</span> <span class="k">string</span> Name <span class="o">=</span> <span class="s">""</span>;
+    }
+</pre></td></tr></table>
+
+</section>
+
+</section>
+
+<section >
+
+<section >
+
+<h2>Members.Methods</h2>
+
+<p>Methods define behavior</p>
+
+</section>
+
+<section author="Alex Aza" description="C# Custom types" theme="league" title="C# Custom types" transition="default">
+
+<p>The signature of every method consists of:</p>
+
+<ul>
+<li>Method name</li>
+<li>Access modifier</li>
+<li>Return type or void (if nothing to return)</li>
+<li>Zero or more parameters</li>
+</ul>
+
+<table class="pre"><tr><td class="lines"><pre class="fssnip">
+<span class="l">1: </span>
+<span class="l">2: </span>
+<span class="l">3: </span>
+<span class="l">4: </span>
+<span class="l">5: </span>
+<span class="l">6: </span>
+<span class="l">7: </span>
+</pre>
+</td>
+<td class="snippet"><pre class="fssnip" lang="cs">    <span class="k">public</span> <span class="k">class</span> Kitten
+    {
+        <span class="k">public</span> <span class="k">bool</span> AmILike(<span class="k">string</span> food)
+        {
+            <span class="k">return</span> food <span class="o">=</span><span class="o">=</span> <span class="s">"milk"</span>;
+        }
+    }   
+</pre></td></tr></table>
+
+</section>
+
+<section author="Alex Aza" description="C# Custom types" theme="league" title="C# Custom types" transition="default">
+
+<h3>Members.Constructors</h3>
+
+<p>Constructor is meant to do all necessary for object creation</p>
+
+<ul>
+<li>parameters should indicate what is needed to create the object</li>
+<li>compiler creates default constructor if no specified</li>
+</ul>
+
+</section>
+
+<section author="Alex Aza" description="C# Custom types" theme="league" title="C# Custom types" transition="default">
+
+<p>Two types of constructors:</p>
+
+<ul>
+<li><p>Static</p>
+<p>Runs once per type</p>
+<p>Note: can be triggered by accessing a static member</p></li>
+<li><p>Instance</p>
+<p>Runs once per instance</p></li>
+</ul>
+
+</section>
+
+<section author="Alex Aza" description="C# Custom types" theme="league" title="C# Custom types" transition="default">
+
+<h3>Members.Constructors</h3>
+
+<p>These two guys are equivalent:</p>
+
+<table class="pre"><tr><td class="lines"><pre class="fssnip">
+<span class="l">1: </span>
+<span class="l">2: </span>
+<span class="l">3: </span>
+<span class="l">4: </span>
+</pre>
+</td>
+<td class="snippet"><pre class="fssnip" lang="cs"><span class="k">public</span> <span class="k">class</span> Kitten
+{
+    <span class="k">public</span> <span class="k">double</span> FurWeight <span class="o">=</span> 12.5;
+}
+
+</pre></td></tr></table>
+
+<table class="pre"><tr><td class="lines"><pre class="fssnip">
+<span class="l">1: </span>
+<span class="l">2: </span>
+<span class="l">3: </span>
+<span class="l">4: </span>
+<span class="l">5: </span>
+<span class="l">6: </span>
+<span class="l">7: </span>
+<span class="l">8: </span>
+<span class="l">9: </span>
+</pre>
+</td>
+<td class="snippet"><pre class="fssnip" lang="cs"><span class="k">public</span> <span class="k">class</span> Kitten
+{
+    <span class="k">public</span> <span class="k">double</span> FurWeight;
+
+    <span class="k">public</span> Kitten()
+    {
+        FurWeight <span class="o">=</span> 12.5;
+    }
+}
+
+</pre></td></tr></table>
+
+</section>
+
+<section author="Alex Aza" description="C# Custom types" theme="league" title="C# Custom types" transition="default">
+
+<h3>Members.Methods.Overloading</h3>
+
+<ul>
+<li>Allows you to define multiple methods with the same name</li>
+<li>These methods should have unique signature</li>
+<li>Compiler finds and invokes the best match</li>
+</ul>
+
+<p><a href="https://dotnetfiddle.net/UG3JME">example</a></p>
+
+</section>
+
+<section author="Alex Aza" description="C# Custom types" theme="league" title="C# Custom types" transition="default">
+
+<h3>Members.Parameters.Params</h3>
+
+<p><code>params</code> keyword means that you can pass variable number of arguments</p>
+
+<ul>
+<li>Can be only the last in parameters list</li>
+<li>All passed parameters will be converted into an array</li>
+</ul>
+
+<p><img src="images/overloads.png" alt="overloads" /></p>
+
+</section>
+
+<section author="Alex Aza" description="C# Custom types" theme="league" title="C# Custom types" transition="default">
+
+<h3>Members.Methods.Parameters.Ref</h3>
+
+<ul>
+<li>Arguments in C# by default are passed by value</li>
+<li>ref means that parameter will be passed by reference into method</li>
+<li>Must be assigned before going into method</li>
+<li>ref modifier must be used in method declaration and invocation</li>
+</ul>
+
+<p><a href="https://dotnetfiddle.net/Q7jY3E">example</a></p>
+
+</section>
+
+<section author="Alex Aza" description="C# Custom types" theme="league" title="C# Custom types" transition="default">
+
+<h3>Members.Methods.Parameters.Out</h3>
+
+<p>Just like ref but:
+- Used to pass data from inside the method back to calling code
+- Must be assigned before going OUT of method</p>
+
+<p><a href="https://dotnetfiddle.net/FRFBSe">example</a></p>
+
+</section>
+
+<section author="Alex Aza" description="C# Custom types" theme="league" title="C# Custom types" transition="default">
+
+<h3>Members.ReferenceTypes.PassingByValue vs PassingByRef</h3>
+
+<ul>
+<li>When you pass ref object by value – you’re passing reference inside the method.</li>
+<li>Therefore it’s impossible to change this reference until you pass it by reference.</li>
+</ul>
+
+<p><a href="https://dotnetfiddle.net/5ejHo8">example</a></p>
+
+</section>
+
+<section author="Alex Aza" description="C# Custom types" theme="league" title="C# Custom types" transition="default">
+
+<h3>Members.Methods.OptionalArguments</h3>
+
+<ul>
+<li>Helps to define default values for arguments so you don’t need to specify them</li>
+<li>Could combine several methods overloads into one</li>
+<li>Can’t have any value calculated during runtime, so you <em>can’t</em> specify default parameter as <code>kat = new Kottan()</code></li>
+</ul>
+
+<p><a href="https://dotnetfiddle.net/QFudYw">example</a></p>
+
+</section>
+
+<section author="Alex Aza" description="C# Custom types" theme="league" title="C# Custom types" transition="default">
+
+<h3>Members.ExtensionMethods</h3>
+
+<ul>
+<li>Allow you to extend any class with your custom method</li>
+<li>Give you syntactic sugar for calling them</li>
+<li>Method must be static</li>
+<li>Object you’re extending could be null</li>
+</ul>
+
+<p><a href="https://dotnetfiddle.net/ulIr20">example</a></p>
+
+</section>
+
+<section author="Alex Aza" description="C# Custom types" theme="league" title="C# Custom types" transition="default">
+
+<h3>Members.fields</h3>
+
+<p>Fields are named storage for values or references depending on their type.</p>
+
+<p>Depending on where are they stored they could be:</p>
+
+<ul>
+<li>Instance</li>
+<li>Static (Type field)</li>
+</ul>
+
+</section>
+
+<section author="Alex Aza" description="C# Custom types" theme="league" title="C# Custom types" transition="default">
+
+<h3>Members.ThisKeyword</h3>
+
+<p><code>this</code> is the reference to current instance
+Can be used only inside instance context, never in static.</p>
+
+</section>
+
+<section author="Alex Aza" description="C# Custom types" theme="league" title="C# Custom types" transition="default">
+
+<h3>Members.fields.const</h3>
+
+<p><code>const</code> – set at compile time and cannot be change thereafter</p>
+
+<ul>
+<li>Must be either built-in types or an enumeration type (<code>enum</code>)</li>
+</ul>
+
+</section>
+
+<section author="Alex Aza" description="C# Custom types" theme="league" title="C# Custom types" transition="default">
+
+<h3>Members.fields.const.Pitfalls</h3>
+
+<p>Compiler can assume that value really will never change and copy it as a literal. Therefore if somebody referenced your assembly – the don’t get your changes until recompilation.</p>
+
+</section>
+
+<section author="Alex Aza" description="C# Custom types" theme="league" title="C# Custom types" transition="default">
+
+<h3>Members.fields.readonly</h3>
+
+<p>readonly – field can be set only* during construction.</p>
+
+<ul>
+<li>We don't count reflection</li>
+</ul>
+
+</section>
+
+<section author="Alex Aza" description="C# Custom types" theme="league" title="C# Custom types" transition="default">
+
+<h3>Members.properties</h3>
+
+<p>Just <code>get</code> and <code>set</code> methods</p>
+
+<ul>
+<li>Mechanism of encapsulation</li>
+<li>Some systems require them, i.e. data binding</li>
+<li>Way to define “field” in <code>interface</code></li>
+</ul>
+
+<p><a href="https://dotnetfiddle.net/U4NyzP">example</a></p>
+
+</section>
+
+<section author="Alex Aza" description="C# Custom types" theme="league" title="C# Custom types" transition="default">
+
+<h3>Members.properties</h3>
+
+<p>Syntactic sugar</p>
+
+<table class="pre"><tr><td class="lines"><pre class="fssnip">
+<span class="l">1: </span>
+<span class="l">2: </span>
+<span class="l">3: </span>
+<span class="l">4: </span>
+<span class="l">5: </span>
+<span class="l">6: </span>
+</pre>
+</td>
+<td class="snippet"><pre class="fssnip" lang="cs"><span class="k">public</span> <span class="k">class</span> Kitten
+{
+    <span class="k">public</span> <span class="k">string</span> Name { get; set; }
+    <span class="k">public</span> <span class="k">string</span> Color { get; <span class="k">private</span> set; }
+    <span class="k">public</span> <span class="k">string</span> FavoriteFood { <span class="k">private</span> get; set; }
+}
+
+</pre></td></tr></table>
+
+</section>
+
+<section author="Alex Aza" description="C# Custom types" theme="league" title="C# Custom types" transition="default">
+
+<h3>Members.Indexers</h3>
+
+<p>Property that takes one or more arguments and accessed with array-like syntax.</p>
+
+<p><a href="https://dotnetfiddle.net/uCGTtB">example</a></p>
+
+</section>
+
+<section author="Alex Aza" description="C# Custom types" theme="league" title="C# Custom types" transition="default">
+
+<h3>ObjectInitializers</h3>
+
+<p>Simplify setting of accessible fields or properties</p>
+
+<table class="pre"><tr><td class="lines"><pre class="fssnip">
+<span class="l">1: </span>
+<span class="l">2: </span>
+<span class="l">3: </span>
+<span class="l">4: </span>
+<span class="l">5: </span>
+</pre>
+</td>
+<td class="snippet"><pre class="fssnip" lang="cs"><span class="k">public</span> <span class="k">class</span> Kottan
+{
+    <span class="k">public</span> <span class="k">string</span> Name;
+    <span class="k">public</span> <span class="k">string</span> Breed { get; set; }
+}
+
+</pre></td></tr></table>
+
+<table class="pre"><tr><td class="lines"><pre class="fssnip">
+<span class="l">1: </span>
+<span class="l">2: </span>
+<span class="l">3: </span>
+<span class="l">4: </span>
+<span class="l">5: </span>
+</pre>
+</td>
+<td class="snippet"><pre class="fssnip" lang="cs"><span class="k">var</span> kottan <span class="o">=</span> <span class="k">new</span> Kottan
+{
+    Breed <span class="o">=</span> <span class="s">"Siamese"</span>,
+    Name <span class="o">=</span> <span class="s">"Bagira"</span>
+}
+
+</pre></td></tr></table>
+
+</section>
+
+<section author="Alex Aza" description="C# Custom types" theme="league" title="C# Custom types" transition="default">
+
+<h3>Members.operators</h3>
+
+<ul>
+<li>Allow you to apply operations to our custom types</li>
+<li>From IL perspective operators are just methods</li>
+</ul>
+
+<p><a href="https://dotnetfiddle.net/a9IrGn">example</a></p>
+
+</section>
+
+<section author="Alex Aza" description="C# Custom types" theme="league" title="C# Custom types" transition="default">
+
+<h3>Members.operators.Unary (CAUTION! BORING SLIDE!)</h3>
+
+<table>
+<thead>
+<tr class="header">
+<th><p>Operator</p></th>
+<th><p>IL method</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><p>+</p></td>
+<td><p>op_UnaryPlus</p></td>
+</tr>
+<tr class="even">
+<td><p>-</p></td>
+<td><p>op_UnaryNegation</p></td>
+</tr>
+<tr class="odd">
+<td><p>!</p></td>
+<td><p>op_LogicalNot</p></td>
+</tr>
+<tr class="even">
+<td><p>~</p></td>
+<td><p>op_OnesComplement</p></td>
+</tr>
+<tr class="odd">
+<td><p>++</p></td>
+<td><p>op_Increment</p></td>
+</tr>
+<tr class="even">
+<td><p>--</p></td>
+<td><p>op_Decrement</p></td>
+</tr>
+</tbody>
+</table>
+
+
+</section>
+
+<section author="Alex Aza" description="C# Custom types" theme="league" title="C# Custom types" transition="default">
+
+<h3>Members.operators.Binary (CAUTION! BORING SLIDE!)</h3>
+
+<table>
+<thead>
+<tr class="header">
+<th><p>Operator</p></th>
+<th><p>IL method</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><p>+</p></td>
+<td><p>op_Addition</p></td>
+</tr>
+<tr class="even">
+<td><p>-</p></td>
+<td><p>op_Subtraction</p></td>
+</tr>
+<tr class="odd">
+<td><p>*</p></td>
+<td><p>op_Multiply</p></td>
+</tr>
+<tr class="even">
+<td><p>/</p></td>
+<td><p>op_Division</p></td>
+</tr>
+<tr class="odd">
+<td><p>%</p></td>
+<td><p>op_Modulus</p></td>
+</tr>
+</tbody>
+</table>
+
+
+</section>
+
+<section author="Alex Aza" description="C# Custom types" theme="league" title="C# Custom types" transition="default">
+
+<h3>Members.operators.Binary (CAUTION! BORING SLIDE!)</h3>
+
+<table>
+<thead>
+<tr class="header">
+<th><p>Operator</p></th>
+<th><p>IL method</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><p>^</p></td>
+<td><p>op_ExcusiveOr</p></td>
+</tr>
+<tr class="even">
+<td><p>&amp;</p></td>
+<td><p>op_BitwiseAnd</p></td>
+</tr>
+<tr class="odd">
+<td><span>&#124;</span></td>
+<td><p>op_BitwiseOr</p></td>
+</tr>
+<tr class="even">
+<td><<</td>
+<td><p>op_LeftShift</p></td>
+</tr>
+</tbody>
+</table>
+
+
+</section>
+
+<section author="Alex Aza" description="C# Custom types" theme="league" title="C# Custom types" transition="default">
+
+<h3>Members.operators.Binary (CAUTION! BORING SLIDE!)</h3>
+
+<table>
+<thead>
+<tr class="header">
+<th><p>Operator</p></th>
+<th><p>IL method</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><span>>></span></td>
+<td><p>op_RightShift</p></td>
+</tr>
+<tr class="even">
+<td><p>==</p></td>
+<td><p>op_Equality</p></td>
+</tr>
+<tr class="odd">
+<td><p>!=</p></td>
+<td><p>op_Inequality</p></td>
+</tr>
+<tr class="even">
+<td><</td>
+<td><p>op_LessThan</p></td>
+</tr>
+</tbody>
+</table>
+
+
+</section>
+
+<section author="Alex Aza" description="C# Custom types" theme="league" title="C# Custom types" transition="default">
+
+<h3>Members.operators.Binary (CAUTION! BORING SLIDE!)</h3>
+
+<table>
+<thead>
+<tr class="header">
+<th><p>Operator</p></th>
+<th><p>IL method</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><span>></span></td>
+<td><p>op_GreaterThan</p></td>
+</tr>
+<tr class="even">
+<td><=</td>
+<td><p>op_LessThanOrEqual</p></td>
+</tr>
+<tr class="odd">
+<td><span>>=</span></td>
+<td><p>op_GreaterThanOrEqual</p></td>
+</tr>
+</tbody>
+</table>
+
+
+</section>
+
+<section author="Alex Aza" description="C# Custom types" theme="league" title="C# Custom types" transition="default">
+
+<h3>Members.ConversionOperators.Implicit&amp;Explicit</h3>
+
+<p>Implicit - casting to other type without specifying it</p>
+
+<p><code>string name = new Kottan("Tom");</code></p>
+
+<p>Explicit - casting to other type only explicitly specifying it</p>
+
+<p><code>Kottan kottan = (Kottan)"Tom";</code></p>
+
+<p><a href="https://dotnetfiddle.net/nuPo4m">example</a></p>
+
+</section>
+
+<section author="Alex Aza" description="C# Custom types" theme="league" title="C# Custom types" transition="default">
+
+<h3>Members.ConversionOperators.RecommendedApproches</h3>
+
+<p>Conversion operators are not widespread because in most cases it’s not obvious that types support them.</p>
+
+<p>More preferred approaches, that easier to discover:</p>
+
+<ul>
+<li>Constructor with parameter of type to convert from</li>
+<li>Instance ToXXX and static FromXXX methods</li>
+</ul>
+
+</section>
+
+<section author="Alex Aza" description="C# Custom types" theme="league" title="C# Custom types" transition="default">
+
+<h3>Members.Events</h3>
+
+<p>Member that enables type to provide notifications when interesting things happen, using a subscription-based model*.</p>
+
+<p><a href="https://dotnetfiddle.net/LfSxbn">example</a></p>
+
+<p>*Don’t go into much detail since we have a lecture about delegates and events</p>
+
+</section>
+
+<section author="Alex Aza" description="C# Custom types" theme="league" title="C# Custom types" transition="default">
+
+<h3>Members.NestedTypes</h3>
+
+<p>Just like the normal classes with few differences:</p>
+
+<ul>
+<li>Has more choices for accessibility (can be private)</li>
+<li>Can access the enclosing type’s private members</li>
+<li>Default accessibility is private</li>
+</ul>
+
+<p><a href="https://dotnetfiddle.net/XyIV3h">example</a></p>
+
+</section>
+
+<section author="Alex Aza" description="C# Custom types" theme="league" title="C# Custom types" transition="default">
+
+<h3>Members.Finalizers</h3>
+
+<p>Destructors are for releasing unmanaged resources.</p>
+
+<ul>
+<li>Cannot invoke explicitly since called by GC</li>
+<li>Cannot overload</li>
+</ul>
+
+<table class="pre"><tr><td class="lines"><pre class="fssnip">
+<span class="l">1: </span>
+<span class="l">2: </span>
+<span class="l">3: </span>
+<span class="l">4: </span>
+<span class="l">5: </span>
+<span class="l">6: </span>
+<span class="l">7: </span>
+</pre>
+</td>
+<td class="snippet"><pre class="fssnip" lang="cs"><span class="k">public</span> <span class="k">class</span> Kitten
+{
+    <span class="k">public</span> ~Kitten 
+    {
+        <span class="c">//release all unmanaged resources   </span>
+    }
+}
+
+</pre></td></tr></table>
+
+</section>
+
+<section author="Alex Aza" description="C# Custom types" theme="league" title="C# Custom types" transition="default">
+
+<h3>structs</h3>
+
+<p>Similar to classes with the following differences:</p>
+
+<ul>
+<li>A struct is a value type, whereas a class is a reference type</li>
+<li>Deriving from System.ValueType</li>
+<li>Can’t have virtual members</li>
+<li>Doesn’t support inheritance</li>
+<li>Can’t have paramerterless constructor and finalizer (changed in C# 6)</li>
+<li>Always passed to methods by value</li>
+</ul>
+
+</section>
+
+<section author="Alex Aza" description="C# Custom types" theme="league" title="C# Custom types" transition="default">
+
+<h3>structs.benefits</h3>
+
+<ul>
+<li>Created on the stack hence you don’t have any pressure to GC.</li>
+<li>They are simpler memory layout in comparison with classes which contain <a href="http://architects.dzone.com/articles/revisiting-value-types-vs">two additional header fields</a></li>
+</ul>
+
+</section>
+
+<section author="Alex Aza" description="C# Custom types" theme="league" title="C# Custom types" transition="default">
+
+<h3>structs.WhenDoWeNeedThem?</h3>
+
+<p>When performance is critical:</p>
+
+<ul>
+<li>Creating a large number of objects</li>
+<li>Creating a large collection of objects</li>
+</ul>
+
+</section>
+
+<section author="Alex Aza" description="C# Custom types" theme="league" title="C# Custom types" transition="default">
+
+<h3>Structs.HowToImplementCorrectly</h3>
+
+<ul>
+<li>Override Equals method</li>
+<li>Implement IEquatable<T> interface (strongly-typed Equals)</li>
+<li>Override GetHashCode method</li>
+</ul>
+
+<p><a href="https://dotnetfiddle.net/uVCmGn">example</a></p>
+
+</section>
+
+<section author="Alex Aza" description="C# Custom types" theme="league" title="C# Custom types" transition="default">
+
+<h3>Namespaces and Assemblies</h3>
+
+<p>Be aware that a namespace and an assembly aren’t necessarily related.</p>
+
+<p>CLR doesn’t know anything about namespaces because it is just a way to make the type more unique.</p>
+
+</section>
+
+<section author="Alex Aza" description="C# Custom types" theme="league" title="C# Custom types" transition="default">
+
+<h3>Namespaces and Assemblies</h3>
+
+<ul>
+<li><p>A single assembly can contain types in different namespaces. For example, the System.Int32 and System.Text.StringBuilder types are both in the MSCorLib.dll assembly.</p></li>
+<li><p>One namespace can be in several Assemblies, for example System.Configuration present in System.Windows.Form.dll and System.Data.dll</p></li>
+</ul>
+
+</section>
+
+<section author="Alex Aza" description="C# Custom types" theme="league" title="C# Custom types" transition="default">
+
+<h3>System.Object</h3>
+
+<p>All of your classes and <a href="http://blogs.msdn.com/b/ericlippert/archive/2009/08/06/not-everything-derives-from-object.aspx">almost</a> every classes in .NET are implicitly derived from System.Object class.</p>
+
+<p>Therefore the following records are the same:</p>
+
+<table class="pre"><tr><td class="lines"><pre class="fssnip">
+<span class="l">1: </span>
+<span class="l">2: </span>
+<span class="l">3: </span>
+</pre>
+</td>
+<td class="snippet"><pre class="fssnip" lang="cs"><span class="k">public</span> <span class="k">class</span> Puppy { }
+
+<span class="k">public</span> <span class="k">class</span> Puppy <span class="o">:</span> System.Object { }
+</pre></td></tr></table>
+
+</section>
+
+<section author="Alex Aza" description="C# Custom types" theme="league" title="C# Custom types" transition="default">
+
+<h3>System.Object relationships</h3>
+
+<p><img src="images/ObjectHierarchy.png" alt="Object relationships" /></p>
+
+</section>
+
+<section author="Alex Aza" description="C# Custom types" theme="league" title="C# Custom types" transition="default">
+
+<h3>System.Object.Members</h3>
+
+<ul>
+<li><p>Equals() – override me</p>
+<p>Returns true if two objects have the same value</p></li>
+<li><p>GetHashCode() – override me</p>
+<p>Returns a hash code for this object’s value</p></li>
+<li><p>ToString() – override me</p>
+<p>Returns name of the type (this.GetType().FullName)</p></li>
+<li><p>GetType() – you don’t own me!</p>
+<p>Returns an instance of a Type-derived object that identifies the type of the object.</p></li>
+</ul>
+
+<p>*also there are Finalize() and MemberwiseClone()</p>
+
+</section>
+
+<section author="Alex Aza" description="C# Custom types" theme="league" title="C# Custom types" transition="default">
+
+<h3>Enums</h3>
+
+<p>Special type that lets you specify a group of named numeric constants</p>
+
+<ul>
+<li>Underlying values are of type int</li>
+<li>Constants 0, 1, 2… are automatically assigned</li>
+</ul>
+
+<p><a href="https://dotnetfiddle.net/frH243">example</a></p>
+
+</section>
+
+<section author="Alex Aza" description="C# Custom types" theme="league" title="C# Custom types" transition="default">
+
+<h3>Enums.Flags</h3>
+
+<p>You can combine enum members. To prevent ambiguities values should be assigned in powers of two:</p>
+
+<table class="pre"><tr><td class="lines"><pre class="fssnip">
+<span class="l">1: </span>
+<span class="l">2: </span>
+<span class="l">3: </span>
+<span class="l">4: </span>
+<span class="l">5: </span>
+<span class="l">6: </span>
+<span class="l">7: </span>
+</pre>
+</td>
+<td class="snippet"><pre class="fssnip" lang="cs">   <span class="k">public</span> <span class="k">enum</span> AccessLevel
+    {
+          Admin <span class="o">=</span> 1,
+          Read <span class="o">=</span> 2,
+          Write <span class="o">=</span> 4,
+          FullAccess <span class="o">=</span> 8
+    }
+
+</pre></td></tr></table>
+
+</section>
+
+<section author="Alex Aza" description="C# Custom types" theme="league" title="C# Custom types" transition="default">
+
+<h3>Enums.Flags</h3>
+
+<p>Then use bitwise operators in order to combine enums and determine if value exists in the combination:</p>
+
+<table class="pre"><tr><td class="lines"><pre class="fssnip">
+<span class="l">1: </span>
+<span class="l">2: </span>
+</pre>
+</td>
+<td class="snippet"><pre class="fssnip" lang="cs"><span class="k">var</span> readWrite <span class="o">=</span> AccessLevel.Read <span class="o">|</span> AccessLevel.Write; <span class="c">//6</span>
+<span class="k">var</span> canRead <span class="o">=</span> (readWrite <span class="o">&amp;</span> AccessLevel.Read) <span class="o">!</span><span class="o">=</span> 0; <span class="c">//True</span>
+</pre></td></tr></table>
+
+</section>
+
+<section author="Alex Aza" description="C# Custom types" theme="league" title="C# Custom types" transition="default">
+
+<h3>interfaces</h3>
+
+<p>Interface is a group of related methods, properties and events</p>
+
+<ul>
+<li>No implementation details</li>
+<li>All members are public</li>
+<li>Classes and structs can inherit from an interface and provide an implementation</li>
+<li>Any class or struct can implement multiple interfaces</li>
+</ul>
+
+<p><a href="https://dotnetfiddle.net/GVZDnU">example</a></p>
+
+</section>
+
+</section>
+
+
+
+        </div>
+    </div>
+    <script src="../../shared/lib/js/head.min.js"></script>
+    <script src="../../shared/js/reveal.js"></script>
+    <script>
+
+        // Full list of configuration options available here:
+        // https://github.com/hakimel/reveal.js#configuration
+        Reveal.initialize({
+            controls: true,
+            progress: true,
+            history: true,
+            center: true,
+
+            transition: 'default', // default/cube/page/concave/zoom/linear/fade/none
+
+            // Parallax scrolling
+            // parallaxBackgroundImage: 'https://s3.amazonaws.com/hakim-static/reveal-js/reveal-parallax-1.jpg',
+            // parallaxBackgroundSize: '2100px 900px',
+
+            // Optional libraries used to extend on reveal.js
+            dependencies: [
+                { src: '../../shared/lib/js/classList.js', condition: function () { return !document.body.classList; } },
+                { src: '../../shared/plugin/markdown/marked.js', condition: function () { return !!document.querySelector('[data-markdown]'); } },
+                { src: '../../shared/plugin/markdown/markdown.js', condition: function () { return !!document.querySelector('[data-markdown]'); } },
+                { src: '../../shared/plugin/highlight/highlight.js', async: true, callback: function () { hljs.initHighlightingOnLoad(); } },
+                { src: '../../shared/plugin/zoom-js/zoom.js', async: true, condition: function () { return !!document.body.classList; } },
+                { src: '../../shared/plugin/notes/notes.js', async: true, condition: function () { return !!document.body.classList; } }
+            ]
+        });
+
+    </script>
+</body>
+</html>
+
