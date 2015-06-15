@@ -8,7 +8,7 @@ csharp-slides
 
 - [x] [Lecture 1 - .NET, infra, tools, basics](https://drive.google.com/open?id=1HMd2B0FErbFMT2v7Z4SDXhUHX_x6fkXMf2QS9yV4X3A&authuser=0)
 - [x] [Lecture 2 - C# language essentials](https://drive.google.com/open?id=1-0KDxmndJU2j483mBdqipdx1b4KdZvgncVraBUvqcu0&authuser=0)
-- [x] [Lecture 3 - Custom types](https://docs.google.com/presentation/d/1e5o9FJNdxFYPsODwVaQdsHP-NltYeRUUQ2xxD6_w48s)
+- [x] [Lecture 3 - Custom types](http://kottans.org/csharp-slides/presentations/3-custom-types/#/)
 - [x] [Lecture 4 - Flow control, Exceptions](https://drive.google.com/open?id=113dEHoylhsbnGlqcXI14O2B6EnFNCWV1UKFBfLilmCo&authuser=0)
 - [x] [Lecture 5 - OOP](https://drive.google.com/open?id=17vL1XaJjSr77T18SdaAXP1mquSqVtaI8EHrKwagwuBU&authuser=0)
 - [x] [Lecture 5.1 - OOP. Continued](https://drive.google.com/open?id=17ax8dZVzRrsEh53SlzBm2RsalZFvGpRrRJ_YI-QU3EI&authuser=0)
