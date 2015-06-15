@@ -439,6 +439,252 @@ var kottan = new Kottan
 |*|op_Multiply|
 |/|op_Division|
 |%|op_Modulus|
+
+---
+
+###Members.operators.Binary (CAUTION! BORING SLIDE!)
+
+|Operator|IL method|
+|-|---|
 |^|op_ExcusiveOr|
 |&|op_BitwiseAnd|
-|||op_BitwiseOr|
+|<span>&#124;</span>|op_BitwiseOr|
+|<<|op_LeftShift|
+
+---
+
+###Members.operators.Binary (CAUTION! BORING SLIDE!)
+
+|Operator|IL method|
+|-|---|
+|<span>>></span>|op_RightShift|
+|==|op_Equality|
+|!=|op_Inequality|
+|<|op_LessThan|
+
+---
+
+###Members.operators.Binary (CAUTION! BORING SLIDE!)
+
+|Operator|IL method|
+|-|---|
+|<span>></span>|op_GreaterThan|
+|<=|op_LessThanOrEqual|
+|<span>>=</span>|op_GreaterThanOrEqual|
+
+---
+
+###Members.ConversionOperators.Implicit&Explicit
+
+Implicit - casting to other type without specifying it
+
+`string name = new Kottan("Tom");`
+
+Explicit - casting to other type only explicitly specifying it
+
+`Kottan kottan = (Kottan)"Tom";`
+
+[example](https://dotnetfiddle.net/nuPo4m)
+
+---
+
+###Members.ConversionOperators.RecommendedApproches
+
+Conversion operators are not widespread because in most cases it’s not obvious that types support them.
+
+More preferred approaches, that easier to discover:
+
+- Constructor with parameter of type to convert from
+- Instance ToXXX and static FromXXX methods
+
+---
+
+###Members.Events
+
+Member that enables type to provide notifications when interesting things happen, using a subscription-based model*.
+
+[example](https://dotnetfiddle.net/LfSxbn)
+
+*Don’t go into much detail since we have a lecture about delegates and events
+
+---
+
+###Members.NestedTypes
+
+Just like the normal classes with few differences:
+
+- Has more choices for accessibility (can be private)
+- Can access the enclosing type’s private members
+- Default accessibility is private
+
+[example](https://dotnetfiddle.net/XyIV3h)
+
+---
+
+###Members.Finalizers
+
+Destructors are for releasing unmanaged resources.
+
+- Cannot invoke explicitly since called by GC
+- Cannot overload
+
+```cs
+public class Kitten
+{
+	public ~Kitten 
+	{
+		//release all unmanaged resources	
+	}
+}
+
+```
+
+---
+
+###structs
+
+Similar to classes with the following differences:
+
+- A struct is a value type, whereas a class is a reference type
+- Deriving from System.ValueType
+- Can’t have virtual members
+- Doesn’t support inheritance
+- Can’t have paramerterless constructor and finalizer (changed in C# 6)
+- Always passed to methods by value
+
+---
+
+###structs.benefits
+
+- Created on the stack hence you don’t have any pressure to GC.
+- They are simpler memory layout in comparison with classes which contain [two additional header fields](http://architects.dzone.com/articles/revisiting-value-types-vs)
+
+---
+
+###structs.WhenDoWeNeedThem?
+
+When performance is critical:
+
+- Creating a large number of objects
+- Creating a large collection of objects
+
+---
+
+###Structs.HowToImplementCorrectly
+
+- Override Equals method
+- Implement IEquatable<T> interface (strongly-typed Equals)
+- Override GetHashCode method
+
+[example](https://dotnetfiddle.net/uVCmGn)
+
+---
+
+###Namespaces and Assemblies
+
+Be aware that a namespace and an assembly aren’t necessarily related.
+
+CLR doesn’t know anything about namespaces because it is just a way to make the type more unique.
+
+---
+
+###Namespaces and Assemblies
+
+- A single assembly can contain types in different namespaces. For example, the System.Int32 and System.Text.StringBuilder types are both in the MSCorLib.dll assembly.
+
+- One namespace can be in several Assemblies, for example System.Configuration present in System.Windows.Form.dll and System.Data.dll
+
+---
+
+###System.Object
+
+All of your classes and [almost](http://blogs.msdn.com/b/ericlippert/archive/2009/08/06/not-everything-derives-from-object.aspx) every classes in .NET are implicitly derived from System.Object class. 
+
+Therefore the following records are the same:
+
+```cs
+public class Puppy { }
+
+public class Puppy : System.Object { }
+```
+
+---
+
+###System.Object relationships
+
+![Object relationships](images/ObjectHierarchy.png)
+
+---
+
+###System.Object.Members
+
+- Equals() – override me
+
+	Returns true if two objects have the same value
+
+- GetHashCode() – override me
+
+	Returns a hash code for this object’s value
+
+- ToString() – override me
+
+	Returns name of the type (this.GetType().FullName)
+
+- GetType() – you don’t own me!
+
+	Returns an instance of a Type-derived object that identifies the type of the object.
+
+*also there are Finalize() and MemberwiseClone()
+
+---
+
+###Enums
+
+Special type that lets you specify a group of named numeric constants
+
+- Underlying values are of type int
+- Constants 0, 1, 2… are automatically assigned
+
+[example](https://dotnetfiddle.net/frH243)
+
+---
+
+###Enums.Flags
+
+You can combine enum members. To prevent ambiguities values should be assigned in powers of two:
+
+```cs
+
+   public enum AccessLevel
+    {
+    	  Admin = 1,
+    	  Read = 2,
+    	  Write = 4,
+    	  FullAccess = 8
+    }
+
+```
+
+---
+
+###Enums.Flags
+
+Then use bitwise operators in order to combine enums and determine if value exists in the combination:
+
+```cs
+var readWrite = AccessLevel.Read | AccessLevel.Write; //6
+var canRead = (readWrite & AccessLevel.Read) != 0; //True
+```
+
+---
+###interfaces
+
+Interface is a group of related methods, properties and events
+
+- No implementation details
+- All members are public
+- Classes and structs can inherit from an interface and provide an implementation
+- Any class or struct can implement multiple interfaces
+
+[example](https://dotnetfiddle.net/GVZDnU)
+
