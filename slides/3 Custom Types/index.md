@@ -565,7 +565,7 @@ Similar to classes with the following differences:
 - Doesn’t support inheritance
 - Can’t have paramerterless constructor and finalizer (changed in C# 6)
 - Always passed to methods by value
-- Can implement interfaces
+- Can implement interfaces (boxing during cast to interface)
 
 ---
 
