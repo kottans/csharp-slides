@@ -539,7 +539,7 @@ int Compare(T x, T y)
 </div>
 
 <br />
-<a href="Example https://dotnetfiddle.net/RFNIVq">Example</a>
+<a href="https://dotnetfiddle.net/RFNIVq">Example</a>
 
 
 ***
