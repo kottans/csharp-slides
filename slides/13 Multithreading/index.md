@@ -24,21 +24,27 @@
 
 ***
 
-### What is multithreading
+### Glossary
 
-Multithreading - parallel execution of code, leveraging threads.
+**Concurrency** - doing more than one thing at a time
 
-<br/>
+**Multithreading** - form of concurrency that uses multiple threads of execution.
 
-C# enables multithreading using following namespace:
+**Asynchronous Programming** - a form of concurrency that uses futures (promises) or callbacks to avoid unnecessary threads.
+
+**Reactive Programming** - a declarative style of programming where the application reacts to events
+
+---
+
+### Namespace
+
+C# enables cuncurrency using following namespace:
 
 	[lang=cs]
 	using System.Threading; 
 
 ---
-### When to parallel?
-
-When multithreading might be useful?
+### When cuncurrency might be useful?
 
 - there are few independent tasks that do not intersect (usually calculation)
 - separate heavy calculation from UI (to avoid freezes)
@@ -47,11 +53,9 @@ When multithreading might be useful?
 - separating processing workflow by threads (collect - filter - process - save)
 
 ---
-### When not to parallel?
+### When concurrency might be awkward?
 
-When multithreading might be awkward?
-
-- when number of threads is big enought
+- when number of threads is big enough
 - when modules are tightly coupled and there are a lot of commmon data across modules (refactor first)
 - when it won't bring any value (switching threads is a heavy operation)
 
@@ -59,7 +63,7 @@ When multithreading might be awkward?
 ###Thread
 
 - a **thread** is an independent execution path, able to run simultaneously with other threads and can be managed independently by a scheduler
-- threads might run in parallel on differen physical cores or creatign multicore illusion (preemptive or context switching)
+- threads might run in parallel on different physical cores or create multicore illusion (preemptive or context switching)
 
 ---
 ###Context switching
@@ -74,9 +78,7 @@ Do not mix Threads and Processes
 ![Task manager in Windows](images/WindowsTaskManager.png)
 
 ---
-###Thread vs Process - Processes
-
-
+###Thread vs Process - Threads
 
 Thread - execution path within a process
 
@@ -86,8 +88,12 @@ Thread - execution path within a process
 - has own stack withing process memory
 - requiere synchronization
 
+<br />
+
+<a href="https://dotnetfiddle.net/zDZ1V2">Example of code with multiple threads</a>
+
 ---
-###Thread vs Process - Threads
+###Thread vs Process - Processes
 
 Process - is an instance of a program
 
@@ -95,10 +101,6 @@ Process - is an instance of a program
 - contains at least 1 thread
 - few processes might represent the same program
 - syncronization almost not required
-
-<br />
-
-<a href="https://dotnetfiddle.net/zDZ1V2">Example of code with multiple threads</a>
 
 
 ***
@@ -160,6 +162,7 @@ Once thread created it should be run for execution:
 <a href="http://www.codeproject.com/Articles/26675/Beginner-s-Guide-to-Threading-in-NET-Part-of-n">More about multithreading</a>
 
 ***
+
 ###Stopping and aborting threads
 There are a number of ways to stop thread:
 
@@ -168,6 +171,8 @@ There are a number of ways to stop thread:
 - Call <a href="https://msdn.microsoft.com/ru-ru/library/ty8d3wta(v=vs.110).aspx">Thread.Abort()</a> method (depricated)
 - Call <a href="https://msdn.microsoft.com/ru-ru/library/system.threading.thread.suspend(v=vs.110).aspx">Thread.Suspend()</a> method (depricated)
 - Call <a href="https://msdn.microsoft.com/ru-ru/library/system.threading.thread.interrupt(v=vs.110).aspx">Thread.Interrupt()</a> method to exit from SleepWaitJoin state
+
+
 
 ***
 ###Thread characteristics
@@ -188,7 +193,9 @@ There are a number of ways to stop thread:
 ***
 ###Thread pooling
 
-Creating thread consumes is an expensive operation. Thread pool cuts these overheads.
+Creating a thread is an expensive operation. 
+
+Thread pool cuts these overheads.
 ####Ways to enter the thread pool: 
 - via the <a href="http://www.codeproject.com/Articles/152765/Task-Parallel-Library-of-n">Task Parallel Library</a>
 - <a href="https://msdn.microsoft.com/en-us/library/system.threading.threadpool.queueuserworkitem(v=vs.110).aspx">ThreadPool.QueueUserWorkItem</a> - <a href="https://dotnetfiddle.net/4ea3Ss">example</a>
@@ -199,6 +206,15 @@ Creating thread consumes is an expensive operation. Thread pool cuts these overh
 ###Thread pooling - schema
 
 ![Thread Pool](images\ThreadPool.png)
+
+---
+###.NET 4 Work-stealing queues
+
+- Each thread has own local queue
+
+When thread's work is finished it:
+
+![Work-stealing](images/Work-stealing-queues.png)
 
 ***
 ###Common synchronization problems
@@ -247,3 +263,63 @@ Exclusive locking is used to ensure that only one thread can enter particular se
 - AutoResetEvent -<a href="https://dotnetfiddle.net/9Q1Ala">example</a>
 - ManualResetEvent
 - CountdownEvent - <a href="https://dotnetfiddle.net/pG4hCf">example</a>
+
+***
+###Tasks
+
+Why do we need them?
+
+- Easier way to return data
+- Compositional (easy to execute work after task finish)
+- Leverages thread pool to lessen up startup latency
+- May not produce thread (I/O bound op, TaskCompletionSource)
+
+---
+### How to start a Task
+
+```cs
+
+Task t = new Task(Operation);
+t.Start();
+
+```
+
+```cs
+//Factory is to create a bunch of tasks with the same configufation
+Task t = Task.Factory.StartNew(Operation);
+
+```
+
+```cs
+//Convinient shortcut (.NET 4.5)
+Task t = Task.Run(Operation);
+
+```
+
+---
+
+### Long runing operations
+It's better to create these operations out of thread pool in dedicated thread.
+
+```cs
+
+var t = Task.Factory.StartNew(Operation, TaskCreationOptions.LongRunning);
+
+```
+
+--- 
+### Passing data into Tasks
+
+```cs
+//with Object parameter
+Task.Factory.StartNew(Operation, "input");
+
+```
+
+```cs
+//closure
+Task.Factory.StartNew(() => Operation("input")));
+
+```
+
+[but be careful of closures](https://dotnetfiddle.net/5EFob0)
