@@ -174,6 +174,7 @@ Threre are numerous of logging frameworks:
 - <a href="https://logging.apache.org/">log4net</a> - powerful, most famous, ported from log4j
 - <a href="http://nlog-project.org/">NLog</a> - flexible adn powerful framework, actively developed 
 - <a href="https://msdn.microsoft.com/en-us/library/ff647183.aspx">Enterprise Log</a> - dunno for whom this logger :)
+- <a href="http://getseq.net">Seq</a>
 - dozens of other frameworks
 
 ***
