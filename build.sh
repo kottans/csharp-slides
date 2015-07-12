@@ -30,7 +30,7 @@ then
 	fi
   fi
   
-  packages/FAKE/tools/FAKE.exe $@ --fsiargs -d:MONO $TARGET slides="$SLIDES" build.fsx
+  packages/FAKE/tools/FAKE.exe -d:MONO $TARGET slides="$SLIDES" build.fsx
 else
   # use mono
   mono .paket/paket.bootstrapper.exe
@@ -60,5 +60,5 @@ else
 	fi
   fi
   
-  mono packages/FAKE/tools/FAKE.exe $@ --fsiargs -d:MONO $TARGET slides="$SLIDES" build.fsx
+  mono packages/FAKE/tools/FAKE.exe -d:MONO $TARGET slides="$SLIDES" build.fsx
 fi
