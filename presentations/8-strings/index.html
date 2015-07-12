@@ -1,0 +1,465 @@
+﻿<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>C# - Working with strings and text</title>
+    <meta name="description" content="Working with strings and text">
+    <meta name="author" content="Programulya">
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <script src="//code.jquery.com/jquery-1.8.0.js"></script>
+    <script src="//code.jquery.com/ui/1.8.23/jquery-ui.js"></script>
+    <script src="//netdna.bootstrapcdn.com/twitter-bootstrap/2.2.1/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link href="//netdna.bootstrapcdn.com/twitter-bootstrap/2.2.1/css/bootstrap-combined.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="../../shared/css/reveal.css">
+    <link rel="stylesheet" href="../../shared/css/theme/league.css" id="theme">
+    <link type="text/css" rel="stylesheet" href="../../shared/fsharp.formatting/styles/style.css" />
+    <link type="text/css" rel="stylesheet" href="../../shared/fsharp.formatting/styles/deedle.css" />
+    <link type="text/css" rel="stylesheet" href="../../shared/css/custom.css" />
+    <script src="../../shared/fsharp.formatting/styles/tips.js" type="text/javascript"></script>
+    <link rel="shortcut icon" type="image/png" href="../../shared/favicon.png">
+    <!-- For syntax highlighting -->
+	<link rel="stylesheet" href="../../shared/css/fsreveal.css">
+    <link rel="stylesheet" href="../../shared/lib/css/zenburn.css">
+    <!-- If the query includes 'print-pdf', include the PDF print sheet -->
+    <script>
+			if( window.location.search.match( /print-pdf/gi ) ) {
+				var link = document.createElement( 'link' );
+				link.rel = 'stylesheet';
+				link.type = 'text/css';
+				link.href = '../../shared/css/print/pdf.css';
+				document.getElementsByTagName( 'head' )[0].appendChild( link );
+			}
+    </script>
+    <!--[if lt IE 9]>
+    <script src="../../shared/lib/js/html5shiv.js"></script>
+    <![endif]-->
+</head>
+<body>
+    <div class="reveal">
+        
+        <!-- Any section element inside of this container is displayed as a slide -->
+        <div class="slides">
+            <section >
+
+<h2>C# course</h2>
+
+<h4>Lecture 8</h4>
+
+<h1>Working with strings and text</h1>
+
+</section>
+
+<section >
+
+<h3>System.String type</h3>
+
+<p>A string is an object of type String whose value is text. Internally, the text is stored as a sequential read-only collection of Char objects.</p>
+
+<br/>
+<br/>
+
+<div class="fragment">
+In C#, the string keyword is an alias for String.
+</div>
+
+</section>
+
+<section >
+
+<h3>Strings initialization</h3>
+
+<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l"> 1: </span>
+<span class="l"> 2: </span>
+<span class="l"> 3: </span>
+<span class="l"> 4: </span>
+<span class="l"> 5: </span>
+<span class="l"> 6: </span>
+<span class="l"> 7: </span>
+<span class="l"> 8: </span>
+<span class="l"> 9: </span>
+<span class="l">10: </span>
+<span class="l">11: </span>
+<span class="l">12: </span>
+<span class="l">13: </span>
+<span class="l">14: </span>
+<span class="l">15: </span>
+</pre></td>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="cs"><span class="c">// Declare without initializing. </span>
+<span class="k">string</span> message1;
+
+<span class="c">// Initialize to null. </span>
+<span class="k">string</span> message2 <span class="o">=</span> <span class="k">null</span>;
+
+<span class="c">// Initialize as an empty string. </span>
+<span class="c">// Use the Empty constant instead of the literal "".</span>
+<span class="k">string</span> message3 <span class="o">=</span> System.String.Empty;
+
+<span class="c">// Initialize with a regular string literal. </span>
+<span class="k">string</span> oldPath <span class="o">=</span> <span class="s">"c:\\Program Files\\Microsoft Visual Studio 8.0"</span>;
+
+<span class="c">// Initialize with a verbatim string literal. </span>
+<span class="k">string</span> newPath <span class="o">=</span> <span class="s">@"c:\Program Files\Microsoft Visual Studio 9.0"</span>;
+</code></pre></td></tr></table>
+
+<p>`</p>
+
+</section>
+
+<section >
+
+<h3>Strings initialization</h3>
+
+<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l"> 1: </span>
+<span class="l"> 2: </span>
+<span class="l"> 3: </span>
+<span class="l"> 4: </span>
+<span class="l"> 5: </span>
+<span class="l"> 6: </span>
+<span class="l"> 7: </span>
+<span class="l"> 8: </span>
+<span class="l"> 9: </span>
+<span class="l">10: </span>
+<span class="l">11: </span>
+<span class="l">12: </span>
+<span class="l">13: </span>
+<span class="l">14: </span>
+<span class="l">15: </span>
+</pre></td>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="cs"><span class="c">// Use System.String if you prefer.</span>
+System.String greeting <span class="o">=</span> <span class="s">"Hello World!"</span>;
+
+<span class="c">// In local variables (i.e. within a method body) </span>
+<span class="c">// you can use implicit typing. </span>
+<span class="k">var</span> temp <span class="o">=</span> <span class="s">"I'm still a strongly-typed System.String!"</span>;
+
+<span class="c">// Use a const string to prevent 'message4' from </span>
+<span class="c">// being used to store another string value. </span>
+<span class="k">const</span> <span class="k">string</span> message4 <span class="o">=</span> <span class="s">"You can't get rid of me!"</span>;
+
+<span class="c">// Use the String constructor only when creating </span>
+<span class="c">// a string from a char*, char[], or sbyte*. See System.String documentation for details. </span>
+<span class="k">char</span>[] letters <span class="o">=</span> { <span class="s">'A'</span>, <span class="s">'B'</span>, <span class="s">'C'</span> };
+<span class="k">string</span> alphabet <span class="o">=</span> <span class="k">new</span> <span class="k">string</span>(letters);
+</code></pre></td></tr></table>
+
+<p>`</p>
+
+</section>
+
+<section >
+
+<h3>Constructors overview</h3>
+
+<ul>
+<li><strong>String(Char*)</strong> by a specified pointer to an array of Unicode characters.</li>
+<li><strong>String(Char[])</strong> by an array of Unicode characters.</li>
+<li><strong>String(SByte*)</strong> by a pointer to an array of 8-bit signed integers.</li>
+<li><strong>String(Char, Int32)</strong> by a specified Unicode character repeated a specified number of times.</li>
+<li><strong>String(Char*, Int32, Int32)</strong> by a specified pointer to an array of Unicode characters, 
+a starting character position within that array, and a length.</li>
+<li><strong>String(Char[], Int32, Int32)</strong> by an array of Unicode characters, 
+a starting character position within that array, and a length.</li>
+<li><strong>String(SByte*, Int32, Int32)</strong> by a specified pointer to an array of 8-bit signed integers, 
+a starting position within that array, and a length.</li>
+<li><strong>String(SByte*, Int32, Int32, Encoding)</strong> by a specified pointer to an array of 8-bit signed integers, 
+a starting position within that array, a length, and an Encoding object.</li>
+</ul>
+
+</section>
+
+<section >
+
+<h3>Strings initialization (example)</h3>
+
+<p>Code:
+<code>`cs
+public static class Program
+{
+    public static void Main()
+    {
+        string s = "Hi there.";
+        System.Console.WriteLine(s);
+    }
+}</code><code></code></p>
+
+<p>IL:
+<code>`
+.method public hidebysig static void Main() cil managed 
+{ 
+    .entrypoint 
+    // Code size 13 (0xd) 
+    .maxstack 1 
+    .locals init (string V_0) 
+    IL_0000: ldstr "Hi there." 
+    IL_0005: stloc.0 IL_0006: ldloc.0 
+    IL_0007: call void [mscorlib]System.Console::WriteLine(string) IL_000c: ret 
+} // end of method Program::Main</code><code></code></p>
+
+</section>
+
+<section >
+
+<h3>String as a reference type</h3>
+
+<h4>It is a reference type</h4>
+
+<p>It's a common misconception that string is a value type. That's because its 
+immutability (see next point) makes it act sort of like a value type. It actually acts like a normal <em>reference type</em>.</p>
+
+<p><a href="http://stackoverflow.com/questions/636932/in-c-why-is-string-a-reference-type-that-behaves-like-a-value-type">Why is string a reference type</a></p>
+
+</section>
+
+<section >
+
+<h3>String immutability</h3>
+
+<h4>It's immutable</h4>
+
+<p>String objects are <em>immutable</em>: they cannot be changed after they have been created. 
+All of the String methods and C# operators that appear to modify a string actually return the results in a new string object.</p>
+
+<ul>
+<li><a href="https://dotnetfiddle.net/nETRFL">Example 1</a></li>
+<li>[Example 2] (<a href="https://dotnetfiddle.net/sHPCbZ)
+***">https://dotnetfiddle.net/sHPCbZ)
+***</a></li>
+</ul>
+
+<h3>Equality operator and strings</h3>
+
+<h4>It overloads the == operator</h4>
+
+<p>When the == operator is used to compare two strings, the Equals method is called, 
+which checks for the equality of the contents of the strings rather than the references themselves. 
+For instance, "hello".Substring(0, 4)=="hell" is true, even though the references on the two sides of 
+the operator are different (they refer to two different string objects, which both contain the same character sequence).</p>
+
+<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
+<span class="l">2: </span>
+<span class="l">3: </span>
+<span class="l">4: </span>
+<span class="l">5: </span>
+<span class="l">6: </span>
+<span class="l">7: </span>
+</pre></td>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="cs"><span class="k">static</span> Int32 Compare(String strA, String strB, StringComparison comparisonType);
+<span class="k">static</span> Int32 Compare(<span class="k">string</span> strA, <span class="k">string</span> strB, Boolean ignoreCase, CultureInfo culture);
+<span class="c">// ...</span>
+Boolean StartsWith(String <span class="k">value</span>, StringComparison comparisonType); 
+Boolean StartsWith(String <span class="k">value</span>, Boolean ignoreCase, CultureInfo culture);
+Boolean EndsWith(String <span class="k">value</span>, StringComparison comparisonType);
+Boolean EndsWith(String <span class="k">value</span>, Boolean ignoreCase, CultureInfo culture);
+</code></pre></td></tr></table>
+
+<p>`</p>
+
+</section>
+
+<section >
+
+<h3>Compare strings</h3>
+
+<h4>Note! Think about case.</h4>
+
+<p>Use <em>StringComparison</em> and <em>CompareOptions</em>:</p>
+
+<p><a href="https://dotnetfiddle.net/nETRFL">Example</a></p>
+
+</section>
+
+<section >
+
+<h3>Compare strings (best practices)</h3>
+
+<ol>
+<li>Use <em>CurrentCulture/CurrentCultureIgnoreCase</em> before output when you display output to the user.</li>
+<li>If you want to ignore culture or case use <em>Ordinal/OrdinalIgnoreCase</em> instead of <em>InvariantCulture/InvariantCultureIgnoreCase</em> (slow).</li>
+<li>If you want to change case before comparison use <em>ToUpperInvariant</em> instead of <em>ToLowerInvariant</em> (first option is optimized).</li>
+<li>Do not use <em>CompareTo</em>, <em>CompareOrdinal</em>, operators <em>==</em> and <em>!=</em> because you don’t see clearly the way of comparison.
+For example, CompareTo uses regional standards, but Equals is not.</li>
+<li>Use an overload of the <em>String.Equals</em> method to test whether two strings are equal.</li>
+</ol>
+
+</section>
+
+<section >
+
+<h3>Localization and strings</h3>
+
+<ol>
+<li><em>System.Globalization.CultureInfo</em>;</li>
+<li><em>CurrentUICulture</em>;</li>
+<li><em>CurrentCulture</em>.</li>
+</ol>
+
+<p>Some info:</p>
+
+<ul>
+<li>Usually <em>CurrentCulture</em> and <em>CurrentUICulture</em> are the same.</li>
+<li>Culture could be set from ‘Regional and Language Options’ in Windows.</li>
+<li>Compare method uses current thread’s regional standards if you do not put it explicitly.</li>
+</ul>
+
+<p>[Example] (<a href="https://dotnetfiddle.net/EZIutS)">https://dotnetfiddle.net/EZIutS)</a></p>
+
+</section>
+
+<section >
+
+<h3>Strings interning</h3>
+
+<p>Reasons:</p>
+
+<ol>
+<li>Slow comparison;</li>
+<li>A lot of memory usage.</li>
+</ol>
+
+<p>Solution:
+CLR has mechanism of optimization named ‘string interning’ (special hash-table).</p>
+
+<p>Methods:</p>
+
+<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
+<span class="l">2: </span>
+</pre></td>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="cs"><span class="k">public</span> <span class="k">static</span> String Intern(String str); 
+<span class="k">public</span> <span class="k">static</span> String IsInterned(String str);
+</code></pre></td></tr></table>
+
+<p>`</p>
+
+<p>You could turn off for project this mechanism using attribute <em>System.Runtime.CompilerServices.CompilationRelaxations.NoStringInterning</em>.</p>
+
+<p>[Example] (<a href="https://dotnetfiddle.net/ggU5Fu)">https://dotnetfiddle.net/ggU5Fu)</a></p>
+
+</section>
+
+<section >
+
+<h4>String other methods</h4>
+
+<p>Length
+Chars, 
+GetEnumerator, 
+ToCharArray, 
+Contains, 
+IndexOf, 
+LastIndexOf, 
+IndexOfAny 
+LastIndexOfAny
+Clone 
+Copy 
+CopyTo 
+Substring 
+ToString 
+Insert, Remove, PadLeft, Replace, Split, Join, ToLower, ToUpper, Trim, Concat, Format…</p>
+
+<h4>Note! All methods return NEW string.</h4>
+
+</section>
+
+<section >
+
+<h3>String vs StringBuilder</h3>
+
+<p>StringBuilder provides mutable string:</p>
+
+<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
+<span class="l">2: </span>
+<span class="l">3: </span>
+</pre></td>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="cs">StringBuilder sb <span class="o">=</span> <span class="k">new</span> StringBuilder(); 
+String s <span class="o">=</span> sb.AppendFormat(<span class="s">"{0} {1}"</span>, <span class="s">"Kottans1111"</span>, <span class="s">"Org"</span>).Replace(<span class="s">' '</span>, <span class="s">'-'</span>).Remove(4, 3).ToString(); 
+Console.WriteLine(s); <span class="c">// "Kottans-Org"</span>
+</code></pre></td></tr></table>
+
+<p>`</p>
+
+</section>
+
+<section >
+
+<h3>Encode/decode strings</h3>
+
+<p>Encodings:</p>
+
+<ul>
+<li>UTF-16;</li>
+<li>UTF-8;</li>
+<li>UTF-32;</li>
+<li>UTF-7;</li>
+<li>ASCII.</li>
+</ul>
+
+<p>The most popular:</p>
+
+<ul>
+<li>UTF-16;</li>
+<li>UTF-8.</li>
+</ul>
+
+<p>[Example] (<a href="https://dotnetfiddle.net/7KCNtS)">https://dotnetfiddle.net/7KCNtS)</a></p>
+
+</section>
+
+<section >
+
+<h3>Useful links</h3>
+
+<ol>
+<li><a href="https://msdn.microsoft.com/ru-ru/library/system.string(v=vs.110).aspx">https://msdn.microsoft.com/ru-ru/library/system.string(v=vs.110).aspx</a></li>
+<li><a href="https://msdn.microsoft.com/en-us/library/dd465121(v=vs.110).aspx">https://msdn.microsoft.com/en-us/library/dd465121(v=vs.110).aspx</a></li>
+<li><a href="http://blog.jetbrains.com/dotnet/2015/02/12/string-interning-effective-memory-management-with-dotmemory">http://blog.jetbrains.com/dotnet/2015/02/12/string-interning-effective-memory-management-with-dotmemory</a></li>
+<li><a href="http://blog.coverity.com/2014/04/09/why-utf-16/#.VZWxSFyqqko">http://blog.coverity.com/2014/04/09/why-utf-16/#.VZWxSFyqqko</a></li>
+<li><a href="https://channel9.msdn.com/Series/C-Sharp-Fundamentals-Development-for-Absolute-Beginners/Working-with-Strings-12">https://channel9.msdn.com/Series/C-Sharp-Fundamentals-Development-for-Absolute-Beginners/Working-with-Strings-12</a></li>
+</ol>
+
+<p><strong>And… If you google ‘CString’ and go to the images you will forget what are you looking for ;)
+ <a href="https://www.google.com.ua/search?q=cstring&amp;espv=2&amp;biw=1600&amp;bih=775&amp;source=lnms&amp;tbm=isch&amp;sa=X&amp;ei=bWuWVe7dHMKPsAGd96u4BA&amp;ved=0CAYQ_AUoAQ">Link</a> </strong></p>
+
+</section>
+
+
+
+        </div>
+    </div>
+    <script src="../../shared/lib/js/head.min.js"></script>
+    <script src="../../shared/js/reveal.js"></script>
+    <script>
+		// Add the nohighlight class and data-noescape attribute to code elements that have already been formatted by FSharp.Formatting
+        $('pre.highlighted code').addClass('nohighlight').attr('data-noescape', '');
+		
+        // Full list of configuration options available here:
+        // https://github.com/hakimel/reveal.js#configuration
+        Reveal.initialize({
+            controls: true,
+            progress: true,
+            history: true,
+            center: true,
+
+            transition: 'default', // default/cube/page/concave/zoom/linear/fade/none
+
+            // Parallax scrolling
+            // parallaxBackgroundImage: 'https://s3.amazonaws.com/hakim-static/reveal-js/reveal-parallax-1.jpg',
+            // parallaxBackgroundSize: '2100px 900px',
+
+            // Optional libraries used to extend on reveal.js
+            dependencies: [
+                { src: '../../shared/lib/js/classList.js', condition: function () { return !document.body.classList; } },
+                { src: '../../shared/plugin/markdown/marked.js', condition: function () { return !!document.querySelector('[data-markdown]'); } },
+                { src: '../../shared/plugin/markdown/markdown.js', condition: function () { return !!document.querySelector('[data-markdown]'); } },
+                { src: '../../shared/plugin/highlight/highlight.js', async: true, callback: function () { hljs.initHighlightingOnLoad(); } },
+                { src: '../../shared/plugin/zoom-js/zoom.js', async: true, condition: function () { return !!document.body.classList; } },
+                { src: '../../shared/plugin/notes/notes.js', async: true, condition: function () { return !!document.body.classList; } }
+            ]
+        });
+
+    </script>
+</body>
+</html>
+
