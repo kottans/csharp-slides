@@ -12,7 +12,7 @@ csharp-slides
 - [x] [Lecture 4 - Flow control, Exceptions](https://drive.google.com/open?id=113dEHoylhsbnGlqcXI14O2B6EnFNCWV1UKFBfLilmCo&authuser=0)
 - [x] [Lecture 5 - OOP](https://drive.google.com/open?id=17vL1XaJjSr77T18SdaAXP1mquSqVtaI8EHrKwagwuBU&authuser=0)
 - [x] [Lecture 5.1 - OOP. Continued](https://drive.google.com/open?id=17ax8dZVzRrsEh53SlzBm2RsalZFvGpRrRJ_YI-QU3EI&authuser=0)
-- [ ] Lecture 6 - Working with strings and text
+- [x] [Lecture 6 - Working with strings and text] (https://docs.google.com/presentation/d/1AgSYaxZzLuzT4dFFQh_LX0HyaVN79x3rVUU2pyF-qY0/)
 - [x] [Lecture 7 - Delegates, Events and Lambdas](https://drive.google.com/open?id=18aWj-E13-jcpo7Za-RlsZhyRGr2sPPNm9MGKhWinS20&authuser=0)
 - [x] [Lecture 8 - Collections and generics](https://drive.google.com/open?id=1x_GryQXEDeWE6vE6X7St8epIFr7cnfgl3eofp9ITqhw&authuser=0)
 - [x] [Lecture 9 - LINQ Pt.1] (http://kottans.org/csharp-slides/presentations/10-linq-pt1/#/)
