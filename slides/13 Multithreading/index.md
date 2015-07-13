@@ -323,3 +323,121 @@ Task.Factory.StartNew(() => Operation("input")));
 ```
 
 [but be careful of closures](https://dotnetfiddle.net/5EFob0)
+
+---
+### Returning data from a Task
+
+```cs 
+
+Task t = Task.Run(() => Operation());
+var result = t.Result;
+
+```
+
+---
+### Task result
+Task can complete with one of the following states:
+
+- Ran to Completion
+- Canceled
+- Faulted
+
+---
+### Error handling
+
+In case of error each of the following will rethrow tasks exception wrapped in `AggregateException`:
+
+- Task.Wait
+- Task.WaitAll
+- Task.Result
+
+---
+### Correct way to handle exception:
+
+```cs
+
+try
+{
+  task.Wait();
+}
+catch (AggregateException errors)
+{
+  foreach (Exception error in errors.InnerExceptions)
+  {
+    Console.WriteLine("{0} : {1}" , error.GetType().Name,error.Message);
+  }
+}
+
+```
+
+---
+### Flatten
+
+```cs
+
+catch (AggregateException errors)
+{
+  foreach (Exception error in errors.Flatten().InnerExceptions)
+  {
+     Console.WriteLine("{0} : {1}" , error.GetType().Name,error.Message);
+  }
+}
+
+```
+
+---
+### Ignore erros
+
+```cs
+
+catch (AggregateException errors)
+{
+  errors.Handle(IgnoreCacheErrors);
+}
+private static bool IgnoreCacheErrors(Exception arg)
+{
+  return (arg.GetType() == typeof (CacheException));
+} 
+
+```
+
+---
+### Last resort
+
+In .NET 4.0 any unhandled inside Task exception could end the process. 
+
+Here is last chance to handle them.
+
+```cs
+
+TaskScheduler.UnobservedTaskException += HandleTaskExceptions;
+
+static void HandleTaskExceptions(object sender, 
+								 UnobservedTaskExceptionEventArgs e)
+{
+   foreach (Exception error in e.Exception.InnerExceptions)
+   {
+     Console.WriteLine(error.Message);
+   }
+   //do not kill the process
+   e.SetObserved();
+}
+```
+
+---
+### Last resort
+
+In .NET 4.5 TPL team decided to change behaviour and just swallow unhandled inside task error.
+
+However, we still have opportunity to intentionally rollback to .NET 4.0 variant with configuration:
+
+```xml
+<configuration>
+  <runtime>
+    <ThrowUnobservedTaskExceptions enabled="true"/>
+  </runtime>
+</configuration>
+```
+
+[example](https://dotnetfiddle.net/YGI3j6)
+
