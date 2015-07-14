@@ -43,7 +43,7 @@ string oldPath = "c:\\Program Files\\Microsoft Visual Studio 8.0";
 
 // Initialize with a verbatim string literal. 
 string newPath = @"c:\Program Files\Microsoft Visual Studio 9.0";
-````
+```
 
 ***
 
@@ -62,34 +62,35 @@ var temp = "I'm still a strongly-typed System.String!";
 const string message4 = "You can't get rid of me!";
 
 // Use the String constructor only when creating 
-// a string from a char*, char[], or sbyte*. See System.String documentation for details. 
+// a string from a char*, char[], or sbyte*. 
+// See System.String documentation for details. 
 char[] letters = { 'A', 'B', 'C' };
 string alphabet = new string(letters);
-````
+```
 
 ***
 
 ### Constructors overview
 
-- **String(Char*)** by a specified pointer to an array of Unicode characters.
-- **String(Char[])** by an array of Unicode characters.
-- **String(SByte*)** by a pointer to an array of 8-bit signed integers.
-- **String(Char, Int32)** by a specified Unicode character repeated a specified number of times.
-- **String(Char*, Int32, Int32)** by a specified pointer to an array of Unicode characters, 
-a starting character position within that array, and a length.
-- **String(Char[], Int32, Int32)** by an array of Unicode characters, 
-a starting character position within that array, and a length.
-- **String(SByte*, Int32, Int32)** by a specified pointer to an array of 8-bit signed integers, 
-a starting position within that array, and a length.
-- **String(SByte*, Int32, Int32, Encoding)** by a specified pointer to an array of 8-bit signed integers, 
-a starting position within that array, a length, and an Encoding object.
+- **String(Char*)** by a pointer to array of Unicode chars (UC).
+- **String(Char[])** by an array of UC.
+- **String(SByte*)** by a pointer to array of 8-bit signed ints.
+- **String(Char, Int32)** by a UC repeated a number of times.
+- **String(Char*, Int32, Int32)** by a specified pointer to array of UC, 
+starting char position in array and length.
+- **String(Char[], Int32, Int32)** by array of UC, 
+starting char position in array and length.
+- **String(SByte*, Int32, Int32)** by a pointer to array of 8-bit signed ints, 
+a starting position in array and length.
+- **String(SByte*, Int32, Int32, Encoding)** by a pointer to an array of 8-bit signed ints, 
+a starting position in that array, a length, and an Encoding object.
 
 ***
 
 ### Strings initialization (example)
 
-Code:
 ```cs
+// CS code
 public static class Program
 {
     public static void Main()
@@ -98,10 +99,10 @@ public static class Program
         System.Console.WriteLine(s);
     }
 }
-````
-
-IL:
 ```
+
+```cs
+//Intrermediate language (IL):
 .method public hidebysig static void Main() cil managed 
 { 
     .entrypoint 
@@ -112,7 +113,7 @@ IL:
     IL_0005: stloc.0 IL_0006: ldloc.0 
     IL_0007: call void [mscorlib]System.Console::WriteLine(string) IL_000c: ret 
 } // end of method Program::Main
-````
+```
 
 ***
 
@@ -133,17 +134,22 @@ String objects are *immutable*: they cannot be changed after they have been crea
 All of the String methods and C# operators that appear to modify a string actually return the results in a new string object.
 
 + [Example 1](https://dotnetfiddle.net/nETRFL)
-+ [Example 2] (https://dotnetfiddle.net/sHPCbZ)
-***
++ [Example 2](https://dotnetfiddle.net/sHPCbZ)
 
+***
 ### Equality operator and strings
 
 #### It overloads the == operator
-When the == operator is used to compare two strings, the Equals method is called, 
-which checks for the equality of the contents of the strings rather than the references themselves. 
-For instance, "hello".Substring(0, 4)=="hell" is true, even though the references on the two sides of 
-the operator are different (they refer to two different string objects, which both contain the same character sequence). 
+When operator '==' applied to strings, the *Equals* method is called.
+It checks for the equality strings contents rather than the references. 
 
+```cs
+ "hello".Substring(0, 4)=="hell"; //is true 
+  // even though the references on the two sides of the operator are different
+  // (they refer to two different string objects, 
+  // which both contain the same character sequence). 
+```
+ 
 ```cs
 static Int32 Compare(String strA, String strB, StringComparison comparisonType);
 static Int32 Compare(string strA, string strB, Boolean ignoreCase, CultureInfo culture);
@@ -168,12 +174,12 @@ Use *StringComparison* and *CompareOptions*:
 
 ### Compare strings (best practices)
 
-1. Use *CurrentCulture/CurrentCultureIgnoreCase* before output when you display output to the user.
-2. If you want to ignore culture or case use *Ordinal/OrdinalIgnoreCase* instead of *InvariantCulture/InvariantCultureIgnoreCase* (slow).
+1. Use *CurrentCulture/CurrentCultureIgnoreCase* just before output to a user.
+2. If comparing without culture use *Ordinal* instead of *InvariantCulture* (slow).
 3. If you want to change case before comparison use *ToUpperInvariant* instead of *ToLowerInvariant* (first option is optimized).
-4. Do not use *CompareTo*, *CompareOrdinal*, operators *==* and *!=* because you don’t see clearly the way of comparison.
+4. Avoid *CompareTo*, *CompareOrdinal*, operators *==* and *!=* because you don’t see clearly the way of comparison.
 For example, CompareTo uses regional standards, but Equals is not.
-5. Use an overload of the *String.Equals* method to test whether two strings are equal.
+5. Use an overload of the *String.Equals* to test strings equality.
 
 ***
 
@@ -189,7 +195,7 @@ Some info:
 - Culture could be set from ‘Regional and Language Options’ in Windows.
 - Compare method uses current thread’s regional standards if you do not put it explicitly.
 
-[Example] (https://dotnetfiddle.net/EZIutS)
+[Example](https://dotnetfiddle.net/EZIutS)
 
 ***
 
@@ -197,22 +203,20 @@ Some info:
 
 Reasons:
 
-1. Slow comparison;
-2. A lot of memory usage.
+- Slow comparison;
+- A lot of memory usage.
 
-Solution:
-CLR has mechanism of optimization named ‘string interning’ (special hash-table).
-
-Methods:
+**Solution:** CLR has mechanism of optimization named ‘string interning’ (special hash-table).
 
 ```cs
+// Methods for interning
 public static String Intern(String str); 
 public static String IsInterned(String str);
-````
+```
 
 You could turn off for project this mechanism using attribute *System.Runtime.CompilerServices.CompilationRelaxations.NoStringInterning*.
 
-[Example] (https://dotnetfiddle.net/ggU5Fu)
+[Example](https://dotnetfiddle.net/ggU5Fu)
 
 ***
 
@@ -225,28 +229,28 @@ ToCharArray,
 Contains, 
 IndexOf, 
 LastIndexOf, 
-IndexOfAny 
+IndexOfAny, 
 LastIndexOfAny
-Clone 
-Copy 
-CopyTo 
-Substring 
-ToString 
+Clone, 
+Copy, 
+CopyTo, 
+Substring, 
+ToString, 
 Insert, Remove, PadLeft, Replace, Split, Join, ToLower, ToUpper, Trim, Concat, Format…
 
 #### Note! All methods return NEW string.
 
 ***
-
 ### String vs StringBuilder
 
 StringBuilder provides mutable string:
 
 ```cs
 StringBuilder sb = new StringBuilder(); 
-String s = sb.AppendFormat("{0} {1}", "Kottans1111", "Org").Replace(' ', '-').Remove(4, 3).ToString(); 
+String s = sb.AppendFormat("{0} {1}", "Kottans1111", "Org").
+	   Replace(' ', '-').Remove(4, 3).ToString(); 
 Console.WriteLine(s); // "Kottans-Org"
-````
+```
 
 ***
 
@@ -265,17 +269,16 @@ The most popular:
 - UTF-16;
 - UTF-8.
 
-[Example] (https://dotnetfiddle.net/7KCNtS)
+[Example](https://dotnetfiddle.net/7KCNtS)
 
 ***
-
 ### Useful links
 
-1. https://msdn.microsoft.com/ru-ru/library/system.string(v=vs.110).aspx
-2. https://msdn.microsoft.com/en-us/library/dd465121(v=vs.110).aspx
-3. http://blog.jetbrains.com/dotnet/2015/02/12/string-interning-effective-memory-management-with-dotmemory
-4. http://blog.coverity.com/2014/04/09/why-utf-16/#.VZWxSFyqqko
-5. https://channel9.msdn.com/Series/C-Sharp-Fundamentals-Development-for-Absolute-Beginners/Working-with-Strings-12
+1. [String class - MSDN](https://msdn.microsoft.com/ru-ru/library/system.string(v=vs.110).aspx)
+2. [Strings - best practices](https://msdn.microsoft.com/en-us/library/dd465121(v=vs.110).aspx)
+3. [String Interning](http://blog.jetbrains.com/dotnet/2015/02/12/string-interning-effective-memory-management-with-dotmemory)
+4. [Why does C# use UTF-16 for strings?](http://blog.coverity.com/2014/04/09/why-utf-16/#.VZWxSFyqqko)
+5. [Working with Strings - Channel9](https://channel9.msdn.com/Series/C-Sharp-Fundamentals-Development-for-Absolute-Beginners/Working-with-Strings-12)
 
 **And… If you google ‘CString’ and go to the images you will forget what are you looking for ;)
  [Link](https://www.google.com.ua/search?q=cstring&espv=2&biw=1600&bih=775&source=lnms&tbm=isch&sa=X&ei=bWuWVe7dHMKPsAGd96u4BA&ved=0CAYQ_AUoAQ) **
