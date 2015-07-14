@@ -1,0 +1,716 @@
+﻿<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Reflection</title>
+    <meta name="description" content="Understanding Reflection and Attributes">
+    <meta name="author" content="Dmytriy Hnatiuk">
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <script src="http://code.jquery.com/jquery-1.8.0.js"></script>
+    <script src="http://code.jquery.com/ui/1.8.23/jquery-ui.js"></script>
+    <script src="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.2.1/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link href="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.2.1/css/bootstrap-combined.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="../../shared/css/reveal.css">
+    <link rel="stylesheet" href="../../shared/css/theme/league.css" id="theme">
+    <link type="text/css" rel="stylesheet" href="../../shared/fsharp.formatting/styles/style.css" />
+    <link type="text/css" rel="stylesheet" href="../../shared/fsharp.formatting/styles/deedle.css" />
+    <link type="text/css" rel="stylesheet" href="../../shared/css/custom.css" />
+    <script src="../../shared/fsharp.formatting/styles/tips.js" type="text/javascript"></script>
+    <link rel="shortcut icon" type="image/png" href="../../shared/favicon.png">
+    <!-- For syntax highlighting -->
+    <link rel="stylesheet" href="../../shared/lib/css/zenburn.css">
+    <!-- If the query includes 'print-pdf', include the PDF print sheet -->
+    <script>
+			if( window.location.search.match( /print-pdf/gi ) ) {
+				var link = document.createElement( 'link' );
+				link.rel = 'stylesheet';
+				link.type = 'text/css';
+				link.href = '../../shared/css/print/pdf.css';
+				document.getElementsByTagName( 'head' )[0].appendChild( link );
+			}
+    </script>
+    <!--[if lt IE 9]>
+    <script src="../../shared/lib/js/html5shiv.js"></script>
+    <![endif]-->
+</head>
+
+<body>
+    <div class="reveal">
+        
+        <!-- Any section element inside of this container is displayed as a slide -->
+        <div class="slides">
+            <section >
+
+<h2>C# course</h2>
+
+<h4>Lecture 15</h4>
+
+<h1>Loggin' with log4net</h1>
+
+</section>
+
+<section >
+
+<h2>Agenda</h2>
+
+<ul>
+<li>Overview. Why we need logging?</li>
+<li>Logging - native VS tools</li>
+<li>Logging frameworks</li>
+<li>Log4net overiew</li>
+</ul>
+
+</section>
+
+<section >
+
+<section >
+
+<h3>Logging. Overview</h3>
+
+<p><strong>Logging</strong> - the process of recording application actions and state to a secondary interface.</p>
+
+<p>Second interface could be:</p>
+
+<ul>
+<li>file</li>
+<li>web service</li>
+<li>external log collector</li>
+<li>database</li>
+<li>e-mail</li>
+<li>etc ...</li>
+</ul>
+
+</section>
+
+<section author="Valentine Radchuk" description="Log4Net framework" theme="league" title="Multithreading" transition="default">
+
+<h3>Logging intension</h3>
+
+<ul>
+<li>track application state</li>
+<li>inform what system doing right now</li>
+<li>store history of internal appliaction actions</li>
+<li>help to detect problems with an application without debugger</li>
+<li>help analyze system health and botlenecks</li>
+</ul>
+
+</section>
+
+</section>
+
+<section >
+
+<section >
+
+<h3>A very simple logger</h3>
+
+<div>
+
+<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
+</pre></td>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="cs">Console.WriteLine(<span class="s">"This is an log message"</span>);
+</code></pre></td></tr></table>
+
+</div>
+
+</section>
+
+<section author="Valentine Radchuk" description="Log4Net framework" theme="league" title="Multithreading" transition="default">
+
+<h3>Advanced logger</h3>
+
+<div>
+
+<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
+<span class="l">2: </span>
+<span class="l">3: </span>
+<span class="l">4: </span>
+<span class="l">5: </span>
+<span class="l">6: </span>
+<span class="l">7: </span>
+<span class="l">8: </span>
+</pre></td>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="cs"><span class="k">var</span> logMessage <span class="o">=</span> <span class="s">"This is an log message"</span>;
+<span class="k">var</span> logFile <span class="o">=</span> <span class="s">"logfile.log"</span>;
+
+<span class="k">using</span> (FileStream fs <span class="o">=</span> <span class="k">new</span> FileStream(logFile,FileMode.Append, FileAccess.Write))
+<span class="k">using</span> (StreamWriter sw <span class="o">=</span> <span class="k">new</span> StreamWriter(fs))
+    {
+        sw.WriteLine(logMessage);
+    }
+</code></pre></td></tr></table>
+
+</div>
+
+</section>
+
+<section author="Valentine Radchuk" description="Log4Net framework" theme="league" title="Multithreading" transition="default">
+
+<h3>More advanced technics</h3>
+
+<h4>Using class <a href="https://msdn.microsoft.com/en-us/library/system.diagnostics.trace(v=vs.110).aspx">Trace</a> for tracing application state</h4>
+
+<div>
+
+<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l"> 1: </span>
+<span class="l"> 2: </span>
+<span class="l"> 3: </span>
+<span class="l"> 4: </span>
+<span class="l"> 5: </span>
+<span class="l"> 6: </span>
+<span class="l"> 7: </span>
+<span class="l"> 8: </span>
+<span class="l"> 9: </span>
+<span class="l">10: </span>
+<span class="l">11: </span>
+<span class="l">12: </span>
+<span class="l">13: </span>
+<span class="l">14: </span>
+<span class="l">15: </span>
+</pre></td>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="cs"><span class="k">using</span> System;
+<span class="k">using</span> System.Diagnostics;
+
+<span class="k">class</span> Test
+{
+    <span class="k">static</span> <span class="k">void</span> Main()
+    {
+       Trace.Listeners.Add(<span class="k">new</span> TextWriterTraceListener(<span class="s">"yourlog.log"</span>));
+       Trace.AutoFlush <span class="o">=</span> <span class="k">true</span>;
+       Trace.WriteLine(<span class="s">"Entering Main"</span>);
+       Console.WriteLine(<span class="s">"Hello World."</span>);
+       Trace.WriteLine(<span class="s">"Exiting Main"</span>); 
+       Trace.Flush();
+    }
+}
+</code></pre></td></tr></table>
+
+</div>
+
+</section>
+
+</section>
+
+<section >
+
+<h3>Structured approach to logging</h3>
+
+<ul>
+<li>introduction of logging level</li>
+<li>change logging interface or support few ones at the time</li>
+<li>keep important information with each log message</li>
+<li>filter log messages depending on environment</li>
+<li>support multiple loggers in an application</li>
+<li>use logging frameworks</li>
+</ul>
+
+</section>
+
+<section >
+
+<section >
+
+<h3>Logging levels</h3>
+
+<p>What information might be interesting for those who will read log?</p>
+
+<section data-markdown>
+    <script type="text/template">
+    - DEBUG - any debug information <!-- .element: class="fragment" data-fragment-index="1" -->  
+    - INFO - general comments or intermediate calculations <!-- .element: class="fragment" data-fragment-index="2" -->  
+    - WARN - warning, something potentially goes wrong <!-- .element: class="fragment" data-fragment-index="3" -->    
+    - ERROR - undesired behaviour/incorrect answer from service, any problem that won't crash application <!-- .element: class="fragment" data-fragment-index="4" -->  
+    - FATAL - critical problem. Application cannot continue running <!-- .element: class="fragment" data-fragment-index="5" --> 
+    </script>
+</section>
+
+</section>
+
+<section author="Valentine Radchuk" description="Log4Net framework" theme="league" title="Multithreading" transition="default">
+
+<h3>Change logging interface</h3>
+
+<p>Depending on application or environment we might be interesting to find logs in different places:</p>
+
+<ul>
+<li>Console - for quick and easily access for log messages</li>
+<li>File - for store big and huge logs</li>
+<li>Database - to get structured logs</li>
+<li>Email - to get notification if wmth goes wrong</li>
+<li>Web Service - pass log data to a service for further transformation or analizing</li>
+</ul>
+
+</section>
+
+<section author="Valentine Radchuk" description="Log4Net framework" theme="league" title="Multithreading" transition="default">
+
+<h3>Keep important information</h3>
+
+<p>What might be important for those who read logs?</p>
+
+<ul>
+<li>date and time in different formats</li>
+<li>class/method name which produced a log message</li>
+<li>log level</li>
+<li>thread id (for multithreaded applications)</li>
+<li>user/machine name</li>
+</ul>
+
+</section>
+
+<section author="Valentine Radchuk" description="Log4Net framework" theme="league" title="Multithreading" transition="default">
+
+<h3>Filter log messages</h3>
+
+<p>What if only subset of generated logs required for now?
+In this case filters might be applied</p>
+
+<ul>
+<li>filter by level</li>
+<li>filter by substring in message</li>
+</ul>
+
+</section>
+
+<section author="Valentine Radchuk" description="Log4Net framework" theme="league" title="Multithreading" transition="default">
+
+<h3>Log to multiple interfaces simultaneously</h3>
+
+<p>Applying filters and log levels log messages might be sent to different interfaces</p>
+
+<h4>Possble scenarios:</h4>
+
+<p>[INFO] -&gt; Datadase <br />
+[DEBUG] -&gt; File <br />
+[ERROR, FATAL] -&gt; EMail</p>
+
+</section>
+
+</section>
+
+<section >
+
+<h3>2 log || ! 2 log</h3>
+
+<p>Logs are useful but they might be excessive:</p>
+
+<ul>
+<li>log instructions take CPU time and extra logging will slow down performance</li>
+<li>long and detailed log is hard for analysis</li>
+<li>log only relative information</li>
+<li>log your environment</li>
+<li>carefully choose log level</li>
+</ul>
+
+</section>
+
+<section >
+
+<h3>Logging frameworks</h3>
+
+<p>Threre are numerous of logging frameworks:</p>
+
+<ul>
+<li><a href="https://logging.apache.org/">log4net</a> - powerful, most famous, ported from log4j</li>
+<li><a href="http://nlog-project.org/">NLog</a> - flexible adn powerful framework, actively developed</li>
+<li><a href="https://msdn.microsoft.com/en-us/library/ff647183.aspx">Enterprise Log</a> - dunno for whom this logger :)</li>
+<li>dozens of other frameworks</li>
+</ul>
+
+</section>
+
+<section >
+
+<section >
+
+<h3>log4net overview</h3>
+
+<a href="https://logging.apache.org/">Log4net</a> is an <a href="https://github.com/apache/log4net">open source </a> logging framework
+
+<p>Core features:</p>
+
+<ul>
+<li>Support for multiple frameworks</li>
+<li>Output to multiple logging targets (20 standard appenders)</li>
+<li>Hierarchical logging architecture (component has own logger)</li>
+<li>XML Configuration (app.config or external xml file)</li>
+<li>Dynamic Configuration (configuration loaded on the fly)</li>
+<li>Logging Context (contextual data for each log message)</li>
+<li>Modular and extensible design</li>
+<li>High performance with flexibility</li>
+</ul>
+
+</section>
+
+<section author="Valentine Radchuk" description="Log4Net framework" theme="league" title="Multithreading" transition="default">
+
+<h3>Core concepts</h3>
+
+<p>Log4net has 4 main components:</p>
+
+<ul>
+<li>loggers - named entities which are used to write log messages</li>
+<li>appenders - endpoint interfaces to write log to particular destination</li>
+<li>filters - to filter out messages by a condition</li>
+<li>layouts - sets shape of each message</li>
+</ul>
+
+</section>
+
+</section>
+
+<section >
+
+<section >
+
+<h3>Loggers</h3>
+
+<ul>
+<li>loggers - named entities encapsulate log target</li>
+<li>loggers support hierarchy</li>
+<li>you can create as many loggers as you need</li>
+<li>log level can be configured per logger</li>
+<li>loggers implement interface ILog with following members:</li>
+</ul>
+
+<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l"> 1: </span>
+<span class="l"> 2: </span>
+<span class="l"> 3: </span>
+<span class="l"> 4: </span>
+<span class="l"> 5: </span>
+<span class="l"> 6: </span>
+<span class="l"> 7: </span>
+<span class="l"> 8: </span>
+<span class="l"> 9: </span>
+<span class="l">10: </span>
+<span class="l">11: </span>
+<span class="l">12: </span>
+</pre></td>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="cs"><span class="k">public</span> <span class="k">interface</span> ILog
+{
+  <span class="k">void</span> Debug(<span class="k">object</span> message);
+  <span class="k">void</span> Info(<span class="k">object</span> message);
+  <span class="k">void</span> Warn(<span class="k">object</span> message);
+  <span class="k">void</span> Error(<span class="k">object</span> message);
+  <span class="k">void</span> Fatal(<span class="k">object</span> message);
+<span class="c">//...</span>
+  <span class="k">void</span> Debug(<span class="k">object</span> message, Exception ex);
+<span class="c">//...</span>
+  <span class="k">bool</span> isDebugEnabled;
+}
+</code></pre></td></tr></table>
+
+</section>
+
+<section author="Valentine Radchuk" description="Log4Net framework" theme="league" title="Multithreading" transition="default">
+
+<h3>Root logger</h3>
+
+<ul>
+<li>default parent logger</li>
+<li>cannot be accessed directly</li>
+<li>all setting enabled for root logger are accessible for all ancestors</li>
+</ul>
+
+<h4>Configuration sample</h4>
+
+<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
+<span class="l">2: </span>
+<span class="l">3: </span>
+<span class="l">4: </span>
+<span class="l">5: </span>
+</pre></td>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="xml"><span class="k">&lt;</span><span class="i">root</span><span class="k">&gt;</span>
+  <span class="k">&lt;</span><span class="i">level</span> <span class="o">value</span><span class="k">="INFO"</span><span class="k">/&gt;</span>
+  <span class="k">&lt;</span><span class="i">appender-ref</span> <span class="o">ref</span><span class="k">="FileAppender"</span><span class="k">/&gt;</span>
+  <span class="k">&lt;</span><span class="i">appender-ref</span> <span class="o">ref</span><span class="k">="ConsoleAppender"</span> <span class="k">/&gt;</span>
+<span class="k">&lt;/</span><span class="i">root</span><span class="k">&gt;</span>
+</code></pre></td></tr></table>
+
+</section>
+
+<section author="Valentine Radchuk" description="Log4Net framework" theme="league" title="Multithreading" transition="default">
+
+<h3>Logger hierarchy</h3>
+
+<p>Log4net supports hierarchy of loggers <br />
+Hierarchy concepts uses C# namespaces</p>
+
+<ul>
+<li>loggers use dot-notation e.g. Namespace.Class</li>
+<li>attributes applied for parent logger applies for child</li>
+<li>attributes applied to child logger overrides parent ones</li>
+</ul>
+
+</section>
+
+<section author="Valentine Radchuk" description="Log4Net framework" theme="league" title="Multithreading" transition="default">
+
+<h3>Recomendation for logger usage</h3>
+
+<ul>
+<li>configure loggers in app.config or external config file</li>
+<li>create loger per class to leverage hierarchy configuration of log4net</li>
+<li>do not pass logger as a parameter to constructor excepting cases when you really need this</li>
+</ul>
+
+</section>
+
+<section author="Valentine Radchuk" description="Log4Net framework" theme="league" title="Multithreading" transition="default">
+
+<h3>Example of usage logger</h3>
+
+<h4>Instantiate logger</h4>
+
+<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
+<span class="l">2: </span>
+<span class="l">3: </span>
+<span class="l">4: </span>
+<span class="l">5: </span>
+<span class="l">6: </span>
+<span class="l">7: </span>
+<span class="l">8: </span>
+<span class="l">9: </span>
+</pre></td>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="cs"><span class="k">using</span> log4net;
+<span class="k">namespace</span> Com.Foo {
+    <span class="k">public</span> <span class="k">class</span> Bar {
+        <span class="k">private</span> <span class="k">static</span> <span class="k">readonly</span> ILog log <span class="o">=</span> LogManager.GetLogger(<span class="k">typeof</span>(Bar));        
+        <span class="k">public</span> <span class="k">void</span> DoIt() {
+            log.Debug(<span class="s">"Oops, I did it again!"</span>);
+        }
+    }
+}
+</code></pre></td></tr></table>
+
+<h4>Enable log4net in Assembly.cs</h4>
+
+<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
+<span class="l">2: </span>
+<span class="l">3: </span>
+<span class="l">4: </span>
+</pre></td>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="cs"><span class="c">// Configure log4net using the .config file</span>
+[assembly: log4net.Config.XmlConfigurator(Watch=<span class="k">true</span>)]
+<span class="c">// Configure log4net using the .log4net file</span>
+[assembly: log4net.Config.XmlConfigurator(ConfigFileExtension=<span class="s">"log4net"</span>,Watch=<span class="k">true</span>)]
+</code></pre></td></tr></table>
+
+</section>
+
+<section author="Valentine Radchuk" description="Log4Net framework" theme="league" title="Multithreading" transition="default">
+
+<h3>Configuration syntax in app.config</h3>
+
+<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l"> 1: </span>
+<span class="l"> 2: </span>
+<span class="l"> 3: </span>
+<span class="l"> 4: </span>
+<span class="l"> 5: </span>
+<span class="l"> 6: </span>
+<span class="l"> 7: </span>
+<span class="l"> 8: </span>
+<span class="l"> 9: </span>
+<span class="l">10: </span>
+<span class="l">11: </span>
+<span class="l">12: </span>
+<span class="l">13: </span>
+<span class="l">14: </span>
+<span class="l">15: </span>
+<span class="l">16: </span>
+<span class="l">17: </span>
+<span class="l">18: </span>
+<span class="l">19: </span>
+</pre></td>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="xml"><span class="prep">&lt;?</span>xml version=<span class="s">"1.0"</span> encoding=<span class="s">"utf-8"</span> <span class="prep">?&gt;</span>
+<span class="k">&lt;</span><span class="i">configuration</span><span class="k">&gt;</span>
+    <span class="k">&lt;</span><span class="i">configSections</span><span class="k">&gt;</span>
+        <span class="k">&lt;</span><span class="i">section</span> <span class="o">name</span><span class="k">="log4net"</span> 
+        <span class="o">type</span><span class="k">="log4net.Config.Log4NetConfigurationSectionHandler, log4net"</span> <span class="k">/&gt;</span>
+    <span class="k">&lt;/</span><span class="i">configSections</span><span class="k">&gt;</span>
+    <span class="k">&lt;</span><span class="i">log4net</span><span class="k">&gt;</span>
+        <span class="k">&lt;</span><span class="i">appender</span> <span class="o">name</span><span class="k">="ConsoleAppender"</span> <span class="o">type</span><span class="k">="log4net.Appender.ConsoleAppender"</span> <span class="k">&gt;</span>
+            <span class="k">&lt;</span><span class="i">layout</span> <span class="o">type</span><span class="k">="log4net.Layout.PatternLayout"</span><span class="k">&gt;</span>
+                <span class="k">&lt;</span><span class="i">conversionPattern</span> 
+        <span class="o">value</span><span class="k">="%date [%thread] %-5level %logger [%ndc] - %message%newline"</span> <span class="k">/&gt;</span>
+            <span class="k">&lt;/</span><span class="i">layout</span><span class="k">&gt;</span>
+        <span class="k">&lt;/</span><span class="i">appender</span><span class="k">&gt;</span>
+        <span class="k">&lt;</span><span class="i">root</span><span class="k">&gt;</span>
+            <span class="k">&lt;</span><span class="i">level</span> <span class="o">value</span><span class="k">="INFO"</span> <span class="k">/&gt;</span>
+            <span class="k">&lt;</span><span class="i">appender-ref</span> <span class="o">ref</span><span class="k">="ConsoleAppender"</span> <span class="k">/&gt;</span>
+        <span class="k">&lt;/</span><span class="i">root</span><span class="k">&gt;</span>
+    <span class="k">&lt;/</span><span class="i">log4net</span><span class="k">&gt;</span>
+<span class="k">&lt;/</span><span class="i">configuration</span><span class="k">&gt;</span>
+</code></pre></td></tr></table>
+
+<a href="http://logging.apache.org/log4net/release/manual/configuration.html">More configuraion samples</a>
+
+</section>
+
+</section>
+
+<section >
+
+<section >
+
+<h3>Appenders</h3>
+
+<p>Appenders specify where and how the information will be logged</p>
+
+<ul>
+<li>appenders is a named entity with a type</li>
+<li>appenders might be attached to loggers by many-to-many relationship</li>
+</ul>
+
+<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
+<span class="l">2: </span>
+<span class="l">3: </span>
+<span class="l">4: </span>
+<span class="l">5: </span>
+<span class="l">6: </span>
+</pre></td>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="xml"><span class="k">&lt;</span><span class="i">appender</span> <span class="o">name</span><span class="k">="ConsoleAppender"</span> <span class="o">type</span><span class="k">="log4net.Appender.ConsoleAppender"</span> <span class="k">&gt;</span>
+    <span class="k">&lt;</span><span class="i">layout</span> <span class="o">type</span><span class="k">="log4net.Layout.PatternLayout"</span><span class="k">&gt;</span>
+        <span class="k">&lt;</span><span class="i">conversionPattern</span> 
+    <span class="o">value</span><span class="k">="%date [%thread] %-5level %logger [%ndc] - %message%newline"</span> <span class="k">/&gt;</span>
+    <span class="k">&lt;/</span><span class="i">layout</span><span class="k">&gt;</span>
+<span class="k">&lt;/</span><span class="i">appender</span><span class="k">&gt;</span>
+</code></pre></td></tr></table>
+
+</section>
+
+<section author="Valentine Radchuk" description="Log4Net framework" theme="league" title="Multithreading" transition="default">
+
+<h3>Frequesntly used appenders</h3>
+
+<ul>
+<li>ConsoleAppender - writes to console</li>
+<li>ColoredConsoleAppender - colored messages to console</li>
+<li>RollingFileAppender - messages to file(s) with date/filesize constraints</li>
+<li>SmtpAppender - sends log messages to email</li>
+</ul>
+
+<a href="https://logging.apache.org/log4net/release/manual/introduction.html#appenders">More standard appenders</a> and <a href="http://logging.apache.org/log4net/release/config-examples.html">config samples</a>
+
+</section>
+
+</section>
+
+<section >
+
+<h3>Filters</h3>
+
+<ul>
+<li>filters are specified for appenders</li>
+<li>few filters can be applied to a appender. Order matters</li>
+<li>filter by level, level range, keyword or deny all filters</li>
+<li>filters make chaining. Once filter match record, record will be printed, otherwise passed to next filter.</li>
+<li>by default all filters pass record. To stop message propagation use DenyAllFilters</li>
+</ul>
+
+<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
+<span class="l">2: </span>
+<span class="l">3: </span>
+<span class="l">4: </span>
+<span class="l">5: </span>
+<span class="l">6: </span>
+</pre></td>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="xml"><span class="k">&lt;</span><span class="i">appender</span> <span class="o">name</span><span class="k">="ConsoleAppender"</span> <span class="o">type</span><span class="k">="log4net.Appender.ConsoleAppender"</span><span class="k">&gt;</span>
+  <span class="k">&lt;</span><span class="i">filter</span> <span class="o">type</span><span class="k">="log4net.Filter.StringMatchFilter"</span><span class="k">&gt;</span>
+      <span class="k">&lt;</span><span class="i">stringToMatch</span> <span class="o">value</span><span class="k">="database"</span> <span class="k">/&gt;</span>
+  <span class="k">&lt;/</span><span class="i">filter</span><span class="k">&gt;</span>  
+  <span class="k">&lt;</span><span class="i">filter</span> <span class="o">type</span><span class="k">="log4net.Filter.DenyAllFilter"</span> <span class="k">/&gt;</span>
+<span class="k">&lt;/</span><span class="i">appender</span><span class="k">&gt;</span>
+</code></pre></td></tr></table>
+
+<p>More about <a href="http://logging.apache.org/log4net/release/manual/configuration.html#filters">configuration</a> and <a href="https://logging.apache.org/log4net/release/manual/introduction.html#filters">filters</a></p>
+
+</section>
+
+<section >
+
+<section >
+
+<h3>Layouts</h3>
+
+<ul>
+<li>shoule be defined for each appender</li>
+<li>specifies how log data should be written</li>
+</ul>
+
+<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
+<span class="l">2: </span>
+<span class="l">3: </span>
+<span class="l">4: </span>
+</pre></td>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="xml"><span class="k">&lt;</span><span class="i">layout</span> <span class="o">type</span><span class="k">="log4net.Layout.PatternLayout"</span><span class="k">&gt;</span>
+  <span class="k">&lt;</span><span class="i">conversionPattern</span> 
+   <span class="o">value</span><span class="k">="%date [%thread] %-5level %logger [%ndc] - %message%newline"</span><span class="k">/&gt;</span>
+<span class="k">&lt;/</span><span class="i">layout</span><span class="k">&gt;</span>
+</code></pre></td></tr></table>
+
+<p>More info about <a href="https://logging.apache.org/log4net/release/manual/introduction.html#layouts">predefined layouts</a> and <a href="http://logging.apache.org/log4net/release/manual/configuration.html#layouts">configuration</a></p>
+
+</section>
+
+<section author="Valentine Radchuk" description="Log4Net framework" theme="league" title="Multithreading" transition="default">
+
+<h3>Conversion patterns of pattern layout</h3>
+
+<ul>
+<li><strong>%date</strong> - outputs local time</li>
+<li><strong>%level</strong> - log level</li>
+<li><strong>%message</strong> - outputs log message</li>
+<li><strong>%exception</strong> - if exception passed, will be formated from new line</li>
+<li><strong>%newline</strong> - outputs new line</li>
+<li><strong>%identity</strong> - outputs current user identity</li>
+<li><strong>%location</strong> - outputs location of log invocation (useful in Debug mode)</li>
+</ul>
+
+<a href="https://logging.apache.org/log4net/release/sdk/log4net.Layout.PatternLayout.html">More patterns</a>
+
+</section>
+
+</section>
+
+
+
+        </div>
+    </div>
+    <script src="../../shared/lib/js/head.min.js"></script>
+    <script src="../../shared/js/reveal.js"></script>
+    <script>
+
+        // Full list of configuration options available here:
+        // https://github.com/hakimel/reveal.js#configuration
+        Reveal.initialize({
+            controls: true,
+            progress: true,
+            history: true,
+            center: true,
+
+            transition: 'default', // default/cube/page/concave/zoom/linear/fade/none
+
+            // Parallax scrolling
+            // parallaxBackgroundImage: 'https://s3.amazonaws.com/hakim-static/reveal-js/reveal-parallax-1.jpg',
+            // parallaxBackgroundSize: '2100px 900px',
+
+            // Optional libraries used to extend on reveal.js
+            dependencies: [
+                { src: '../../shared/lib/js/classList.js', condition: function () { return !document.body.classList; } },
+                { src: '../../shared/plugin/markdown/marked.js', condition: function () { return !!document.querySelector('[data-markdown]'); } },
+                { src: '../../shared/plugin/markdown/markdown.js', condition: function () { return !!document.querySelector('[data-markdown]'); } },
+                { src: '../../shared/plugin/highlight/highlight.js', async: true, callback: function () { hljs.initHighlightingOnLoad(); } },
+                { src: '../../shared/plugin/zoom-js/zoom.js', async: true, condition: function () { return !!document.body.classList; } },
+                { src: '../../shared/plugin/notes/notes.js', async: true, condition: function () { return !!document.body.classList; } }
+            ]
+        });
+
+    </script>
+</body>
+</html>
+
