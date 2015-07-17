@@ -403,6 +403,63 @@ Once registered, components can be configured with their lifetime
 
 - Instance Per Dependency - create new instance on each service request
 - Single Instance - aka Singleton
-- Instance Per LifeTime Scope - 
-- InstancePerMatchingLifeTimeScope
-- SingleInstance
+- Instance Per LifeTime Scope - same instance in single scope
+- Instance Per Matching LifeTime Scope - singleton within the named scope
+
+[More about lifetime scopes](http://autofac.readthedocs.org/en/latest/lifetime/instance-scope.html)
+
+***
+###Modules
+
+A module is a class that can be used to bundle up a set of related components behind a 'facade' to simplify configuration and deployment.
+
+####Modules:
+
+- Decreased Configuration Complexity
+- Configuration Parameters are Explicit
+- Abstraction from the Internal Application Architecture
+- Better Type Safety
+- Dynamic Configuration
+
+---
+###Module example
+Create module
+
+```cs
+public class CarTransportModule : Module {
+  public bool ObeySpeedLimit { get; set; } 
+  protected override void Load(ContainerBuilder builder) {
+    builder.Register(c => new Car(c.Resolve<IDriver>())).As<IVehicle>();
+
+    if (ObeySpeedLimit)
+      builder.Register(c => new SaneDriver()).As<IDriver>();
+    else
+      builder.Register(c => new CrazyDriver()).As<IDriver>();
+  }
+}
+```
+Register module
+
+```cs
+builder.RegisterModule(new CarTransportModule() {
+    ObeySpeedLimit = true
+});
+```
+
+***
+###Autofac Integration
+
+Autofac is integrated with following technologies:
+
+- ASP.NET
+	- OWIN
+	- MVC
+	- Web API
+	- SignalR
+	- Web Forms
+- WCF
+- Managed Extensibility Framework
+- NHibernate
+- Moq
+
+[Full list](http://autofac.readthedocs.org/en/latest/integration/index.html)	
