@@ -45,9 +45,9 @@ Imversion control could be implemented via:
 ###How does IoC works
 ![](images\IoC-basics.jpg)
 
-<a href="">Sample code without DI</a>  
+<a href="https://dotnetfiddle.net/K9bYLb">Sample code without DI</a>  
 <br />
-<a href="">Sample code with DI</a>
+<a href="https://dotnetfiddle.net/2MRbRK">Sample code with DI</a>
 
 ---
 ###Constructor injection
