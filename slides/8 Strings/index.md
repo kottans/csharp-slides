@@ -102,7 +102,7 @@ public static class Program
 ```
 
 ```cs
-//Intrermediate language (IL):
+// Intermediate language (IL):
 .method public hidebysig static void Main() cil managed 
 { 
     .entrypoint 
@@ -144,7 +144,7 @@ When operator '==' applied to strings, the *Equals* method is called.
 It checks for the equality strings contents rather than the references. 
 
 ```cs
- "hello".Substring(0, 4)=="hell"; //is true 
+ "hello".Substring(0, 4)=="hell"; // Is true 
   // even though the references on the two sides of the operator are different
   // (they refer to two different string objects, 
   // which both contain the same character sequence). 
@@ -222,7 +222,7 @@ You could turn off for project this mechanism using attribute *System.Runtime.Co
 
 #### String other methods
 
-Length
+Length,
 Chars, 
 GetEnumerator, 
 ToCharArray, 
@@ -281,7 +281,7 @@ The most popular:
 5. [Working with Strings - Channel9](https://channel9.msdn.com/Series/C-Sharp-Fundamentals-Development-for-Absolute-Beginners/Working-with-Strings-12)
 
 **And… If you google ‘CString’ and go to the images you will forget what are you looking for ;)
- [Link](https://www.google.com.ua/search?q=cstring&espv=2&biw=1600&bih=775&source=lnms&tbm=isch&sa=X&ei=bWuWVe7dHMKPsAGd96u4BA&ved=0CAYQ_AUoAQ) **
+ [Wow!](https://www.google.com.ua/search?q=cstring&espv=2&biw=1600&bih=775&source=lnms&tbm=isch&sa=X&ei=bWuWVe7dHMKPsAGd96u4BA&ved=0CAYQ_AUoAQ) **
 
 
 
