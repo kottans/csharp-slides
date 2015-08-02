@@ -1,0 +1,466 @@
+﻿<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Garbage collection</title>
+    <meta name="description" content="Understanding CLR cleanup">
+    <meta name="author" content="Dmytriy Hnatiuk">
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <script src="http://code.jquery.com/jquery-1.8.0.js"></script>
+    <script src="http://code.jquery.com/ui/1.8.23/jquery-ui.js"></script>
+    <script src="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.2.1/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link href="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.2.1/css/bootstrap-combined.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="../../shared/css/reveal.css">
+    <link rel="stylesheet" href="../../shared/css/theme/league.css" id="theme">
+    <link type="text/css" rel="stylesheet" href="../../shared/fsharp.formatting/styles/style.css" />
+    <link type="text/css" rel="stylesheet" href="../../shared/fsharp.formatting/styles/deedle.css" />
+    <link type="text/css" rel="stylesheet" href="../../shared/css/custom.css" />
+    <script src="../../shared/fsharp.formatting/styles/tips.js" type="text/javascript"></script>
+    <link rel="shortcut icon" type="image/png" href="../../shared/favicon.png">
+    <!-- For syntax highlighting -->
+    <link rel="stylesheet" href="../../shared/css/fsreveal.css">
+    <link rel="stylesheet" href="../../shared/lib/css/zenburn.css">
+    <!-- If the query includes 'print-pdf', include the PDF print sheet -->
+    <script>
+			if( window.location.search.match( /print-pdf/gi ) ) {
+				var link = document.createElement( 'link' );
+				link.rel = 'stylesheet';
+				link.type = 'text/css';
+				link.href = '../../shared/css/print/pdf.css';
+				document.getElementsByTagName( 'head' )[0].appendChild( link );
+			}
+    </script>
+    <!--[if lt IE 9]>
+    <script src="../../shared/lib/js/html5shiv.js"></script>
+    <![endif]-->
+</head>
+<body>
+    <div class="reveal">
+        
+        <!-- Any section element inside of this container is displayed as a slide -->
+        <div class="slides">
+            <section >
+
+<h2>C# course</h2>
+
+<h4>Lecture 11</h4>
+
+<h1>Garbage collection</h1>
+
+</section>
+
+<section >
+
+<section >
+
+<h4>Garbage Collection (GC) - technic to "delete" objects in the heap that your application no longer requires access to.</h4>
+
+<h3>Resources:</h3>
+
+<ul>
+<li>Managed (life-cycle is managed by CLR)</li>
+<li>Unmanaged (require additional clean ups [files, socets, database connections])</li>
+</ul>
+
+</section>
+
+<section author="Dmytriy Hnatiuk" description="Understanding CLR cleanup" theme="league" title="Garbage collection" transition="default">
+
+<p>.NET application uses 2 types of Managed Heaps:</p>
+
+<ul>
+<li>Small Object Heap (SOH) &lt; 85 K - used most intensively</li>
+<li>Large Object Heap (LOH) &gt; 85 K</li>
+</ul>
+
+</section>
+
+<section author="Dmytriy Hnatiuk" description="Understanding CLR cleanup" theme="league" title="Garbage collection" transition="default">
+
+<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
+<span class="l">2: </span>
+<span class="l">3: </span>
+<span class="l">4: </span>
+<span class="l">5: </span>
+</pre></td>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="cs"><span class="k">class</span> MyClass
+{
+    <span class="k">string</span> Test=<span class="s">"Hello world Wazzup!"</span>;
+    <span class="k">byte</span>[] data=<span class="k">new</span> <span class="k">byte</span>[86000]; 
+}
+</code></pre></td></tr></table>
+
+<div class="fragment">
+
+<p><img src="images/mem_model.png" alt="Memmory model" />
+</div></p>
+
+</section>
+
+</section>
+
+<section >
+
+<section >
+
+<h3>Consecutive allocation on the SOH</h3>
+
+<p>To minimize allocation time and almost eliminate heap fragmentation, .NET allocates objects consecutively, one on top of another, and keeps track of where to allocate the next object. (using NextObjPtr)</p>
+
+</section>
+
+<section author="Dmytriy Hnatiuk" description="Understanding CLR cleanup" theme="league" title="Garbage collection" transition="default">
+
+<h4>Schema of objects allocation on the SOH</h4>
+
+<p><img src="images/soh.png" alt="Objects allocation schema (SOH)" /></p>
+
+</section>
+
+</section>
+
+<section >
+
+<section >
+
+<h3>SOH Heap compaction</h3>
+
+<p>After Object A will be collected, it would leave a gap on the Heap. To overcome the fragmentation problem, the GC compacts the heap, and thereby removes any gaps between objects</p>
+
+</section>
+
+<section author="Dmytriy Hnatiuk" description="Understanding CLR cleanup" theme="league" title="Garbage collection" transition="default">
+
+<h4>Compaction algorithm:</h4>
+
+<ol>
+<li>Find all live root references</li>
+<li>Mark all dead references</li>
+<li>Compacting the heap by copying live objects over the top of dead ones</li>
+</ol>
+
+<p><img src="images/soh_compaction.png" alt="SOH compaction" /></p>
+
+</section>
+
+</section>
+
+<section >
+
+<section >
+
+<h3>Problem!</h3>
+
+<p>Navigating through huge object graphs and copying lots of live objects over the top of dead ones is going to take a significant amount of processing time.</p>
+
+<div class="fragment">
+
+<h3>Any variants?</h3>
+
+</div> 
+
+</section>
+
+<section author="Dmytriy Hnatiuk" description="Understanding CLR cleanup" theme="league" title="Garbage collection" transition="default">
+
+<h3>Resolution</h3>
+
+<p>Perform garbage collection based on object's live-time.</p>
+
+<div class="fragment">
+Classify all objects by the live-time (3 groups):
+
+<ul>
+<li><strong>short-lived</strong> - Generation 0 (<strong>Gen 0</strong>)</li>
+<li><strong>medium-lived</strong> - Generation 1 (<strong>Gen 1</strong>)</li>
+<li><strong>long-lived</strong> - Generation 2 (<strong>Gen 2</strong>)
+</div></li>
+</ul>
+
+</section>
+
+<section author="Dmytriy Hnatiuk" description="Understanding CLR cleanup" theme="league" title="Garbage collection" transition="default">
+
+<p><img src="images/generations.png" alt="Objects generations" /></p>
+
+</section>
+
+</section>
+
+<section >
+
+<h3>Conditions for GC to be runnned</h3>
+
+<ol>
+<li>When the size of objects in any generation reaches a generation-specific threshold:
+<ul>
+<li>Gen 0 hits ~ 256 K</li>
+<li>Gen 1 hits ~ 2 MB (at which point the GC collects Gen 1 and 0)</li>
+<li>Gen 2 hits ~10 MB (at which point the GC collects Gen 2, 1 and 0)</li>
+</ul></li>
+<li>GC.Collect() is colled in code (<strong>try to NOT USE IT</strong>)</li>
+<li>The OS sends a low memory notification</li>
+</ol>
+
+</section>
+
+<section >
+
+<section >
+
+<h3>IDisposable interface</h3>
+
+<p>The IDisposable interface defines the Dispose method used to release allocated (i.e. unmanaged) resources. 
+When utilizing a class that implements this interface, it is clearly best to ensure that the Dispose method is called when the object is no longer needed.</p>
+
+</section>
+
+<section author="Dmytriy Hnatiuk" description="Understanding CLR cleanup" theme="league" title="Garbage collection" transition="default">
+
+<h4>First approach</h4>
+
+<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l"> 1: </span>
+<span class="l"> 2: </span>
+<span class="l"> 3: </span>
+<span class="l"> 4: </span>
+<span class="l"> 5: </span>
+<span class="l"> 6: </span>
+<span class="l"> 7: </span>
+<span class="l"> 8: </span>
+<span class="l"> 9: </span>
+<span class="l">10: </span>
+<span class="l">11: </span>
+<span class="l">12: </span>
+<span class="l">13: </span>
+<span class="l">14: </span>
+<span class="l">15: </span>
+<span class="l">16: </span>
+<span class="l">17: </span>
+</pre></td>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="cs">        FileStream stream <span class="o">=</span> <span class="k">new</span> FileStream(<span class="s">"message.txt"</span>, FileMode.Open); 
+        <span class="k">try</span>
+        {
+            StreamReader reader <span class="o">=</span> <span class="k">new</span> StreamReader(stream);
+            <span class="k">try</span>
+            { 
+                Console.WriteLine(reader.ReadToEnd());
+            }
+            <span class="k">finally</span>
+            { 
+                reader.Dispose();
+            } 
+        }
+        <span class="k">finally</span>
+        { 
+            stream.Dispose();
+        }
+</code></pre></td></tr></table>
+
+</section>
+
+<section author="Dmytriy Hnatiuk" description="Understanding CLR cleanup" theme="league" title="Garbage collection" transition="default">
+
+<h4>Second approach (recommended)</h4>
+
+<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
+<span class="l">2: </span>
+<span class="l">3: </span>
+<span class="l">4: </span>
+<span class="l">5: </span>
+</pre></td>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="cs">     <span class="k">using</span> (FileStream stream <span class="o">=</span> <span class="k">new</span> FileStream(<span class="s">"message.txt"</span>, FileMode.Open)) 
+     <span class="k">using</span> (StreamReader reader <span class="o">=</span> <span class="k">new</span> StreamReader(stream))
+        {
+            Console.WriteLine(reader.ReadToEnd()); 
+        }
+</code></pre></td></tr></table>
+
+</section>
+
+</section>
+
+<section >
+
+<section >
+
+<h3>Finalization</h3>
+
+<p>Unmanaged resources such as files/disks, network resources, UI elements or databases would not be closed (disposed) automatically unless you call Dispose method. 
+If <strong>!! you write such classes</strong> to ensure that your resources will be freed up you have to provide finalizers.</p>
+
+<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l"> 1: </span>
+<span class="l"> 2: </span>
+<span class="l"> 3: </span>
+<span class="l"> 4: </span>
+<span class="l"> 5: </span>
+<span class="l"> 6: </span>
+<span class="l"> 7: </span>
+<span class="l"> 8: </span>
+<span class="l"> 9: </span>
+<span class="l">10: </span>
+<span class="l">11: </span>
+<span class="l">12: </span>
+</pre></td>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="cs">        <span class="k">class</span> TestClass
+        {
+            ~TestClass()
+            {
+            } 
+        }
+        <span class="k">class</span> TestClass2
+        {
+            <span class="k">void</span> Finalize()
+            {
+            } 
+        }
+</code></pre></td></tr></table>
+
+</section>
+
+<section author="Dmytriy Hnatiuk" description="Understanding CLR cleanup" theme="league" title="Garbage collection" transition="default">
+
+<h3>Finalization</h3>
+
+<p><img src="images/finalization.png" alt="Finalization" /></p>
+
+</section>
+
+<section author="Dmytriy Hnatiuk" description="Understanding CLR cleanup" theme="league" title="Garbage collection" transition="default">
+
+<h3>Finalization</h3>
+
+<p>Even if Object Z would loose its root reference it would be promoted to Gen 2 and moved from the finalization queue to another queue, called the fReachable queue.</p>
+
+<p>Periodically, the finalization thread will run, and it will iterate through all objects pointed to by references in the f Reachable queue, calling the Finalize method or destructor on each one and removing its reference from fReachable.</p>
+
+</section>
+
+<section author="Dmytriy Hnatiuk" description="Understanding CLR cleanup" theme="league" title="Garbage collection" transition="default">
+
+<h3>Finalization</h3>
+
+<p><img src="images/finalization_2.png" alt="Finalization" /></p>
+
+</section>
+
+</section>
+
+<section >
+
+<h3>Disposable pattern</h3>
+
+<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l"> 1: </span>
+<span class="l"> 2: </span>
+<span class="l"> 3: </span>
+<span class="l"> 4: </span>
+<span class="l"> 5: </span>
+<span class="l"> 6: </span>
+<span class="l"> 7: </span>
+<span class="l"> 8: </span>
+<span class="l"> 9: </span>
+<span class="l">10: </span>
+<span class="l">11: </span>
+<span class="l">12: </span>
+<span class="l">13: </span>
+<span class="l">14: </span>
+<span class="l">15: </span>
+<span class="l">16: </span>
+<span class="l">17: </span>
+<span class="l">18: </span>
+<span class="l">19: </span>
+</pre></td>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="cs">        <span class="k">public</span> <span class="k">void</span> Dispose()
+        {
+            Dispose(<span class="k">true</span>);
+            GC.SuppressFinalize(<span class="k">this</span>); 
+        }
+
+        <span class="k">private</span> <span class="k">void</span> Dispose(<span class="k">bool</span> disposing)
+        {
+            <span class="k">if</span> (!disposing)
+            {
+                <span class="c">// Thread-specific code goes here</span>
+            }
+            <span class="c">// Resource Cleanup goes here </span>
+        }
+
+        <span class="k">public</span> <span class="k">void</span> Finalize()
+        {
+            Dispose(<span class="k">false</span>);
+        }
+
+</code></pre></td></tr></table>
+
+</section>
+
+<section >
+
+<section >
+
+<h3>Large Object Heap (LOH)</h3>
+
+<ul>
+<li>holds objects larger than 85K</li>
+<li>holds double arrays with more than 999 elements</li>
+</ul>
+
+<p><img src="images/loh.png" alt="Large Object Heap" /></p>
+
+</section>
+
+<section author="Dmytriy Hnatiuk" description="Understanding CLR cleanup" theme="league" title="Garbage collection" transition="default">
+
+<p>LOH key features:</p>
+
+<ul>
+<li>Free Space Table reclaims on full (Gen 2) GC</li>
+<li>New objects would be placed or into the top of Heap or into the “gaps” depending on objects size</li>
+<li>Heap aren’t compacted (because of overhead of copying large chunks of data)</li>
+</ul>
+
+</section>
+
+</section>
+
+
+
+        </div>
+    </div>
+    <script src="../../shared/lib/js/head.min.js"></script>
+    <script src="../../shared/js/reveal.js"></script>
+    <script>
+		// Add the nohighlight class and data-noescape attribute to code elements that have already been formatted by FSharp.Formatting
+        $('pre.highlighted code').addClass('nohighlight').attr('data-noescape', '');
+		
+        // Full list of configuration options available here:
+        // https://github.com/hakimel/reveal.js#configuration
+        Reveal.initialize({
+            controls: true,
+            progress: true,
+            history: true,
+            center: true,
+
+            transition: 'default', // default/cube/page/concave/zoom/linear/fade/none
+
+            // Parallax scrolling
+            // parallaxBackgroundImage: 'https://s3.amazonaws.com/hakim-static/reveal-js/reveal-parallax-1.jpg',
+            // parallaxBackgroundSize: '2100px 900px',
+
+            // Optional libraries used to extend on reveal.js
+            dependencies: [
+                { src: '../../shared/lib/js/classList.js', condition: function () { return !document.body.classList; } },
+                { src: '../../shared/plugin/markdown/marked.js', condition: function () { return !!document.querySelector('[data-markdown]'); } },
+                { src: '../../shared/plugin/markdown/markdown.js', condition: function () { return !!document.querySelector('[data-markdown]'); } },
+                { src: '../../shared/plugin/highlight/highlight.js', async: true, callback: function () { hljs.initHighlightingOnLoad(); } },
+                { src: '../../shared/plugin/zoom-js/zoom.js', async: true, condition: function () { return !!document.body.classList; } },
+                { src: '../../shared/plugin/notes/notes.js', async: true, condition: function () { return !!document.body.classList; } }
+            ]
+        });
+
+    </script>
+</body>
+</html>
+
