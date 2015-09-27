@@ -592,6 +592,7 @@ When performance is critical:
 - Override GetHashCode method
 
 [example](https://dotnetfiddle.net/uVCmGn)
+[detailed info](https://msdn.microsoft.com/en-us/library/336aedhh(v=VS.71).aspx)
 
 ***
 
