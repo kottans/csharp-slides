@@ -44,7 +44,8 @@
 ###CLR - common language runtime   
  CLR is a runtime environment that manages the execution of code and provides services that improves development, deployment and run time.
 
-####Services provided by CLR:   
+---
+###Services provided by CLR   
 - <a href="https://msdn.microsoft.com/en-us/library/windows/desktop/bb318664%28v=vs.85%29.aspx">managed code</a>
 - cross-language operability
 - JIT compiler
@@ -94,6 +95,8 @@
 >the management of a Common Language Runtime virtual machine, typically the .NET Framework, or Mono.” 
 >© <a href="www.wikipedia.org">Wikipedia</a>   
 
+---
+###Managed code
  - machine independent.
  - is code that runs on CLR and is fully managed by CLR (including cleaning up memory, reflecting metadata etc)
  - provided with metadata which describe types and allows different tools inspect types.
@@ -103,7 +106,8 @@
 - **Assembly** - is a chunk of MSIL code that can be run in .NET runtime
 - **Assembly** - is a logical unit, not physical (can include multiple classes, resources and can be executable)   
 
-####Assembly contains: 
+---
+###Assembly contains 
 - manifest (metadata about the assembly itself - name, version, culture, public key and digital signature)
 - type metadata (Completely describes all types defined in an assembly + attributes)
 - managed code
@@ -121,16 +125,20 @@
 ***
 ###CLI (<a href="http://www.ecma-international.org/publications/standards/Ecma-335.htm">ECMA 335</a>)
 CLI - Common Language Infrastructure - is an open specification developed by Microsoft and standardized by ISO and ECMA that describes the executable code and runtime environment.
-####CLI describes:
-- The Common Type System (CTS)
-- Metadata
-- CTS
-- CLS
 
-####Existing implementations:
+---
+###CLI describes
+- Common Type System (CTS)
+- Metadata Definition and Symantics
+- Common Intermeadiate Language (CIL)
+- Common Language Specification (CLS)
+
+---
+###CLI existing implementations
 - <a href="https://github.com/Microsoft/dotnet">.NET</a> / <a href="https://msdn.microsoft.com/en-us/library/f44bbwa1%28v=vs.90%29.aspx">.NET compact</a> / <a href="https://netmf.codeplex.com/">.NET micro framework</a>
 - <a href="http://www.mono-project.com/">Mono dev platform</a>
 - <a href="http://www.gnu.org/software/dotgnu/">Portable .NET (dotGnu project)</a>
+- <a href="https://github.com/dotnet/core">.NET Core</a>
 
 ***
 ###About:C#
