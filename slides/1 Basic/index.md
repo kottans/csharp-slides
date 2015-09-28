@@ -20,7 +20,25 @@
 
 ***
 ###.NET history
-![.NET history](images/dotNet_history.png)
+
+| .NET ver | CLR ver | Release    | Dev tool         | Features                                                                |
+|----------|---------|------------|------------------|-------------------------------------------------------------------------|
+| 1.0      | 1.0     | 2002-02-13 | VS .NET          | C#, VB, BCL                                                             |
+| 1.1      | 1.1     | 2003-04-24 | VS .NET 2003     | API changes                                                             |
+| 2.0      | 2.0     | 2005-11-07 | VS 2005          | 64x support, partials, nullable, anonymous methods, iterators, generics |
+| 3.0      | 2.0     | 2006-11-06 | Expression Blend | WPF, WCF, WWF                                                           |
+
+---
+
+| .NET ver | CLR ver | Release    | Dev tool         | Features                                                                |
+|----------|---------|------------|------------------|-------------------------------------------------------------------------|
+| 3.5      | 2.0     | 2007-11-19 | VS 2008          | lambda-expressions, LINQ, ASP.NET MVC                                   |
+| 4.0      | 4.0     | 2010-04-12 | VS 2010          | TPL, dynamic, code contracts                                            |
+| 4.5      | 4.0     | 2012-08-15 | VS 2012          | async/await                                                             |
+| 4.5.1    | 4.0     | 2013-10-17 | VS 2013          | improvements                                                            |
+| 4.5.2    | 4.0     | 2014-05-05 | -                | High DPI for WinForms                                                   |
+| 4.6      | 4.0     | 2015-07-20 | VS 2015          | new JIT compiler (RyuJIT), cryptographic enhancements                   |
+
 
 ***
 ###.NET key features
