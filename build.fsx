@@ -158,8 +158,12 @@ Target "ReleaseSlides" (fun _ ->
         CleanDir publishImagesDir
         CopyRecursive outputImagesDir publishImagesDir true |> tracefn "%A"
 
+    let cssFile = slidesDir @@ "custom.css"
+    if File.Exists cssFile then
+        CopyFile publishDir cssFile |> tracefn "%A"
+
     CopyFile publishDir (outDir @@ "index.html") |> tracefn "%A"
-        
+
     StageAll ghPagesDir
     Git.Commit.Commit ghPagesDir (sprintf "Update generated slides for %s" topic)
     Branches.push ghPagesDir
