@@ -236,7 +236,7 @@ These two guys are equivalent:
 		}
 	}
 
----
+--- 
 
 ###Overloading
 
@@ -379,6 +379,23 @@ public class Kitten
 
 ---
 
+###properties C# 6
+
+Syntactic sugar
+
+```cs
+
+public class Kitten
+{
+	public string Name { get; set; } = "Tom";
+	public string Color { get; }
+	public override string ToString() => Name;
+}
+
+```
+
+---
+
 ###Indexers
 
 Property that takes one or more arguments and accessed with array-like syntax.
@@ -407,6 +424,44 @@ var kottan = new Kottan
 {
 	Breed = "Siamese",
 	Name = "Bagira"
+}
+
+```
+
+---
+
+###Dictionary initializers
+
+```cs
+
+public class Kitten 
+{
+    Dictionary<string, string> FavoriteDishes = 
+    	new Dictionary<string, string>()
+    {
+        { "breakfest", "fish and milk" },
+        { "launch", "fish and milk" },
+        { "dinner", "fish and milk" }
+    };
+}
+
+```
+
+---
+
+###Dictionary initializers C# 6
+
+```cs
+
+public class Kitten 
+{
+    Dictionary<string, string> FavoriteDishes = 
+    	new Dictionary<string, string>()
+    {
+        ["breakfest"] = "fish and milk",
+        ["launch"] = "fish and milk",
+        ["dinner"] = "fish and milk",
+    };
 }
 
 ```
