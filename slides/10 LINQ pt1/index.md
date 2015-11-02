@@ -6,7 +6,7 @@
 
 ***
 ## C# course
-#### Lecture 9
+#### Lecture 10
 # LINQ part 1
 
 ***
@@ -23,7 +23,7 @@
 ##What is LINQ?
 - stands for “Language INtegrated Query”
 - is a set of features that extends powerful query capabilities to the language syntax of C# and Visual Basic 
-- introduces standard, easily-learned patterns for querying and updating data, 
+- introduces standard, easily-learned patterns for querying and updating data
 
 ---
 ##What is LINQ?
@@ -34,8 +34,9 @@
     - ADO.NET Datasets
     - XML documents
 
-` http://msdn.microsoft.com/en-us/netframework/aa904594.aspx
-` http://weblogs.asp.net/dixin/introducing-linq-1-what-is-linq
+
+  - [LINQ MSDN](http://msdn.microsoft.com/en-us/netframework/aa904594.aspx)
+  - [Dixin's blog series](http://weblogs.asp.net/dixin/linq-via-csharp)
 
 ***
 ##Motivation
@@ -58,7 +59,7 @@ you need **to find** positive integers:
 </div>
 
 <div data-markdown class="fragment" data-fragment-index="2">
-and **to sort** them from larger to smoller
+and **to sort** them from larger to smaller
 </div>
 <div class="fragment" data-fragment-index="2">
 
@@ -86,7 +87,7 @@ results.Sort((x1, x2) => x2 - x1);
 </div>
 
 ***
-###LINQ to Objects
+###Syntax forms
 
 <div class="fragment">
 Fluent or query methods sytax:
@@ -109,14 +110,14 @@ Query expression syntax:
 
 ***
 ###LINQ to SQL
-Only changinge data source we can query SQL database
+We can query SQL database without changing query code
 
 <div class="fragment">
 fluently
 
 ```cs
 database.Products
-	    .Where(p => p.ProductName == "Beverages")
+	    .Where(p => p.Category.CategoryName == "Beverages")
 	    .Select(p => new Product
 	    {
 	        ProductName = p.ProductName,
@@ -222,7 +223,7 @@ OR
 - Deferred execution
 
 ***
-###What does LINQ consists of?
+###What makes LINQ the way it is?
 - Automatic Property
 - Object Initializer And Collection Initializer
 - Type Inference
@@ -268,9 +269,9 @@ IEnumerable<string> query = names.Where(n => n.Contains("a"))
 It could be even readable like this:
 
 ```cs
-var period = 8.June(2014).To(DateTime.Today)
-                         .Step(1.Days())
-                         .Select(d => d.Date);
+var period = 8.October(2015).To(DateTime.Today)
+                            .Step(1.Days())
+                            .Select(d => d.Date);
 
 foreach (DateTime day in period)
 {
@@ -278,6 +279,8 @@ foreach (DateTime day in period)
 }
 
 ```
+
+[FIDDLE](https://dotnetfiddle.net/6PHz25)
 
 ***
 ###Query expression vs fluent syntax
@@ -411,7 +414,7 @@ Subset of LINQ which
 
 ***
 
-###Why to use VAR in LINQ context
+###Why use VAR in LINQ context
 Always use VAR storing result of query because...
 
 <div class="fragment">
@@ -429,21 +432,21 @@ var result = people.GroupBy(n => n.Name);
 </div>
 
 ---
-###Why to use VAR in LINQ context
+###Why use VAR in LINQ context
 It can be an enumeration of anonymous types:
 
 <div class="fragment">
 
 ```cs
 var result = from person in people
-             select new {person.Name, person.Surname};
+             select new { person.Name, person.Surname };
 ```
 
 </div>
 
 ---
 
-###Why to use VAR in LINQ context
+###Why use VAR in LINQ context
 You never know how you will change your LINQ query therefore VAR will help you to not change resulting type with a small change:
 
 <div class="fragment">
@@ -513,16 +516,18 @@ Func<int, int> getOlderOn = x => age + x;
 ```
 
 In LINQ context:
-
-var filter = "Compare";
  
 ```cs
+
+var filter = "Compare";
 
 var query = from m in typeof(String).GetMethods()
             where m.Name.Contains(filter)
             select new { m.Name, ParameterCount = m.GetParameters().Length };
 
 ```
+
+[FIDDLE](https://dotnetfiddle.net/J2gqyR)
 
 ---
 
@@ -540,6 +545,8 @@ var grepFoo = grep(new Regex("foo"));
 
 ```
 
+[FIDDLE](https://dotnetfiddle.net/R1ijsD)
+
 ---
 
 ### Memoization
@@ -555,29 +562,7 @@ fib = fib.Memoize();
 
 ```
 
----
-
-### Memize
-
-```cs
-
-public static Func<A, R> Memoize<A, R>(this Func<A, R> f)
-{
-    var d = new Dictionary<A, R>();
-    return a=>
-    {
-        R r;
-        if (!d.TryGetValue(a, out r))
-        {
-          r = f(a);
-          d.Add(a, r);
-        }
-        return r;
-    };
-}
-
-
-```
+[FIDDLE](https://dotnetfiddle.net/YgC5OS)
 
 ---
 
@@ -666,3 +651,4 @@ group c by d.Initials into g
 select g;
 
 ```
+[Nice article](https://weblogs.asp.net/dixin/introducing-linq-3-programming-paradigms)
