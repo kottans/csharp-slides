@@ -102,7 +102,7 @@ var lambda = Expression.Lambda<Func<Student,bool>>(
                   Expression.Equal(
                       Expression.Property(stud, "City"),
                       Expression.Constant("Kiev")
-                  ), cust);
+                  ), stud);
 
 ```
 
@@ -181,7 +181,7 @@ Example:
 
 ```cs
   ctx.Students.Where(stud => stud.City == "Kiev")
-                .Select(stud => new { stud.FirstName, stud.LastName });
+              .Select(stud => new { stud.FirstName, stud.LastName });
 ```
 
 <div data-markdown class="fragment">
@@ -249,7 +249,8 @@ Please do not write such "magnificent code":
 
 ```cs
 
-public static IEnumerable<PersonWithDish> GiveDishesBadWay(IEnumerable<Person> people, IEnumerable<Dish> dishes)
+public static IEnumerable<PersonWithDish> GiveDishesBadWay(IEnumerable<Person> people, 
+														   IEnumerable<Dish> dishes)
 {
   for(int i = 0; i < people.Count(); i++)
   {
@@ -275,7 +276,8 @@ Or choose right parameter type for your method:
 
 ```cs
 
-public static IEnumerable<PersonWithDish> GiveDishesBetterWay(IReadOnlyList<Person> people, IReadOnlyList<Dish> dishes)
+public static IEnumerable<PersonWithDish> GiveDishesBetterWay(IReadOnlyList<Person> people, 
+															  IReadOnlyList<Dish> dishes)
 {
     for (int i = 0; i < people.Count; i++)
     {
@@ -296,7 +298,8 @@ public static IEnumerable<PersonWithDish> GiveDishesBetterWay(IReadOnlyList<Pers
 In this case to avoid multiple enumeration just use built-in method `Zip` :
 
 ```cs
-public static IEnumerable<PersonWithDish> GiveDishesBestWay(IEnumerable<Person> people, IEnumerable<Dish> dishes)
+public static IEnumerable<PersonWithDish> GiveDishesBestWay(IEnumerable<Person> people, 
+															IEnumerable<Dish> dishes)
 {
     return people.Zip(dishes, (p, d) => new PersonWithDish
                                         {
@@ -361,7 +364,7 @@ Note that there is possibility to write dependent ordering:
 ```cs
 
 from s in Students
-orderby s.FirstName ascending, s.LastName descending
+orderby s.FirstName ascending, s.LastName ascending
 select s;
 
 ```
