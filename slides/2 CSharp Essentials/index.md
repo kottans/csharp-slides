@@ -38,7 +38,7 @@ The object created by instantiating a type is called either an **object** of the
 
 ```cs
 
-&lt;Type&gt; variableName = new &lt;Type&gt;
+<Type> variableName = new <Type>
 ```
 
 </div>	
@@ -231,7 +231,7 @@ Syntax:
 
 ```cs
 int? intVar1 = 10; 
-var intVar2 = new Nullable&lt;int&gt; ();
+var intVar2 = new Nullable<int> ();
 ```
 </div>
 
