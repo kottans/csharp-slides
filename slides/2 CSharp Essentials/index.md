@@ -157,7 +157,7 @@ var var4 = b as IEnumerable;
 **var** is not allowed:
 
 ```cs
-public class SomeClass { var _field = new List(); }
+public class SomeClass { var someField = new List(); }
 ```
 </div>   
 
@@ -223,7 +223,7 @@ Reference could be null, which means no object in heap to reference
 ###Nullable types
 
 - are types that build over value types with **null** value added
-- are always reference types
+- are always value types
 - could be created from value type only (including user-defined)   
 
 Syntax:
