@@ -99,4 +99,4 @@ S.O.L.I.D. - is an abbreviation of 5 principles of object oriented design
 - **O** - Openness principle   
 - **L** - Liskov substitution principle   
 - **I** - Interface segregation principle   
-- **D** - Dependency injection principle   
+- **D** - Dependency inversion principle   
