@@ -168,7 +168,7 @@ Boolean EndsWith(String value, Boolean ignoreCase, CultureInfo culture);
 
 Use *StringComparison* and *CompareOptions*:
 
-[Example](https://dotnetfiddle.net/nETRFL)
+[Example](https://dotnetfiddle.net/dY4r91)
 
 ***
 
