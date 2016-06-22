@@ -130,7 +130,7 @@ Object-Relational Mapping (ORM) which allows you:
 
 - Work with data-store in object-oriented way
 - Query any supported data source
-- Potantially change data source
+- Potentially change data source
 - Has own change tracking system which can be extended
 - Business specifications can be reused throughout your project
 - Currently prefered data access in wich Microsoft invests the most
@@ -453,8 +453,8 @@ A group join produces a sequence of object arrays based on properties equivalenc
 ```cs
 
 from s in Students
-join c in Courses on s.StudentID equals a.StudentID into t
-select { StudentName = s.Name, Courses = t }
+join c in Courses on s.StudentID equals s.StudentID into t
+select new { StudentName = s.Name, Courses = t }
 
 ```
 
@@ -474,7 +474,7 @@ If there are no columns matching in the right table, it returns NULL values.
 from s in Students
 join a in Addresses on s.AddressID equals a.AddressID into t
 from st in t.DefaultIfEmpty()
-select { AddressID = (int?)st.AddressID, st.City, StudentName = s.Name }
+select new { AddressID = (int?)st.AddressID, st.City, StudentName = s.Name }
 
 ```
 
@@ -490,7 +490,7 @@ Cross join returns records or rows that are multiplication of record number from
 
 from s in Students
 from a in Addresses
-select { a.City, s.Name }
+select new { a.City, s.Name }
 
 ```
 
@@ -527,8 +527,8 @@ var count = nums.Count(); // 9
 
 ```cs
 
-int[] nums = {500,100,50,20,10,5,2,1,1000};
-var count = nums.Sum(); // 1688
+int[] nums = {300,100,50,20,10,5,2,1,1000};
+var count = nums.Sum(); // 1488
 
 ```
 
@@ -574,8 +574,8 @@ Performs custom aggregation:
 
 ```cs
 
-int[] nums = {500,100,50,20,10,5,2,1,1000};
-var sum = nums.Aggregate(0, (total, n) => total + n); // 1688
+int[] nums = {300,100,50,20,10,5,2,1,1000};
+var sum = nums.Aggregate(0, (total, n) => total + n); // 1488
 
 ```
 
@@ -644,7 +644,7 @@ IEnumerable<string> strings = values.OfType<string>();
 object[] values = new object[] {"1", "2", "3", "AAA", 5};
 IEnumerable<string> strings = values.Cast<string>(); 
 // an exception will be thrown 
-//because the last element is not string
+// because the last element is not string
 
 ```
 
@@ -671,3 +671,5 @@ var flatten = values.SelectMany(s => s);
 Additional resources:
 
 - https://weblogs.asp.net/dixin/linq-via-csharp
+- https://codeblog.jonskeet.uk/category/edulinq
+- http://linqsamples.com

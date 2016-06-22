@@ -81,7 +81,7 @@ foreach (var i in source)
     }
 }
 
-results.Sort((x1, x2) => x2 - x1);
+results.Sort(delegate (int x1, int x2) { return x2 - x1; });
 ```
 
 </div>
@@ -390,7 +390,7 @@ LINQ query can produce one of two results:
 enumeration
 
 ```cs
-IEnumerable<int> res = from s in sequance
+IEnumerable<int> res = from s in sequence
                        where s > 3
                        select s;
 ```
@@ -398,7 +398,7 @@ IEnumerable<int> res = from s in sequance
 scalar (statistic)
 
 ```cs
-int res = (from s in sequance
+int res = (from s in sequence
           where s > 3
           select s).Count();
 ```
